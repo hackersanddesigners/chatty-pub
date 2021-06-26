@@ -1,0 +1,15 @@
+{
+  "name": "chattypub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Karl Moubarak",
+  "license": "ISC",
+  "dependencies": {
+    "vue-html2pdf": "^1.8.0",
+    "zulip-js": "^2.0.9"
+  }
+}
