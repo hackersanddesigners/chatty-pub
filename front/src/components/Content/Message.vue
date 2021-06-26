@@ -45,7 +45,13 @@ export default {
         .$store
         .state
         .rules
-        .filter(r => this.classes.includes('u' + r.emoji_code))
+        .filter(r => 
+          this
+          .classes
+          .includes(
+            'u' + r.emoji_code
+          )
+        )  
         .map(r => r.rules)
         .flat()
         .map(s => s.text)
