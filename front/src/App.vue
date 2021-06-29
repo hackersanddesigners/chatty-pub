@@ -14,152 +14,129 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import api from './api'
+import { mapState } from "vuex";
+import api from "./api";
 
 export default {
-  name: 'App',
-  components: { 
-  },
+  name: "App",
+  components: {},
   data() {
     return {
       api: api,
       zulipClient: null,
-    }
+    };
   },
   computed: {
-    ...mapState([
-      'isMobile',
-      'pubStr'
-    ])
+    ...mapState(["isMobile", "pubStr"]),
   },
   created() {
-    this.$store.commit('setMobile', this.checkIfMobile())
-    window.addEventListener('resize', () => {
-      this.$store.commit('setMobile', this.checkIfMobile())
-    })
+    this.$store.commit("setMobile", this.checkIfMobile());
+    window.addEventListener("resize", () => {
+      this.$store.commit("setMobile", this.checkIfMobile());
+    });
 
-    this.getStreams()
-    
-    this.$router.afterEach(to => {
-      const stream = to.path.replace('/', '')
-      if (stream != '') {
-        this.setUpDoc(stream)
+    this.getStreams();
+
+    this.$router.afterEach((to) => {
+      const stream = to.path.replace("/", "");
+      if (stream != "") {
+        this.setUpDoc(stream);
       } else {
-        this.$store.commit('setContents', [])
-        this.$store.commit('setRules', [])  
+        this.$store.commit("setContents", []);
+        this.$store.commit("setRules", []);
       }
-    })
+    });
   },
 
-
   methods: {
-
     checkIfMobile: () => window.innerWidth < 700,
 
     getStreams() {
-      api.zulip
-      .init()
-      .then(client => {
-        this.zulipClient = client
-        api.zulip
-        .getStreams(client)
-        .then(result => {
-          this.$store.commit( 'setStreams', 
-            result
-            .streams
-            .filter(
-              s => s.name.startsWith(this.pubStr)
-            )
-          )
-        })
-      })
+      api.zulip.init().then((client) => {
+        this.zulipClient = client;
+        api.zulip.getStreams(client).then((result) => {
+          this.$store.commit(
+            "setStreams",
+            result.streams.filter((s) => s.name.startsWith(this.pubStr))
+          );
+        });
+      });
     },
 
     setUpDoc(stream) {
-    
-      api.zulip
-      .getMsgs(this.zulipClient, stream, 'content')
-      .then(result => {
-        this.$store.commit('setContents', 
-          result
-          .messages
-        )
-      })
-      
-      api.zulip
-      .getMsgs(this.zulipClient, stream, 'rules')
-      .then(result => {
-        this.$store.commit('setRules', 
-          result
-          .messages
-          .map(m => 
-            this.toCSS(m)
-          )
-        )
-      })
-      
-      api.zulip.listen(this.zulipClient)
-        
+      api.zulip.getMsgs(this.zulipClient, stream, "content").then((result) => {
+        this.$store.commit("setContents", result.messages);
+      });
+
+      api.zulip.getMsgs(this.zulipClient, stream, "rules").then((result) => {
+        console.log("messages!",result)
+        this.$store.commit(
+          "setRules",
+          result.messages
+            .filter((m) => m.content.match(/\/poll/gm))
+            .map((m) => this.toCSS(m))
+        );
+      });
+
+      api.zulip.listen(this.zulipClient);
     },
-    
+
     toCSS(poll) {
-      let 
-        className = '',
-        emoji_code = '',
+      let className = "",
+        emoji_code = "",
         options = [],
         rules = [],
-        subs = poll
-        .submessages
-        .map(s => JSON.parse(s.content))
-        
-      subs
-      .forEach(sub => {
-        // console.log(sub)
-        if (sub.widget_type && sub.widget_type == 'poll') {
-          className = sub.extra_data.question
-          emoji_code = this.toEmojiCode(className)
-          console.log(emoji_code)
-          options = sub.extra_data.options
+        subs = poll.submessages.map((s) => JSON.parse(s.content));
+      subs.forEach((sub) => {
+        if (sub.widget_type && sub.widget_type == "poll") {
+          className = sub.extra_data.question;
+          emoji_code = this.toEmojiCode(className);
+          // console.log(emoji_code);
+          options = sub.extra_data.options;
           if (options) {
-            options.forEach(option => {
-              rules.push(this.constructRule(option, options, subs))
-            })
+            options.forEach((option) => {
+              let r = this.constructRule(option, options, subs);
+              if (this.validateRule(r)) {
+                rules.push(r);
+              }
+            });
           }
-        } else if (sub.type && sub.type == 'new_option') {
-          rules.push(this.constructRule(sub.option, options, subs))
+        } else if (sub.type && sub.type == "new_option") {
+          let r = this.constructRule(sub.option, options, subs);
+          if (this.validateRule(r)) {
+            rules.push(r);
+          }
         }
-      })
-      return { className, emoji_code, rules }
+      });
+      return { className, emoji_code, rules };
     },
-    
+
     constructRule(option, options, subs) {
-      const
-        text = option,
-        votes = subs.filter(s => (
-          s.type == 'vote' &&
-          s.key.replace('canned,', '') == options.indexOf(option)
-        )),
-        weight = votes.length > 0 ? votes
-          .map(s => s.vote)
-          .reduce((a,b) => a + b) : 0 
-      return { text, weight }
+      const text = option,
+        votes = subs.filter(
+          (s) =>
+            s.type == "vote" &&
+            s.key.replace("canned,", "") == options.indexOf(option)
+        ),
+        weight =
+          votes.length > 0
+            ? votes.map((s) => s.vote).reduce((a, b) => a + b)
+            : 0;
+      return { text, weight };
     },
-    
-    toEmojiCode: emoji => emoji.replace(
-      /\p{Emoji}/ug, 
-      m => m.codePointAt(0).toString(16)
-    ),
 
+    toEmojiCode: (emoji) =>
+      emoji.replace(/\p{Emoji}/gu, (m) => m.codePointAt(0).toString(16)),
 
-    
-
-  }
-}
+    // minimal validation. rules have to contain a colon and semicolon
+    validateRule: (rule) => { 
+      return rule.text.match(/.+:.+;/gm);
+    },
+  },
+};
 </script>
 
 <style>
-
 :root {
   --back: white;
 }
@@ -167,14 +144,17 @@ export default {
 html,
 body,
 #app {
-  height: 100%; width: 100%;
-  padding: 0; margin: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
   background: var(--back);
 }
 
 #app {
   position: relative;
-  height: 100%; width: 100%;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   font-size: 11pt;
@@ -190,7 +170,8 @@ header {
 
 main {
   position: relative;
-  height: 100%; width: 100%;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
