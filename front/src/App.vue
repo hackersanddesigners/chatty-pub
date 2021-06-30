@@ -14,47 +14,41 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import api from './api'
+import { mapState } from "vuex";
+import api from "./api";
 
 export default {
-  name: 'App',
-  components: { 
-  },
+  name: "App",
+  components: {},
   data() {
     return {
       api: api,
       zulipClient: null,
-    }
+    };
   },
   computed: {
-    ...mapState([
-      'isMobile',
-      'pubStr'
-    ])
+    ...mapState(["isMobile", "pubStr"]),
   },
   created() {
-    this.$store.commit('setMobile', this.checkIfMobile())
-    window.addEventListener('resize', () => {
-      this.$store.commit('setMobile', this.checkIfMobile())
-    })
+    this.$store.commit("setMobile", this.checkIfMobile());
+    window.addEventListener("resize", () => {
+      this.$store.commit("setMobile", this.checkIfMobile());
+    });
 
-    this.getStreams()
-    
-    this.$router.afterEach(to => {
-      const stream = to.path.replace('/', '')
-      if (stream != '') {
-        this.setUpDoc(stream)
+    this.getStreams();
+
+    this.$router.afterEach((to) => {
+      const stream = to.path.replace("/", "");
+      if (stream != "") {
+        this.setUpDoc(stream);
       } else {
-        this.$store.commit( 'setContents', [] )
-        this.$store.commit( 'setRules',    [] )  
+        this.$store.commit("setContents", []);
+        this.$store.commit("setRules", []);
       }
-    })
+    });
   },
 
-
   methods: {
-
     checkIfMobile: () => window.innerWidth < 700,
 
     getStreams() {
@@ -112,7 +106,7 @@ export default {
       api.zulip.listen(this.zulipClient)
         
     },
-    
+
     toCSS(poll) {
     
       const 
@@ -162,7 +156,7 @@ export default {
       }
       
     },
-    
+
     constructRule(option, options, subs) {
       const
         text   = option,
@@ -183,21 +177,19 @@ export default {
         weight 
       }
     },
-    
-    toEmojiCode: emoji => emoji.replace(
-      /\p{Emoji}/ug, 
-      m => m.codePointAt(0).toString(16)
-    ),
 
+    toEmojiCode: (emoji) =>
+      emoji.replace(/\p{Emoji}/gu, (m) => m.codePointAt(0).toString(16)),
 
-    
-
-  }
-}
+    // minimal validation. rules have to contain a colon and semicolon
+    validateRule: (rule) => { 
+      return rule.text.match(/.+:.+;/gm);
+    },
+  },
+};
 </script>
 
 <style>
-
 :root {
   --back: white;
 }
@@ -205,14 +197,17 @@ export default {
 html,
 body,
 #app {
-  height: 100%; width: 100%;
-  padding: 0; margin: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
   background: var(--back);
 }
 
 #app {
   position: relative;
-  height: 100%; width: 100%;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   font-size: 11pt;
@@ -228,7 +223,8 @@ header {
 
 main {
   position: relative;
-  height: 100%; width: 100%;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
