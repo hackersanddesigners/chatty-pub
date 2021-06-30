@@ -46,8 +46,8 @@ export default {
       if (stream != '') {
         this.setUpDoc(stream)
       } else {
-        this.$store.commit('setContents', [])
-        this.$store.commit('setRules', [])  
+        this.$store.commit( 'setContents', [] )
+        this.$store.commit( 'setRules',    [] )  
       }
     })
   },
@@ -58,18 +58,22 @@ export default {
     checkIfMobile: () => window.innerWidth < 700,
 
     getStreams() {
-      api.zulip
+      api
+      .zulip
       .init()
       .then(client => {
         this.zulipClient = client
-        api.zulip
+        api
+        .zulip
         .getStreams(client)
         .then(result => {
-          this.$store.commit( 'setStreams', 
+          this
+          .$store
+          .commit( 'setStreams', 
             result
             .streams
-            .filter(
-              s => s.name.startsWith(this.pubStr)
+            .filter(s => 
+              s.name.startsWith(this.pubStr)
             )
           )
         })
@@ -78,19 +82,25 @@ export default {
 
     setUpDoc(stream) {
     
-      api.zulip
+      api
+      .zulip
       .getMsgs(this.zulipClient, stream, 'content')
       .then(result => {
-        this.$store.commit('setContents', 
+        this
+        .$store
+        .commit( 'setContents', 
           result
           .messages
         )
       })
       
-      api.zulip
+      api
+      .zulip
       .getMsgs(this.zulipClient, stream, 'rules')
       .then(result => {
-        this.$store.commit('setRules', 
+        this
+        .$store
+        .commit( 'setRules', 
           result
           .messages
           .map(m => 
@@ -104,46 +114,74 @@ export default {
     },
     
     toCSS(poll) {
-      let 
-        className = '',
-        emoji_code = '',
-        options = [],
-        rules = [],
+    
+      const 
         subs = poll
         .submessages
         .map(s => JSON.parse(s.content))
-        
-      subs
-      .forEach(sub => {
+       
+      let 
+        className  = '',
+        emoji_code = '',
+        options    = [],
+        rules      = []
+         
+      subs.forEach(sub => {
         // console.log(sub)
-        if (sub.widget_type && sub.widget_type == 'poll') {
-          className = sub.extra_data.question
+        if (
+           sub.widget_type && 
+           sub.widget_type == 'poll'
+          ) {
+          className  = sub.extra_data.question
+          options    = sub.extra_data.options
           emoji_code = this.toEmojiCode(className)
-          console.log(emoji_code)
-          options = sub.extra_data.options
+          // console.log(emoji_code)
           if (options) {
-            options.forEach(option => {
-              rules.push(this.constructRule(option, options, subs))
-            })
+            options.forEach(option => 
+              rules
+              .push( 
+                this.constructRule(option, options, subs)
+              )
+            )
           }
-        } else if (sub.type && sub.type == 'new_option') {
-          rules.push(this.constructRule(sub.option, options, subs))
+        } else if (
+           sub.type && 
+           sub.type == 'new_option'
+          ) {
+          rules
+          .push(
+            this.constructRule(sub.option, options, subs)
+          )
         }
       })
-      return { className, emoji_code, rules }
+      
+      return { 
+        className,
+        emoji_code, 
+        rules 
+      }
+      
     },
     
     constructRule(option, options, subs) {
       const
-        text = option,
-        votes = subs.filter(s => (
+        text   = option,
+        votes  = subs.filter(s => (
           s.type == 'vote' &&
           s.key.replace('canned,', '') == options.indexOf(option)
         )),
-        weight = votes.length > 0 ? votes
-          .map(s => s.vote)
-          .reduce((a,b) => a + b) : 0 
-      return { text, weight }
+        weight = 
+          votes.length > 0 
+          ? 
+            votes
+            .map(s => s.vote)
+            .reduce((a,b) => a + b) 
+          : 
+            0 
+      return { 
+        text, 
+        weight 
+      }
     },
     
     toEmojiCode: emoji => emoji.replace(

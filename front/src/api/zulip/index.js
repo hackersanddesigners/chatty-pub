@@ -15,9 +15,11 @@ const
     })
   ),
   
-  getStreams = (client) => ( new
+  getStreams = client => ( new
     Promise((resolve, reject) => {
-     client.streams.retrieve()
+     client
+     .streams
+     .retrieve()
       .then(result => resolve(result))
       .catch(error => reject(error))
     })
@@ -25,7 +27,9 @@ const
   
   getMsgs = (client, stream, topic, params) => ( new
     Promise((resolve, reject) => {
-     client.messages.retrieve(params || {
+     client
+     .messages
+     .retrieve(params || {
         anchor: "newest",
         num_before: 100,
         num_after: 0,
@@ -41,7 +45,8 @@ const
   ),
   
   listen = client => {
-    client.callOnEachEvent(
+    client
+    .callOnEachEvent(
       event => console.log('Got Event:', event), 
       [ 'message' ],
       [ { operator: "stream", operand: "chatty" } ]
@@ -50,7 +55,10 @@ const
   
   getSubs = client => ( new
     Promise((resolve, reject) => {
-     client.streams.subscriptions.retrieve()
+     client
+     .streams
+     .subscriptions
+     .retrieve()
       .then(result => resolve(result))
       .catch(error => reject(error))
     })
@@ -58,9 +66,15 @@ const
   
   addSub = (client, stream) => ( new
     Promise((resolve, reject) => {
-      client.users.me.subscriptions.add({
-        subscriptions: JSON.stringify([{ name: stream }]),
-      })
+      client
+      .users
+      .me
+      .subscriptions
+      .add(
+        {
+          subscriptions: JSON.stringify([{ name: stream }]),
+        }
+      )
       .then(result => resolve(result))
       .catch(error => reject(error))
     })
@@ -68,7 +82,9 @@ const
   
   sendMsg = (client, params) => ( new
     Promise((resolve, reject) => {
-      client.messages.send(params || {
+      client
+      .messages
+      .send(params || {
         to: "chatty",
         type: "stream",
         topic: "content",
