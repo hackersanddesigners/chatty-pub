@@ -18,9 +18,9 @@ export default {
     content() {
       let url = process.env.VUE_APP_ZULIP_site;
       let m = this.message.content.replace("\n", "<br/>");
-      m = m.replaceAll('src="','src="' + url);
-      m = m.replaceAll('href="/','href="' + url + "/");
-      return m
+      m = m.replaceAll('src="', 'src="' + url);
+      m = m.replaceAll('href="/', 'href="' + url + "/");
+      return m;
     },
     classes() {
       return this.message.reactions.map((r) => "u" + r.emoji_code);

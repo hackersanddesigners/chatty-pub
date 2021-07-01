@@ -74,14 +74,7 @@ export default {
       });
 
       api.zulip.getMsgs(this.zulipClient, stream, "rules").then((result) => {
-        console.log("messages!",result)
-        this.$store.commit(
-          "setRules",
-          result
-          // result.messages
-          //   .filter((m) => m.content.match(/\/poll/gm))
-          //   .map((m) => this.toCSS(m))
-        );
+        this.$store.commit("setRules", result);
       });
 
       api.zulip.listen(this.zulipClient);
