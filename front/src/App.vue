@@ -77,97 +77,14 @@ export default {
         console.log("messages!",result)
         this.$store.commit(
           "setRules",
-          result.messages
-            .filter((m) => m.content.match(/\/poll/gm))
-            .map((m) => this.toCSS(m))
+          result
+          // result.messages
+          //   .filter((m) => m.content.match(/\/poll/gm))
+          //   .map((m) => this.toCSS(m))
         );
       });
 
       api.zulip.listen(this.zulipClient);
-    },
-
-    toCSS(poll) {
-      let className = "",
-        emoji_code = "",
-        options = [],
-        rules = [],
-        subs = poll.submessages.map((s) => JSON.parse(s.content));
-      subs.forEach((sub) => {
-        if (sub.widget_type && sub.widget_type == "poll") {
-          className = sub.extra_data.question;
-          emoji_code = this.toEmojiCode(className);
-          // console.log(emoji_code);
-          options = sub.extra_data.options;
-          if (options) {
-            options.forEach((option) => {
-              let r = this.constructRule(option, options, subs);
-              if (this.validateRule(r)) {
-                rules.push(r);
-              }
-            });
-          }
-        } else if (sub.type && sub.type == "new_option") {
-          let r = this.constructRule(sub.option, options, subs);
-          if (this.validateRule(r)) {
-            rules.push(r);
-          }
-        }
-      });
-      return { className, emoji_code, rules };
-    },
-
-    constructRule(option, options, subs) {
-      const text = option,
-        votes = subs.filter(
-          (s) =>
-            s.type == "vote" &&
-            s.key.replace("canned,", "") == options.indexOf(option)
-        ),
-        weight =
-          votes.length > 0
-            ? votes.map((s) => s.vote).reduce((a, b) => a + b)
-            : 0;
-      return { text, weight };
-    },
-
-    toEmojiCode: (emoji) => {
-      console.log(emoji);
-      emoji.replace(/\p{Emoji}/gu, (m) => m.codePointAt(0).toString(16));
-    },
-
-    // toEmojiCode: (emoji) => {
-    //   var t = this;
-    //   emoji.replace(/\p{Emoji}/gu, function (m) {
-    //     console.log(m, t.toUTF16);
-    //     this.toUTF16(m.codePointAt(0));
-    //   });
-    //   return emoji;
-    // },
-
-    toUTF16: (codePoint) => {
-      var TEN_BITS = parseInt("1111111111", 2);
-
-      if (codePoint <= 0xffff) {
-        return this.u(codePoint);
-      }
-      codePoint -= 0x10000;
-
-      // Shift right to get to most significant 10 bits
-      var leadSurrogate = 0xd800 + (codePoint >> 10);
-
-      // Mask to get least significant 10 bits
-      var tailSurrogate = 0xdc00 + (codePoint & TEN_BITS);
-
-      return this.u(leadSurrogate) + this.u(tailSurrogate);
-    },
-
-    u: (codeUnit) => {
-      return "\\u" + codeUnit.toString(16).toUpperCase();
-    },
-
-    // minimal validation. rules have to contain a colon and semicolon
-    validateRule: (rule) => { 
-      return rule.text.match(/.+:.+;/gm);
     },
   },
 };
