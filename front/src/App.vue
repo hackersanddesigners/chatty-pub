@@ -1,5 +1,7 @@
 <template>
   <div id="app" :class="{ mobile: isMobile }">
+    <Styles />
+
     <!-- <header>
       <code>Zulip URL: {{ api.zulip.config.realm }}</code>
     </header> -->
@@ -16,10 +18,13 @@
 <script>
 import { mapState } from "vuex";
 import api from "./api";
+import Styles from "./components/Rules/Styles.vue";
 
 export default {
   name: "App",
-  components: {},
+  components: {
+    Styles,
+  },
   data() {
     return {
       api: api,
@@ -184,6 +189,23 @@ export default {
     // minimal validation. rules have to contain a colon and semicolon
     validateRule: (rule) => { 
       return rule.text.match(/.+:.+;/gm);
+    },
+      api.zulip.getMsgs(this.zulipClient, stream, "content").then((result) => {
+        this.$store.commit("setContents", result.messages);
+      });
+
+      api.zulip.getMsgs(this.zulipClient, stream, "rules").then((result) => {
+        console.log("messages!",result)
+        this.$store.commit(
+          "setRules",
+          result
+          // result.messages
+          //   .filter((m) => m.content.match(/\/poll/gm))
+          //   .map((m) => this.toCSS(m))
+        );
+      });
+
+      api.zulip.listen(this.zulipClient);
     },
   },
 };
