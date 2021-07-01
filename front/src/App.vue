@@ -1,5 +1,7 @@
 <template>
   <div id="app" :class="{ mobile: isMobile }">
+    <Styles />
+
     <!-- <header>
       <code>Zulip URL: {{ api.zulip.config.realm }}</code>
     </header> -->
@@ -16,10 +18,13 @@
 <script>
 import { mapState } from "vuex";
 import api from "./api";
+import Styles from "./components/Rules/Styles.vue";
 
 export default {
   name: "App",
-  components: {},
+  components: {
+    Styles,
+  },
   data() {
     return {
       api: api,
@@ -125,8 +130,40 @@ export default {
       return { text, weight };
     },
 
-    toEmojiCode: (emoji) =>
-      emoji.replace(/\p{Emoji}/gu, (m) => m.codePointAt(0).toString(16)),
+    toEmojiCode: (emoji) => {
+      console.log(emoji);
+      emoji.replace(/\p{Emoji}/gu, (m) => m.codePointAt(0).toString(16));
+    },
+
+    // toEmojiCode: (emoji) => {
+    //   var t = this;
+    //   emoji.replace(/\p{Emoji}/gu, function (m) {
+    //     console.log(m, t.toUTF16);
+    //     this.toUTF16(m.codePointAt(0));
+    //   });
+    //   return emoji;
+    // },
+
+    toUTF16: (codePoint) => {
+      var TEN_BITS = parseInt("1111111111", 2);
+
+      if (codePoint <= 0xffff) {
+        return this.u(codePoint);
+      }
+      codePoint -= 0x10000;
+
+      // Shift right to get to most significant 10 bits
+      var leadSurrogate = 0xd800 + (codePoint >> 10);
+
+      // Mask to get least significant 10 bits
+      var tailSurrogate = 0xdc00 + (codePoint & TEN_BITS);
+
+      return this.u(leadSurrogate) + this.u(tailSurrogate);
+    },
+
+    u: (codeUnit) => {
+      return "\\u" + codeUnit.toString(16).toUpperCase();
+    },
 
     // minimal validation. rules have to contain a colon and semicolon
     validateRule: (rule) => { 

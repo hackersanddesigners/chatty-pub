@@ -1,5 +1,5 @@
 <template>
-  <span :class="classes" :style="styles">
+  <span :class="classes" :x-style="styles">
     <!-- {{ $md.renderInline(content) }} -->
     <vue3-markdown-it :source="content" v-bind="$mdOpts"></vue3-markdown-it>
   </span>
