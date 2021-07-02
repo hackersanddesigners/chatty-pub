@@ -26,7 +26,7 @@ let toCSS = (message, currentStream) => {
     }
     rules = results[0]['groups']['props'].split("\n");
     rules = rules.filter((rule) => validateRule(rule))
-    return { className, emoji_code, rules };
+    return { className, emoji_code, rules, parentClassName };
   }
   return null;
 }

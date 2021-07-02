@@ -1,7 +1,7 @@
 <template>
   <code 
     class="rule"
-    :class="rule.emoji_code"  
+    :class="myClass"  
   >
     <p :title="toEmojiCode(rule.className)">{{ rule.className }} {</p>
     <p v-for="dec in rule.rules" :key="dec">&nbsp; {{ dec }}</p>
@@ -17,9 +17,12 @@ export default {
   mixins: [emoji],
   props: ["rule"],
   computed: {
-    rawJSON() {
-      return "```json\n" + JSON.stringify(this.rule, null, 2) + "\n```";
-    },
+    myClass() {
+      return (
+        this.containsEmoji(this.rule.className) ?
+        'u' + this.toEmojiCode(this.rule.className) : null
+      )
+    }
   },
 };
 </script>
