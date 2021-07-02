@@ -105,7 +105,7 @@ export default createStore({
     },
     
     addRule: (state, rule) => {
-      if (rule.content.match(/\/poll/gm)) {
+      if (toCSS(rule) !== null) {
         state.rules.push(toCSS(rule))
       }
     } 
