@@ -87,37 +87,20 @@ export default {
     },
 
     setUpDoc(stream) {
-    
-      api
-      .zulip
-      .getMsgs(this.zulipClient, stream, 'content')
-      .then(result => {
+        
+      api.zulip.getMsgs(this.zulipClient, stream, "content").then((result) => {
         for (let m = 0; m < result.messages.length; m++) {
           const message = result.messages[m]
           this.$store.commit('addMessage', message)
         } 
-        // this
-        // .$store
-        // .commit( 'setContents', 
-        //   result
-        //   .messages
-        // )
-      })
-      
-      api
-      .zulip
-      .getMsgs(this.zulipClient, stream, 'rules')
-      .then(result => {
-        this
-        .$store
-        .commit( 'setRules', 
-          result
-          .messages
-        )
-      })
-      
+      });
+
+      api.zulip.getMsgs(this.zulipClient, stream, "rules").then((result) => {
+        this.$store.commit("setRules", result.messages);
+      });
+
       api.zulip.listen(this.zulipClient, this.eventHandler)
-        
+      
     },
 
     eventHandler(event) {

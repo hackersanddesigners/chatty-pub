@@ -1,55 +1,39 @@
+/*eslint no-unused-vars: "off"*/
+/*eslint no-undef: "off"*/
+
 import { createStore } from 'vuex'
 import emoji from "../mixins/emoji";
+import { stripHtml } from "string-strip-html";
 
-const toCSS = (poll, currentStream) => {
-  let 
-    className  = "",
+var EmojiConvertor = require('emoji-js');
+var emojiConv = new EmojiConvertor();
+
+let toCSS = (message, currentStream) => {
+  let className = "",
     emoji_code = "",
-    options    = [],
-    rules      = [],
-    subs       = poll.submessages.map((s) => JSON.parse(s.content)),
+    rules = [],
     parentClassName = currentStream
-        
-  subs.forEach(sub => {
-    if (sub.widget_type && sub.widget_type == "poll") {
-      className  = sub.extra_data.question
-      emoji_code = emoji.methods.toEmojiCode(className)
-      options = sub.extra_data.options
-      // console.log(emoji_code)
-      if (options) {
-        options.forEach(option => {
-          let r = constructRule(option, options, subs)
-          if (validateRule(r)) {
-            rules.push(r)
-          }
-        })
-      }
-    } else if (sub.type && sub.type == "new_option") {
-      let r = constructRule(sub.option, options, subs)
-      if (validateRule(r)) {
-        rules.push(r)
-      }
+
+  // let regex = /[/s]?(?<selector>.+)\s*\n?{\n?(?<prop>[\s\w.~:>-]+\s*:\s*.+;?\n?)*\n?}/gm
+  let regex = /[/s]?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
+  let content = stripHtml(message.content).result;
+  let results = content.matchAll(regex);
+  results = Array.from(results);
+  if (results.length > 0) {
+    className = emojiConv.replace_colons(results[0]['groups']['selector']);
+    if (emoji.methods.containsEmoji(className)) {
+      emoji_code = emoji.methods.toEmojiCode(className);
     }
-  })
-  return { parentClassName, className, emoji_code, rules }
+    rules = results[0]['groups']['props'].split("\n");
+    rules = rules.filter((rule) => validateRule(rule))
+    return { className, emoji_code, rules };
+  }
+  return null;
 }
 
-const constructRule = (option, options, subs) => {
-  const 
-    text = option,
-    votes = subs.filter( s =>
-      s.type == "vote" &&
-      s.key.replace("canned,", "") == options.indexOf(option)
-    ),
-    weight =
-      votes.length > 0
-      ? votes.map((s) => s.vote).reduce((a, b) => a + b)
-      : 0
-  return { text, weight }
+let validateRule = (rule) => {
+  return rule.match(/.+:.+;/gm);
 }
-
-// minimal validation. rules have to contain a colon and semicolon
-const validateRule = rule => rule.text.match(/.+:.+;/gm)
 
 export default createStore({
 
@@ -82,14 +66,6 @@ export default createStore({
             .replace(/[^]+.*```quote\n/gm, '')
             .replace(/ \n```/gm, '')
         }
-        // console.log(message.responseTo)
-        // const referenceMessage = state.contents.find(m => { 
-        //   m.id == message.responseTo.id 
-        //   // &&
-        //   // m.sender_id == message.responseTo.sender_id
-        //   // m.content.includes(message.responseTo.quote)
-        // })
-        // console.log(referenceMessage)
       }
       state.contents.push(message)
     },
@@ -118,12 +94,16 @@ export default createStore({
       }
     },
     
-    
-    setRules: (state, rules)  => { state.rules = 
-      rules
-      .filter((r) => r.content.match(/\/poll/gm))
-      .map((r) => toCSS(r, state.currentStream))
+    setRules: (state, rules) => {
+      state.rules = rules.reduce((acc, cur) => {
+        let rule = toCSS(cur, state.currentStream);
+        if (rule !== null) {
+          acc.push(rule);
+        }
+        return acc
+      }, [])
     },
+    
     addRule: (state, rule) => {
       if (rule.content.match(/\/poll/gm)) {
         state.rules.push(toCSS(rule))
