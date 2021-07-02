@@ -5,7 +5,10 @@
       inline
     ></vue3-markdown-it>
   </span>   -->
-  <code class="rule">
+  <code 
+    class="rule"
+    :class="rule.emoji_code"  
+  >
     <p>{{ rule.className }} {</p>
     <p
       v-for="dec in rule.rules"
@@ -29,7 +32,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+.rule {
+  margin: 1em 0;
+}
 
 .rule p {
   margin: 0;

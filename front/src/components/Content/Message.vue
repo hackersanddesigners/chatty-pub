@@ -1,10 +1,7 @@
 <template>
-  <span :class="classes" :x-style="styles">
-    <!-- {{ $md.renderInline(content) }} -->
+  <span :class="classes">
     <vue3-markdown-it :source="content" v-bind="$mdOpts"></vue3-markdown-it>
   </span>
-  <!-- <div v-html="content"/> -->
-  <!-- {{ content }} -->
 </template>
 
 <script>
@@ -16,25 +13,35 @@ export default {
       return "```json\n" + JSON.stringify(this.message, null, 2) + "\n```";
     },
     content() {
+    
       let url = process.env.VUE_APP_ZULIP_site;
-      let m = this.message.content.replace("\n", "<br/>");
-      m = m.replaceAll('src="','src="' + url);
-      m = m.replaceAll('href="/','href="' + url + "/");
-      return m
+      let c = this.message.content.replace("\n", "<br/>");
+      c = c.replaceAll('src="','src="' + url);
+      c = c.replaceAll('href="/','href="' + url + "/");
+      
+      const referrers = this.$store.state.contents.filter(m => (
+        m.responseTo &&
+        m.responseTo.id == this.message.id &&
+        m.responseTo.sender_id == this.message.sender_id &&
+        this.message.content.includes(m.responseTo.quote)
+      ))
+      referrers.forEach(m => {
+        const classes = m.reactions
+          .map(r => "u" + r.emoji_code)
+          .join(' ')
+        c = c.replace(
+          m.responseTo.quote,
+          `<span class="${classes}">${m.responseTo.quote}</span>`
+        )
+      })
+      return c
     },
     classes() {
       return this.message.reactions.map((r) => "u" + r.emoji_code);
     },
-    styles() {
-      return this.$store.state.rules
-        .filter((r) => this.classes.includes("u" + r.emoji_code))
-        .map((r) => r.rules)
-        .flat()
-        .map((s) => s.text);
-    },
   },
   created() {
-    console.log(this.message.content);
+    // console.log(this.message.content);
   },
 };
 </script>

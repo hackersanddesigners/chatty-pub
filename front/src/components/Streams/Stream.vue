@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- {{ $md.renderInline(rawJSON) }} -->
     <p class="name">
       <router-link :to="stream.name">
         {{ stream.name }}

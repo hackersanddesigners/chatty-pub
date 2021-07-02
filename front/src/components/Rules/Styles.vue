@@ -9,15 +9,26 @@ export default {
   data: function(){
     return {
       el: null,
+      htmlTags: [
+        'section',
+        'p',
+        'a',
+        'span',
+        'code',
+        'ul',
+        'li',
+        'and so on' 
+      ]
     }
   },
   methods: {
     generateStyleRules() {
       let styles = "";
-      this.rules.map((r)=>{
-        styles  += r.className
+      this.rules.map(r => {
+        const dot = this.htmlTags.indexOf(r.className) > -1 ? '' : '.'
+        styles  += `.${r.parentClassName} ${dot}${r.className}`
         if( this.containsEmoji(r.className)){
-          styles += ", .u" + this.toEmojiCode(r.className)
+          styles += `, .${r.parentClassName} .u${this.toEmojiCode(r.className)}` 
         }
         styles += "{"
         r.rules.map((s)=>{
@@ -25,6 +36,7 @@ export default {
         })
         styles += "}"
       })
+      console.log(styles)
       return styles;
     },
     insertStyleElement() {

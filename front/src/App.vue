@@ -1,5 +1,10 @@
 <template>
-  <div id="app" :class="{ mobile: isMobile }">
+  <div 
+    id="app" 
+    :class="[
+      stream,
+      { mobile: isMobile }
+    ]">
     <Styles />
 
     <!-- <header>
@@ -29,10 +34,11 @@ export default {
     return {
       api: api,
       zulipClient: null,
+      stream: null,
     };
   },
   computed: {
-    ...mapState(["isMobile", "pubStr"]),
+    ...mapState(["isMobile", "pubStr", "currentStream"]),
   },
   created() {
     this.$store.commit("setMobile", this.checkIfMobile());
@@ -43,9 +49,10 @@ export default {
     this.getStreams();
 
     this.$router.afterEach((to) => {
-      const stream = to.path.replace("/", "");
-      if (stream != "") {
-        this.setUpDoc(stream);
+      this.$store.commit("setCurStream", to.path.replace("/", ""))
+      this.stream = to.path.replace("/", "")
+      if (this.stream != "") {
+        this.setUpDoc(this.stream);
       } else {
         this.$store.commit("setContents", []);
         this.$store.commit("setRules", []);
@@ -85,12 +92,16 @@ export default {
       .zulip
       .getMsgs(this.zulipClient, stream, 'content')
       .then(result => {
-        this
-        .$store
-        .commit( 'setContents', 
-          result
-          .messages
-        )
+        for (let m = 0; m < result.messages.length; m++) {
+          const message = result.messages[m]
+          this.$store.commit('addMessage', message)
+        } 
+        // this
+        // .$store
+        // .commit( 'setContents', 
+        //   result
+        //   .messages
+        // )
       })
       
       api
@@ -102,111 +113,55 @@ export default {
         .commit( 'setRules', 
           result
           .messages
-          .map(m => 
-            this.toCSS(m)
-          )
         )
       })
       
-      api.zulip.listen(this.zulipClient)
+      api.zulip.listen(this.zulipClient, this.eventHandler)
         
     },
 
-    toCSS(poll) {
-    
-      const 
-        subs = poll
-        .submessages
-        .map(s => JSON.parse(s.content))
-       
-      let 
-        className  = '',
-        emoji_code = '',
-        options    = [],
-        rules      = []
-         
-      subs.forEach(sub => {
-        // console.log(sub)
-        if (
-           sub.widget_type && 
-           sub.widget_type == 'poll'
-          ) {
-          className  = sub.extra_data.question
-          options    = sub.extra_data.options
-          emoji_code = this.toEmojiCode(className)
-          // console.log(emoji_code)
-          if (options) {
-            options.forEach(option => 
-              rules
-              .push( 
-                this.constructRule(option, options, subs)
-              )
-            )
+    eventHandler(event) {
+      console.log(event)
+      switch (event.type) {
+      
+        case 'message':
+          switch (event.message.subject) {
+            case 'content':
+              this.$store.commit('addMessage', event.message)
+              break
+            case 'rules':
+              this.$store.commit('addRule', event.message)
+              break
           }
-        } else if (
-           sub.type && 
-           sub.type == 'new_option'
-          ) {
-          rules
-          .push(
-            this.constructRule(sub.option, options, subs)
-          )
-        }
-      })
-      
-      return { 
-        className,
-        emoji_code, 
-        rules 
+          break
+          
+        case 'delete_message':
+          this.$store.commit('deleteMessage', event.message_id)
+          break
+          
+        case 'update_message':
+          this.$store.commit('editMessage', {
+            mid: event.message_id,
+            content: event.content
+          })
+          break
+          
+        case 'reaction':
+          this.$store.commit(`${event.op}Reaction`, {
+            mid: event.message_id,
+            reaction: {   
+              emoji_code: event.emoji_code,
+              emoji_name: event.emoji_name,
+              reaction_type: event.reaction_type,
+            }
+          })
+          break
+          
+        default:
+        console.log("Event type unknown", event.type)
       }
+    }
       
-    },
-
-    constructRule(option, options, subs) {
-      const
-        text   = option,
-        votes  = subs.filter(s => (
-          s.type == 'vote' &&
-          s.key.replace('canned,', '') == options.indexOf(option)
-        )),
-        weight = 
-          votes.length > 0 
-          ? 
-            votes
-            .map(s => s.vote)
-            .reduce((a,b) => a + b) 
-          : 
-            0 
-      return { 
-        text, 
-        weight 
-      }
-    },
-
-    toEmojiCode: (emoji) =>
-      emoji.replace(/\p{Emoji}/gu, (m) => m.codePointAt(0).toString(16)),
-
-    // minimal validation. rules have to contain a colon and semicolon
-    validateRule: (rule) => { 
-      return rule.text.match(/.+:.+;/gm);
-    },
-      api.zulip.getMsgs(this.zulipClient, stream, "content").then((result) => {
-        this.$store.commit("setContents", result.messages);
-      });
-
-      api.zulip.getMsgs(this.zulipClient, stream, "rules").then((result) => {
-        console.log("messages!",result)
-        this.$store.commit(
-          "setRules",
-          result
-          // result.messages
-          //   .filter((m) => m.content.match(/\/poll/gm))
-          //   .map((m) => this.toCSS(m))
-        );
-      });
-
-      api.zulip.listen(this.zulipClient);
-    },
   },
 };
 </script>
