@@ -33,7 +33,7 @@ const
         anchor: "newest",
         num_before: 100,
         num_after: 0,
-        apply_markdown: false,
+        // apply_markdown: false,
         narrow: [
           { operator: "stream", operand: stream },
           { operator: "topic", operand: topic },

@@ -47,8 +47,4 @@ export default {
 </script>
 
 <style>
-header {
-  box-sizing: border-box;
-  margin: 1em;
-}
 </style>

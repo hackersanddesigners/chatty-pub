@@ -35,6 +35,41 @@ let validateRule = (rule) => {
   return rule.match(/.+:.+;/gm);
 }
 
+// parsing replies, there are two scenarios:
+// we are either getting the message as plain markdown
+// or we are getting the message pre-rendered as HTML (default Zulip behaviour)
+// see /src/api/zulip/index.js line 36
+
+const handleMDReply = message => {
+  message.responseTo = {
+    id: message.content
+      .replace(/.*\/near\//gm, '')
+      .replace(/\):.*[^]+/gm, ''),
+    sender_id: message.content
+      .replace(/@_\*\*.*\|/gm, '')
+      .replace(/\*\*.\[said\].*[^]+/gm, ''),
+    quote: message.content
+      .replace(/[^]+.*```quote\n/gm, '')
+      .replace(/ \n```/gm, '')
+  }
+  // console.log(message.responseTo)
+}
+
+const handleHTMLReply = message => { 
+  message.responseTo = {
+    id: message.content
+      .replace(/.*\/near\//gm, '')
+      .replace(/".*[^]+/gm, ''),
+    sender_id: message.content
+      .replace(/[^]+data-user-id="/gm, '')
+      .replace(/">[^]+/gm, ''),
+    quote: message.content
+      .replace(/.*[^]+<\/p>\n<blockquote>\n<p>/gm, '')
+      .replace(/ <\/p>\n<\/blockquote>/gm, '')
+  }
+  // console.log(message.responseTo)
+}
+
 export default createStore({
 
   strict: process.env.NODE_ENV !== 'production',
@@ -55,17 +90,12 @@ export default createStore({
 
     addMessage: (state, message) => {
       if (message.content.startsWith('@_**')) {
-        message.responseTo = {
-          id: message.content
-            .replace(/.*\/near\//gm, '')
-            .replace(/\):.*[^]+/gm, ''),
-          sender_id: message.content
-            .replace(/@_\*\*.*\|/gm, '')
-            .replace(/\*\*.\[said\].*[^]+/gm, ''),
-          quote: message.content
-            .replace(/[^]+.*```quote\n/gm, '')
-            .replace(/ \n```/gm, '')
-        }
+        handleMDReply(message)
+      } else if (
+        message.content.includes('user-mention') && 
+        message.content.includes('blockquote')
+      ) {
+        handleHTMLReply(message)
       }
       state.contents.push(message)
     },
