@@ -1,27 +1,20 @@
 <script>
+import { mapState } from 'vuex';
 import emoji from "../../mixins/emoji";
+
 
 export default {
   name: "Styles",
   mixins: [emoji],
   computed: {
-    rules() {
-      return this.$store.state.rules;
-    },
+    ...mapState([
+      'rules'
+    ]),
+    
   },
-  data: function () {
+  data() {
     return {
       el: null,
-      htmlTags: [
-        'section',
-        'p',
-        'a',
-        'span',
-        'code',
-        'ul',
-        'li',
-        'and so on' 
-      ]
     }
   },
   methods: {
@@ -38,22 +31,24 @@ export default {
         });
         styles += "}";
       });
-      console.log(styles)
       return styles;
     },
-    insertStyleElement() {
+    createStyleElement() {
       var style = document.createElement("style");
       style.innerText = this.generateStyleRules();
       return style;
     },
   },
-  mounted: function () {
-    this.el = document.head.appendChild(this.insertStyleElement());
+  mounted() {
+    this.el = this.createStyleElement() 
+    document.head.appendChild(this.el)
   },
   watch: {
     rules() {
-      let style = this.insertStyleElement();
-      this.el.parentNode.replaceChild(style, this.el);
+      console.log('rules!')
+      const newStyle = this.createStyleElement()
+      document.head.replaceChild(newStyle, this.el)
+      this.el = newStyle
     },
   },
 };

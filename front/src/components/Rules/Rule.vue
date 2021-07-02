@@ -1,12 +1,12 @@
 <template>
-  <code 
+  <div 
     class="rule"
     :style="rule.rules"  
   >
     <p :title="toEmojiCode(rule.className)">{{ rule.className }} {</p>
     <p v-for="dec in rule.rules" :key="dec">&nbsp; {{ dec }}</p>
     <p>}</p>
-  </code>
+  </div>
 </template>
 
 <script>

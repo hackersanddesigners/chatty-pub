@@ -27,7 +27,10 @@ export default {
 </script>
 
 <style scoped>
-section {
-  min-width: 6em;
+.streams {
+  min-width: 10em;
+}
+@media print {
+  .streams { display: none; } 
 }
 </style>

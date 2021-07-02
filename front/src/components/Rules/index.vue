@@ -22,9 +22,21 @@ export default {
     ...mapState([
       'rules',
     ])
+  },
+  watch: {
+    rules() {
+      console.log('rules')
+    }
   }
 }
 </script>
 
 <style scoped>
+.rules {
+  max-width: unset;
+}
+
+@media print {
+  .rules { display: none; } 
+}
 </style>

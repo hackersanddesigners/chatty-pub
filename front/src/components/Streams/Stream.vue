@@ -21,6 +21,8 @@ export default {
 </script>
 
 <style scoped>
+div {
+}
 div p {
   margin: 0;
 }

@@ -1,7 +1,10 @@
 <template>
   <section class="content">
     <p class="title">{{ $.type.name }}</p>
-    <div class="body">
+    <div 
+      class="body"
+      :class="currentStream"
+    >
       <span
         v-for="message in contents"
         :key="message.id"
@@ -27,7 +30,8 @@ export default {
   computed: {
     ...mapState([
       'contents',
-      'rules'
+      'rules',
+      'currentStream'
     ])
   },
   methods: {
@@ -36,7 +40,11 @@ export default {
 </script>
 
 <style scoped>
-section {
+.content {
   max-width: 700px;
+  background: unset;
+}
+@media print {
+  .title { display: none; } 
 }
 </style>

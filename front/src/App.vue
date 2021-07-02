@@ -2,7 +2,6 @@
   <div 
     id="app" 
     :class="[
-      stream,
       { mobile: isMobile }
     ]">
     <Styles />
@@ -34,7 +33,6 @@ export default {
     return {
       api: api,
       zulipClient: null,
-      stream: null,
     };
   },
   computed: {
@@ -49,13 +47,11 @@ export default {
     this.getStreams();
 
     this.$router.afterEach((to) => {
+      this.$store.commit("setContents", []);
+      this.$store.commit("setRules", []);
       this.$store.commit("setCurStream", to.path.replace("/", ""))
-      this.stream = to.path.replace("/", "")
-      if (this.stream != "") {
-        this.setUpDoc(this.stream);
-      } else {
-        this.$store.commit("setContents", []);
-        this.$store.commit("setRules", []);
+      if (this.currentStream != "") {
+        this.setUpDoc(this.currentStream);
       }
     });
   },
@@ -64,29 +60,29 @@ export default {
     checkIfMobile: () => window.innerWidth < 700,
 
     getStreams() {
-      api
-      .zulip
-      .init()
-      .then(client => {
+      api.zulip.init().then(client => {
         this.zulipClient = client
-        api
-        .zulip
-        .getStreams(client)
-        .then(result => {
-          this
-          .$store
-          .commit( 'setStreams', 
-            result
-            .streams
-            .filter(s => 
-              s.name.startsWith(this.pubStr)
-            )
+        api.zulip.getStreams(client).then(result => {
+          this.$store.commit( 'setStreams', 
+            result.streams
+            .filter(s => s.name.startsWith(this.pubStr))
           )
         })
+        api.zulip.listen(this.zulipClient, this.eventHandler)
       })
     },
 
     setUpDoc(stream) {
+    
+      api.zulip.getSubs(this.zulipClient).then(result => {
+        if (
+          !result.subscriptions
+          .map(s => s.name)
+          .includes(this.currentStream)
+        ) {
+          api.zulip.addSub(this.zulipClient, this.currentStream)
+        }
+      })
         
       api.zulip.getMsgs(this.zulipClient, stream, "content").then((result) => {
         for (let m = 0; m < result.messages.length; m++) {
@@ -99,8 +95,6 @@ export default {
         this.$store.commit("setRules", result.messages);
       });
 
-      api.zulip.listen(this.zulipClient, this.eventHandler)
-      
     },
 
     eventHandler(event) {
@@ -125,7 +119,7 @@ export default {
         case 'update_message':
           this.$store.commit('editMessage', {
             mid: event.message_id,
-            content: event.content
+            content: event.rendered_content
           })
           break
           
@@ -192,17 +186,27 @@ main {
 section {
   position: relative;
   box-sizing: border-box;
-  margin-left: 1em;
-  min-width: 500px;
+  /* margin-left: 1em; */
+  padding: 1em;
+  min-width: 800px;
   max-width: 800px;
   display: flex;
   flex-direction: column;
   overflow: scroll;
+  background: lightgray;
 }
-
+section p {
+  margin-bottom: 0;
+  margin-top: 0;
+}
 section .title {
+  display: none;
   font-weight: bold;
   position: sticky;
   top: 1em;
+}
+
+@media print {
+  .title { display: none; } 
 }
 </style>
