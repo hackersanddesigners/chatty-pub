@@ -18,11 +18,11 @@ let toCSS = (message, currentStream) => {
     id = message.id
 
   // let regex = /[/s]?(?<selector>.+)\s*\n?{\n?(?<prop>[\s\w.~:>-]+\s*:\s*.+;?\n?)*\n?}/gm
-  let regex = /[/s]?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
+  let regex = /\s?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
   let content = stripHtml(message.content).result;
   let results = content.matchAll(regex);
   results = Array.from(results);
-  // console.log(results)
+  //console.log(results)
   if (results.length > 0) {
     className = emojiConv.replace_colons(results[0]['groups']['selector']);
     if (emoji.methods.containsEmoji(className)) {
@@ -60,7 +60,7 @@ const handleMDReply = message => {
   // console.log(message.responseTo)
 }
 
-const handleHTMLReply = message => { 
+const handleHTMLReply = message => {
   message.responseTo = {
     id: message.content
       .replace(/.*\/near\//gm, '')
@@ -80,26 +80,26 @@ export default createStore({
   strict: process.env.NODE_ENV !== 'production',
 
   state: {
-    isMobile  : false,
-    streams   : [],
+    isMobile: false,
+    streams: [],
     currentStream: '',
-    contents  : [],
-    rules     : [],
-    pubStr    : 'pub-', 
+    contents: [],
+    rules: [],
+    pubStr: 'pub-',
   },
 
   mutations: {
-  
-    setMobile    : (state, mobile)    => state.isMobile  = mobile,
-    setStreams   : (state, streams)   => state.streams = streams,
-    setCurStream : (state, stream)    => state.currentStream = stream,
+
+    setMobile: (state, mobile) => state.isMobile = mobile,
+    setStreams: (state, streams) => state.streams = streams,
+    setCurStream: (state, stream) => state.currentStream = stream,
     setContents: (state, contents) => state.contents = contents,
     addMessage: (state, message) => {
       if (message.display_recipient == state.currentStream) {
         if (message.content.startsWith('@_**')) {
           handleMDReply(message)
         } else if (
-          message.content.includes('user-mention') && 
+          message.content.includes('user-mention') &&
           message.content.includes('blockquote')
         ) {
           handleHTMLReply(message)
@@ -113,13 +113,13 @@ export default createStore({
         state.contents.splice(state.contents.indexOf(message), 1)
       }
     },
-    addReaction : (state, { mid, reaction })  => {
+    addReaction: (state, { mid, reaction }) => {
       const message = state.contents.find(m => m.id == mid)
       if (message) {
         message.reactions.push(reaction)
       }
     },
-    removeReaction : (state, { mid, reaction })  => {
+    removeReaction: (state, { mid, reaction }) => {
       const message = state.contents.find(m => m.id == mid)
       if (message) {
         message.reactions.splice(message.reactions.indexOf(reaction), 1)
@@ -147,7 +147,7 @@ export default createStore({
         if (message.content.startsWith('@_**')) {
           handleMDReply(message)
         } else if (
-          message.content.includes('user-mention') && 
+          message.content.includes('user-mention') &&
           message.content.includes('blockquote')
         ) {
           handleHTMLReply(message)
@@ -157,19 +157,19 @@ export default createStore({
           id: mid, content: content,
         }, state.currentStream)]]
         state.rules = newRules
-        
+
         // state.rules[state.rules.indexOf(rule)] = toCSS({
         //   id: mid, content: content,
         // }, state.currentStream)
       }
     },
-    
+
   },
 
   actions: {
   },
 
-  getters: {  
+  getters: {
     rules: state => state.rules
   }
 
