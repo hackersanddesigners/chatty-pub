@@ -1,5 +1,10 @@
 # CSS
 
+- [What is CSS](#css)
+- [Rules](#rules)
+- [Css in chatty-pub](#chatty-pub)
+- [Typing Emoji](#emoji)
+
 ## What is CSS?
 
 CSS (Cascading Style Sheets) is the language that allows you to style and layout HTML web pages. This article explains what CSS is, with some simple syntax examples, and also covers some key terms about the language.
@@ -12,7 +17,7 @@ But what HTML does not do is speficy how these elements should look. That is whe
 CSS can be used for very basic document text styling — for example changing the color and size of headings and links. It can be used to create layout — for example turning a single column of text into a layout with a main content area and a sidebar for related information. It can even be used for effects such as animation.
 In Chatty-pub we're mostly interested in the first part.
 
-### Rules
+## Rules
 
 #### _Elements and Classes_
 
@@ -22,10 +27,10 @@ CSS is a rule-based language — you define rules specifying groups of styles th
 
 The following code shows a very simple CSS rule that would achieve the styling described above:
 
-```lang-css
+```css
 h1 {
-    color: red;
-    font-size: 5em;
+  color: red;
+  font-size: 5em;
 }
 ```
 
@@ -39,7 +44,7 @@ The example above will style all the `H1` elements on the page. You could also w
 
 Take this HTML:
 
-```lang=html
+```html
 <ul>
   <li>Item one</li>
   <li class="special">Item two</li>
@@ -49,7 +54,7 @@ Take this HTML:
 
 To target the class of special you can create a selector that starts with a full stop character.
 
-```lang=css
+```css
 .special {
   color: orange;
   font-weight: bold;
@@ -66,7 +71,7 @@ has that class.  -->
 
 When you react to a message in Zulip with an emoji, this emoji gets turned into a class in **Chatty-pub**. So lets say you responded to a message with the strawberry 🍓 emoji. In **Chatty-Pub** the message will have class with that emoji as selector. (You can confirm this by rolling over the message, the emoji should popup on a overlay.) So now to style that message, you go to the #rules channel and add a message with the following content:
 
-```lang=css
+```css
 🍓 {
   color: red;
 }
@@ -105,6 +110,11 @@ A colors value can defined in multiple ways:
 - By [name/keyword](http://web.simmons.edu/~grovesd/comm244/notes/week3/css-colors#keywords) - `color: red;` will make your text red.
 - By [hex value](http://web.simmons.edu/~grovesd/comm244/notes/week3/css-colors#hex) - `color: #ff0000;` also red.
 - Or as a [function](http://web.simmons.edu/~grovesd/comm244/notes/week3/css-colors#rgba), which allows transparency. - `color: rgba(255,0,0,0.5);` red, but 50% transparent.
+
+### Box model
+
+- [margin](https://developer.mozilla.org/en-US/docs/Web/CSS/margin) - The margin property sets the margin area on all four sides of an element. Margin refers to space between different elements.
+- [padding](https://developer.mozilla.org/en-US/docs/Web/CSS/padding) - The padding property sets the padding area on all four sides of an element at once. Padding refers to the spacing inside the border of an element.
 
 ### Fonts
 
