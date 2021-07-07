@@ -115,20 +115,29 @@ export default createStore({
         }
       }
     },
-    deleteMessage: (state, mid) => {
-      const message = state.contents.find(m => m.id == mid)
-      if (message) {
-        state.contents.splice(state.contents.indexOf(message), 1)
+    deleteMessage: (state, { mid, subject }) => {
+      const topic = state.topics.find(t => t.title == subject)
+      if (topic) {
+        const message = topic.messages.find(m => m.id == mid)
+        if (message) {
+          topic.messages.splice(topic.messages.indexOf(message), 1)
+        }
       }
     },
     addReaction: (state, { mid, reaction }) => {
-      const message = state.contents.find(m => m.id == mid)
+      const message = state.topics
+        .map(t => t.messages)
+        .flat()
+        .find(m => m.id == mid)
       if (message) {
         message.reactions.push(reaction)
       }
     },
     removeReaction: (state, { mid, reaction }) => {
-      const message = state.contents.find(m => m.id == mid)
+      const message = state.topics
+        .map(t => t.messages)
+        .flat()
+        .find(m => m.id == mid)
       if (message) {
         message.reactions.splice(message.reactions.indexOf(reaction), 1)
       }
@@ -145,13 +154,15 @@ export default createStore({
     addRule: (state, rule) => {
       if (toCSS(rule) !== null) {
         // state.rules.push(toCSS(rule, state.currentStream))
-        
         // vue will not update if i use rules.push(rule)
         state.rules = [...state.rules,...[toCSS(rule, state.currentStream)]]
       }
     },
     editMessage: (state, { mid, content }) => {
-      const message = state.contents.find(m => m.id == mid)
+      const message = state.topics
+        .map(t => t.messages)
+        .flat()
+        .find(m => m.id == mid)
       const rule = state.rules.find(r => r.id == mid)
       if (message) {
         message.content = content
