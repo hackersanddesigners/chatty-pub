@@ -184,9 +184,16 @@ export default createStore({
           id: mid, content: content,
         }, state.currentStream)]]
         state.rules = newRules
-
       }
     },
+
+    updateTopic: (state, { orig_subject, subject }) => {
+      const topic = state.topics.find(t => t.title == orig_subject)
+      if (topic) {
+        topic.title = subject
+        topic.messages.forEach(m => m.subject = subject)
+      }
+    }
 
   },
 
@@ -195,7 +202,11 @@ export default createStore({
 
   getters: {
     rules: state => state.rules,
-    sortedTopics: state => [...state.topics].sort((a, b) => a.title.localeCompare(b.title))
+    sortedTopics: state => (
+      [...state.topics]
+      .sort((a, b) => a.title.localeCompare(b.title))
+      .filter(t => t.messages.length > 0) 
+    )
   }
 
 })

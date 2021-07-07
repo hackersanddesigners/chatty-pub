@@ -117,10 +117,20 @@ export default {
           break
           
         case 'update_message':
-          this.$store.commit('editMessage', {
-            mid: event.message_id,
-            content: event.rendered_content
-          })
+          if (
+            event.message_ids.length > 1 &&
+            event.orig_subject
+          ){
+            this.$store.commit('updateTopic', { 
+              orig_subject: event.orig_subject,
+              subject: event.subject
+            })
+          } else {
+            this.$store.commit('editMessage', {
+              mid: event.message_id,
+              content: event.rendered_content
+            })
+          }
           break
           
         case 'reaction':
