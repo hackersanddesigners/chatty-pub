@@ -125,13 +125,19 @@ export default createStore({
       }
     },
     addReaction: (state, { mid, reaction }) => {
-      const message = state.contents.find(m => m.id == mid)
+      const message = state.topics
+        .map(t => t.messages)
+        .flat()
+        .find(m => m.id == mid)
       if (message) {
         message.reactions.push(reaction)
       }
     },
     removeReaction: (state, { mid, reaction }) => {
-      const message = state.contents.find(m => m.id == mid)
+      const message = state.topics
+        .map(t => t.messages)
+        .flat()
+        .find(m => m.id == mid)
       if (message) {
         message.reactions.splice(message.reactions.indexOf(reaction), 1)
       }
