@@ -209,14 +209,7 @@ section p {
   margin-bottom: 0;
   margin-top: 0;
 }
-section .title {
-  display: none;
-  font-weight: bold;
-  position: sticky;
-  top: 1em;
-}
-
 @media print {
-  .title { display: none; } 
+  /* .title { display: none; }  */
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <section class="streams">
-    <p class="title">{{ $.type.name }}</p>
+    <!-- <p class="title">{{ $.type.name }}</p> -->
     <Stream
       v-for="stream in streams"
       :key="stream.id"
@@ -29,6 +29,7 @@ export default {
 <style scoped>
 .streams {
   min-width: 10em;
+  padding: 0;
 }
 @media print {
   .streams { display: none; } 

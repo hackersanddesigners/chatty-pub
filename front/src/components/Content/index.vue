@@ -1,36 +1,30 @@
 <template>
   <section :class="[ 'content', currentStream ]">
-    <div 
+    <h1 class="title">{{ currentStream }}</h1>
+    <Chapter 
       v-for="topic in sortedTopics"
       :key="topic.title"
-      :class="[ 'body', topic.title ]"
-    >
-      <h1>{{ topic.title }}</h1>
-      <span
-        v-for="message in topic.messages"
-        :key="message.id"
-      >
-      <Message
-        :message="message"
-      />
-      <span>&nbsp;</span>
-      </span>
-    </div>
+      :topic="topic"
+    />    
   </section>   
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import Message from './Message'
+import Chapter from './Chapter.vue'
 
 export default {
   name: 'Content',
   components: { 
-    Message,
+    Chapter,
+  },
+  data() {
+    return {
+      desiresContent: false,
+    }
   },
   computed: {
     ...mapState([
-      'rules',
       'currentStream'
     ]),
     ...mapGetters([
@@ -46,8 +40,5 @@ export default {
 .content {
   max-width: 700px;
   background: unset;
-}
-@media print {
-  .title { display: none; } 
 }
 </style>
