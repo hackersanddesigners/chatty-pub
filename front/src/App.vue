@@ -102,18 +102,18 @@ export default {
       switch (event.type) {
       
         case 'message':
-          switch (event.message.subject) {
-            case 'content':
-              this.$store.commit('addMessage', event.message)
-              break
-            case 'rules':
-              this.$store.commit('addRule', event.message)
-              break
+          if (event.message.subject == 'rules') {
+            this.$store.commit('addRule', event.message)
+          } else {
+            this.$store.commit('addMessage', event.message)
           }
           break
           
         case 'delete_message':
-          this.$store.commit('deleteMessage', event.message_id)
+          this.$store.commit('deleteMessage', {
+            subject: event.topic, 
+            mid: event.message_id
+          })
           break
           
         case 'update_message':
