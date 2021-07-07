@@ -47,8 +47,8 @@ export default {
     this.getStreams();
 
     this.$router.afterEach((to) => {
-      this.$store.commit("setContents", []);
-      this.$store.commit("setRules", []);
+      this.$store.commit("setTopics",    []);
+      this.$store.commit("setRules",     []);
       this.$store.commit("setCurStream", to.path.replace("/", ""))
       if (this.currentStream != "") {
         this.setUpDoc(this.currentStream);
@@ -83,16 +83,16 @@ export default {
           api.zulip.addSub(this.zulipClient, this.currentStream)
         }
       })
-        
-      api.zulip.getMsgs(this.zulipClient, stream, "content").then((result) => {
+      
+      api.zulip.getAllMsgs(this.zulipClient, stream).then((result) => {
         for (let m = 0; m < result.messages.length; m++) {
           const message = result.messages[m]
-          this.$store.commit('addMessage', message)
+          if (message.subject == 'rules') {
+            this.$store.commit('addRule', message)
+          } else {
+            this.$store.commit('addMessage', message)
+          }
         } 
-      });
-
-      api.zulip.getMsgs(this.zulipClient, stream, "rules").then((result) => {
-        this.$store.commit("setRules", result.messages);
       });
 
     },

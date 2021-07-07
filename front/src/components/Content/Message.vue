@@ -27,7 +27,9 @@ export default {
       c = c.replaceAll('src="', 'src="' + url);
       c = c.replaceAll('href="/', 'href="' + url + "/");
 
-      const referrers = this.$store.state.contents.filter(
+      const referrers = this.$store.state
+      .topics.find(t => t.title == this.message.subject)
+      .messages.filter(
         (m) =>
           m.responseTo &&
           m.responseTo.id == this.message.id &&

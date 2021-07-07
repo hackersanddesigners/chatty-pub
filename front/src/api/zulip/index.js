@@ -36,8 +36,24 @@ const
         // apply_markdown: false,
         narrow: [
           { operator: "stream", operand: stream },
-          { operator: "topic", operand: topic },
+          { operator: "topic",  operand: topic },
         ],
+      })
+      .then(result => resolve(result))
+      .catch(error => reject(error))
+    })
+  ),
+  
+  getAllMsgs = (client, stream, params) => ( new
+    Promise((resolve, reject) => {
+     client
+     .messages
+     .retrieve(params || {
+        anchor: "newest",
+        num_before: 100,
+        num_after: 0,
+        // apply_markdown: false,
+        narrow: [{ operator: "stream", operand: stream }],
       })
       .then(result => resolve(result))
       .catch(error => reject(error))
@@ -100,6 +116,7 @@ export default {
   config,
   getStreams,
   getMsgs,
+  getAllMsgs,
   listen,
   sendMsg,
   getSubs,
