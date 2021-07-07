@@ -1,9 +1,5 @@
 <template>
-  <div 
-    id="app" 
-    :class="[
-      { mobile: isMobile }
-    ]">
+  <div id="app" :class="[{ mobile: isMobile }]">
     <Styles />
 
     <!-- <header>
@@ -47,9 +43,9 @@ export default {
     this.getStreams();
 
     this.$router.afterEach((to) => {
-      this.$store.commit("setTopics",    []);
-      this.$store.commit("setRules",     []);
-      this.$store.commit("setCurStream", to.path.replace("/", ""))
+      this.$store.commit("setTopics", []);
+      this.$store.commit("setRules", []);
+      this.$store.commit("setCurStream", to.path.replace("/", ""));
       if (this.currentStream != "") {
         this.setUpDoc(this.currentStream);
       }
@@ -60,85 +56,79 @@ export default {
     checkIfMobile: () => window.innerWidth < 700,
 
     getStreams() {
-      api.zulip.init().then(client => {
-        this.zulipClient = client
-        api.zulip.getStreams(client).then(result => {
-          this.$store.commit( 'setStreams', 
-            result.streams
-            .filter(s => s.name.startsWith(this.pubStr))
-          )
-        })
-        api.zulip.listen(this.zulipClient, this.eventHandler)
-      })
+      api.zulip.init().then((client) => {
+        this.zulipClient = client;
+        api.zulip.getStreams(client).then((result) => {
+          this.$store.commit(
+            "setStreams",
+            result.streams.filter((s) => s.name.startsWith(this.pubStr))
+          );
+        });
+        api.zulip.listen(this.zulipClient, this.eventHandler);
+      });
     },
 
     setUpDoc(stream) {
-    
-      api.zulip.getSubs(this.zulipClient).then(result => {
+      api.zulip.getSubs(this.zulipClient).then((result) => {
         if (
-          !result.subscriptions
-          .map(s => s.name)
-          .includes(this.currentStream)
+          !result.subscriptions.map((s) => s.name).includes(this.currentStream)
         ) {
-          api.zulip.addSub(this.zulipClient, this.currentStream)
+          api.zulip.addSub(this.zulipClient, this.currentStream);
         }
-      })
-      
-      api.zulip.getAllMsgs(this.zulipClient, stream).then((result) => {
-        for (let m = 0; m < result.messages.length; m++) {
-          const message = result.messages[m]
-          if (message.subject == 'rules') {
-            this.$store.commit('addRule', message)
-          } else {
-            this.$store.commit('addMessage', message)
-          }
-        } 
       });
 
+      api.zulip.getAllMsgs(this.zulipClient, stream).then((result) => {
+        for (let m = 0; m < result.messages.length; m++) {
+          const message = result.messages[m];
+          if (message.subject == "rules") {
+            this.$store.commit("addRule", message);
+          } else {
+            this.$store.commit("addMessage", message);
+          }
+        }
+      });
     },
 
     eventHandler(event) {
-      console.log(event)
+      console.log(event);
       switch (event.type) {
-      
-        case 'message':
+        case "message":
           switch (event.message.subject) {
-            case 'content':
-              this.$store.commit('addMessage', event.message)
-              break
-            case 'rules':
-              this.$store.commit('addRule', event.message)
-              break
+            case "content":
+              this.$store.commit("addMessage", event.message);
+              break;
+            case "rules":
+              this.$store.commit("addRule", event.message);
+              break;
           }
-          break
-          
-        case 'delete_message':
-          this.$store.commit('deleteMessage', event.message_id)
-          break
-          
-        case 'update_message':
-          this.$store.commit('editMessage', {
+          break;
+
+        case "delete_message":
+          this.$store.commit("deleteMessage", event.message_id);
+          break;
+
+        case "update_message":
+          this.$store.commit("editMessage", {
             mid: event.message_id,
-            content: event.rendered_content
-          })
-          break
-          
-        case 'reaction':
+            content: event.rendered_content,
+          });
+          break;
+
+        case "reaction":
           this.$store.commit(`${event.op}Reaction`, {
             mid: event.message_id,
-            reaction: {   
+            reaction: {
               emoji_code: event.emoji_code,
               emoji_name: event.emoji_name,
               reaction_type: event.reaction_type,
-            }
-          })
-          break
-          
+            },
+          });
+          break;
+
         default:
-        console.log("Event type unknown", event.type)
+          console.log("Event type unknown", event.type);
       }
-    }
-      
+    },
   },
 };
 </script>
@@ -188,11 +178,11 @@ section {
   box-sizing: border-box;
   /* margin-left: 1em; */
   padding: 1em;
-  min-width: 800px;
-  max-width: 800px;
+  /* min-width: 800px; */
+  /* max-width: 800px; */
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  /* overflow: scroll; */
   background: lightgray;
 }
 section p {
@@ -207,6 +197,8 @@ section .title {
 }
 
 @media print {
-  .title { display: none; } 
+  .title {
+    display: none;
+  }
 }
 </style>
