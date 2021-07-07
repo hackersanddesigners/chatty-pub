@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "emoji-js": "^3.5.0",
+    "splitpanes": "^2.3.6",
     "string-strip-html": "^8.3.0",
     "vue-html2pdf": "^1.8.0",
     "zulip-js": "^2.0.9"

@@ -83,8 +83,8 @@ export default createStore({
     isMobile: false,
     streams: [],
     currentStream: '',
-    contents: [],
     rules: [],
+    topics: [],
     pubStr: 'pub-',
   },
 
@@ -93,7 +93,7 @@ export default createStore({
     setMobile: (state, mobile) => state.isMobile = mobile,
     setStreams: (state, streams) => state.streams = streams,
     setCurStream: (state, stream) => state.currentStream = stream,
-    setContents: (state, contents) => state.contents = contents,
+    setTopics: (state, topics) => state.topics = topics,
     addMessage: (state, message) => {
       if (message.display_recipient == state.currentStream) {
         if (message.content.startsWith('@_**')) {
@@ -104,7 +104,15 @@ export default createStore({
         ) {
           handleHTMLReply(message)
         }
-        state.contents.push(message)
+        const topic = state.topics.find(topic => topic.title == message.subject)
+        if (topic) {
+          topic.messages.push(message)
+        } else {
+          state.topics.push({
+            title: message.subject,
+            messages: [ message ]
+          })
+        }
       }
     },
     deleteMessage: (state, mid) => {
@@ -136,7 +144,10 @@ export default createStore({
     },
     addRule: (state, rule) => {
       if (toCSS(rule) !== null) {
-        state.rules.push(toCSS(rule, state.currentStream))
+        // state.rules.push(toCSS(rule, state.currentStream))
+        
+        // vue will not update if i use rules.push(rule)
+        state.rules = [...state.rules,...[toCSS(rule, state.currentStream)]]
       }
     },
     editMessage: (state, { mid, content }) => {
@@ -153,14 +164,16 @@ export default createStore({
           handleHTMLReply(message)
         }
       } else if (rule) {
+        // state.rules[state.rules.indexOf(rule)] = toCSS({
+        //   id: mid, content: content,
+        // }, state.currentStream)
+
+        // vue will not update if i use rules.push(rule)        
         const newRules = [...state.rules, ...[toCSS({
           id: mid, content: content,
         }, state.currentStream)]]
         state.rules = newRules
 
-        // state.rules[state.rules.indexOf(rule)] = toCSS({
-        //   id: mid, content: content,
-        // }, state.currentStream)
       }
     },
 
@@ -170,7 +183,8 @@ export default createStore({
   },
 
   getters: {
-    rules: state => state.rules
+    rules: state => state.rules,
+    sortedTopics: state => [...state.topics].sort((a, b) => a.title.localeCompare(b.title))
   }
 
 })
