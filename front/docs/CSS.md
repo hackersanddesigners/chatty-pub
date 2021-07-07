@@ -1,5 +1,13 @@
 # CSS
 
+In this document we take a look at what CSS is and how it can be applied to a publication in **Chatty-pub**.
+
+- [What is CSS](#css)
+- [Rules](#rules)
+- [Css in chatty-pub](#chatty-pub)
+- [Print settings](#print-settings)
+- [Typing Emoji](#emoji)
+
 ## What is CSS?
 
 CSS (Cascading Style Sheets) is the language that allows you to style and layout HTML web pages. This article explains what CSS is, with some simple syntax examples, and also covers some key terms about the language.
@@ -12,7 +20,7 @@ But what HTML does not do is speficy how these elements should look. That is whe
 CSS can be used for very basic document text styling — for example changing the color and size of headings and links. It can be used to create layout — for example turning a single column of text into a layout with a main content area and a sidebar for related information. It can even be used for effects such as animation.
 In Chatty-pub we're mostly interested in the first part.
 
-### Rules
+## Rules
 
 #### _Elements and Classes_
 
@@ -22,10 +30,10 @@ CSS is a rule-based language — you define rules specifying groups of styles th
 
 The following code shows a very simple CSS rule that would achieve the styling described above:
 
-```lang-css
+```css
 h1 {
-    color: red;
-    font-size: 5em;
+  color: red;
+  font-size: 20px;
 }
 ```
 
@@ -39,7 +47,7 @@ The example above will style all the `H1` elements on the page. You could also w
 
 Take this HTML:
 
-```lang=html
+```html
 <ul>
   <li>Item one</li>
   <li class="special">Item two</li>
@@ -49,7 +57,7 @@ Take this HTML:
 
 To target the class of special you can create a selector that starts with a full stop character.
 
-```lang=css
+```css
 .special {
   color: orange;
   font-weight: bold;
@@ -59,14 +67,23 @@ To target the class of special you can create a selector that starts with a full
 The peroid character in front of special tells the browser that we're creating a class selector.
 You can apply the class of special to any element on your page that you want to have the same look as this list item.
 
-<!-- As said, in this example we're selecting a ```H1``` (Heading 1) to style, but there are other ways to select elements. In **Chatty-pub** specifically we use something called a class. A class is a propery you can add to HTML elements, and if you write a CSS selector for that class, the rules in the class will be apply to each element that
-has that class.  -->
+### Units
+
+In the `h1` example above, we set the following property: `font-size: 20px;`. This will set the font-size of all H1 headers to 20 pixels. But pixels are not the only units available. Some examples:
+
+- `em` and `rem` - these relative units declare a size dependant on the font-size of the context they get used in. This can be a bit confusing if you're not used to it. Feel free to replace it with on of the values below.
+- `px` - Pixels.
+- `cm` and `in` - centimeters and inches. These units are mostly relevant in print context.
+- `vw` and `vh` - so called viewport units, 100vw is exactly the height of the viewport (the part of the browser that shows the webpage). `vh` is the same, but for the height of the browser.
+- `rgba(r,g,b,a)` strictly speaking not a unit but a function, but it sets the color and transparency of the foreground.
+
+[More information on units](https://www.w3.org/Style/Examples/007/units.en.html).
 
 ## CSS in Chatty-pub
 
 When you react to a message in Zulip with an emoji, this emoji gets turned into a class in **Chatty-pub**. So lets say you responded to a message with the strawberry 🍓 emoji. In **Chatty-Pub** the message will have class with that emoji as selector. (You can confirm this by rolling over the message, the emoji should popup on a overlay.) So now to style that message, you go to the #rules channel and add a message with the following content:
 
-```lang=css
+```css
 🍓 {
   color: red;
 }
@@ -82,11 +99,54 @@ Because of the way Zulip handles the emoji reactions, not all emoji are availabl
 
 You can't enter a tab character in Zulip and the indentation before the property in the rule isn't absolutely necessary. So feel free to leave it out. If you absolutely want to have the indentation, you could write the rule in your favorite editor and copy and paste it into Zulip. If you only want to style a single property you could have the whole rule on a single line like this: `🌕 { box-shadow: 0 0 20px rgba(255,0,0,0.5); }`,
 
-_Don't forget the semi-colon at the end of the property line!_.
+_Don't forget the semi-colon at the end of the property line!_
+
+### Advanced CSS
+
+**Selecting HTML elements and other style rules**
+
+The reaction/emoji method described above allows to make quick modifications to the style and layout of your publication. But besides this **Chatty-pub** also allows you to style html elements like in regular CSS. To do this just enter your style rule. This snippet will give all HTML links a pink background color:
+
+```css
+a {
+  background-color: pink;
+}
+```
+
+You should be able to enter all regular CSS rules this way.
+
+**Bypassing the parser** -_Work in progress_-
+
+It is possible to bypass the parser and add arbitrary code to the CSS on the page. This allows you to add, for example, `@key` or media queries. To do this send any message to the #rules channel and wrap the message in three backticks like this:
+
+<code>
+```
+@keyframes example {
+  from {background-color: red;}
+  to {background-color: yellow;}
+}
+```
+</code>
+
+## Print settings
+
+To set the paper size we can use the special selector `@page`. The following snippet set the page size to A5.
+
+```css
+@page {
+  size: 148mm 210mm;
+}
+```
+
+Regrettably browser support for `@page` is [spotty](https://caniuse.com/css-paged-media). You will get the best results using Google Chrome.
+
+[Pagedmedia.org](https://www.pagedmedia.org/pagedjs-sneak-peeks/) has an excellent explanation on using `@page`. The [Paged media module](https://developer.mozilla.org/en-US/docs/Web/CSS/Paged_Media) at Mozilla also.
+
+It may be necessary to use the methods described under [Advanced CSS](#advanced-css) above to enter these rules.
 
 ## List of common and handy CSS properties
 
-There are hundreds of CSS properties, so I can't list them all here. Below is a small selection of some basic properties grouped by module. Most of them are self explainatory, otherwise I've added a small note.
+There are hundreds of CSS properties. Below is a small selection of some basic properties mostly focussed on layout and type representation, grouped by module.
 
 ### Backgrounds and borders
 
@@ -105,6 +165,11 @@ A colors value can defined in multiple ways:
 - By [name/keyword](http://web.simmons.edu/~grovesd/comm244/notes/week3/css-colors#keywords) - `color: red;` will make your text red.
 - By [hex value](http://web.simmons.edu/~grovesd/comm244/notes/week3/css-colors#hex) - `color: #ff0000;` also red.
 - Or as a [function](http://web.simmons.edu/~grovesd/comm244/notes/week3/css-colors#rgba), which allows transparency. - `color: rgba(255,0,0,0.5);` red, but 50% transparent.
+
+### Box model
+
+- [margin](https://developer.mozilla.org/en-US/docs/Web/CSS/margin) - The margin property sets the margin area on all four sides of an element. Margin refers to space between different elements.
+- [padding](https://developer.mozilla.org/en-US/docs/Web/CSS/padding) - The padding property sets the padding area on all four sides of an element at once. Padding refers to the spacing inside the border of an element.
 
 ### Fonts
 

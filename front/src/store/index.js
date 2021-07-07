@@ -18,11 +18,11 @@ let toCSS = (message, currentStream) => {
     id = message.id
 
   // let regex = /[/s]?(?<selector>.+)\s*\n?{\n?(?<prop>[\s\w.~:>-]+\s*:\s*.+;?\n?)*\n?}/gm
-  let regex = /[/s]?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
+  let regex = /\s?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
   let content = stripHtml(message.content).result;
   let results = content.matchAll(regex);
   results = Array.from(results);
-  // console.log(results)
+  //console.log(results)
   if (results.length > 0) {
     className = emojiConv.replace_colons(results[0]['groups']['selector']);
     if (emoji.methods.containsEmoji(className)) {
@@ -60,7 +60,7 @@ const handleMDReply = message => {
   // console.log(message.responseTo)
 }
 
-const handleHTMLReply = message => { 
+const handleHTMLReply = message => {
   message.responseTo = {
     id: message.content
       .replace(/.*\/near\//gm, '')
@@ -80,31 +80,39 @@ export default createStore({
   strict: process.env.NODE_ENV !== 'production',
 
   state: {
-    isMobile  : false,
-    streams   : [],
+    isMobile: false,
+    streams: [],
     currentStream: '',
-    contents  : [],
-    rules     : [],
-    pubStr    : 'pub-', 
+    rules: [],
+    topics: [],
+    pubStr: 'pub-',
   },
 
   mutations: {
-  
-    setMobile    : (state, mobile)    => state.isMobile  = mobile,
-    setStreams   : (state, streams)   => state.streams = streams,
-    setCurStream : (state, stream)    => state.currentStream = stream,
-    setContents: (state, contents) => state.contents = contents,
+
+    setMobile: (state, mobile) => state.isMobile = mobile,
+    setStreams: (state, streams) => state.streams = streams,
+    setCurStream: (state, stream) => state.currentStream = stream,
+    setTopics: (state, topics) => state.topics = topics,
     addMessage: (state, message) => {
       if (message.display_recipient == state.currentStream) {
         if (message.content.startsWith('@_**')) {
           handleMDReply(message)
         } else if (
-          message.content.includes('user-mention') && 
+          message.content.includes('user-mention') &&
           message.content.includes('blockquote')
         ) {
           handleHTMLReply(message)
         }
-        state.contents.push(message)
+        const topic = state.topics.find(topic => topic.title == message.subject)
+        if (topic) {
+          topic.messages.push(message)
+        } else {
+          state.topics.push({
+            title: message.subject,
+            messages: [ message ]
+          })
+        }
       }
     },
     deleteMessage: (state, mid) => {
@@ -113,13 +121,13 @@ export default createStore({
         state.contents.splice(state.contents.indexOf(message), 1)
       }
     },
-    addReaction : (state, { mid, reaction })  => {
+    addReaction: (state, { mid, reaction }) => {
       const message = state.contents.find(m => m.id == mid)
       if (message) {
         message.reactions.push(reaction)
       }
     },
-    removeReaction : (state, { mid, reaction })  => {
+    removeReaction: (state, { mid, reaction }) => {
       const message = state.contents.find(m => m.id == mid)
       if (message) {
         message.reactions.splice(message.reactions.indexOf(reaction), 1)
@@ -136,7 +144,10 @@ export default createStore({
     },
     addRule: (state, rule) => {
       if (toCSS(rule) !== null) {
-        state.rules.push(toCSS(rule, state.currentStream))
+        // state.rules.push(toCSS(rule, state.currentStream))
+        
+        // vue will not update if i use rules.push(rule)
+        state.rules = [...state.rules,...[toCSS(rule, state.currentStream)]]
       }
     },
     editMessage: (state, { mid, content }) => {
@@ -147,30 +158,33 @@ export default createStore({
         if (message.content.startsWith('@_**')) {
           handleMDReply(message)
         } else if (
-          message.content.includes('user-mention') && 
+          message.content.includes('user-mention') &&
           message.content.includes('blockquote')
         ) {
           handleHTMLReply(message)
         }
       } else if (rule) {
+        // state.rules[state.rules.indexOf(rule)] = toCSS({
+        //   id: mid, content: content,
+        // }, state.currentStream)
+
+        // vue will not update if i use rules.push(rule)        
         const newRules = [...state.rules, ...[toCSS({
           id: mid, content: content,
         }, state.currentStream)]]
         state.rules = newRules
-        
-        // state.rules[state.rules.indexOf(rule)] = toCSS({
-        //   id: mid, content: content,
-        // }, state.currentStream)
+
       }
     },
-    
+
   },
 
   actions: {
   },
 
-  getters: {  
-    rules: state => state.rules
+  getters: {
+    rules: state => state.rules,
+    sortedTopics: state => [...state.topics].sort((a, b) => a.title.localeCompare(b.title))
   }
 
 })

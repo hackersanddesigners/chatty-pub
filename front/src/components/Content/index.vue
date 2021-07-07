@@ -1,12 +1,13 @@
 <template>
-  <section class="content">
-    <p class="title">{{ $.type.name }}</p>
+  <section :class="[ 'content', currentStream ]">
     <div 
-      class="body"
-      :class="currentStream"
+      v-for="topic in sortedTopics"
+      :key="topic.title"
+      :class="[ 'body', topic.title ]"
     >
+      <h1>{{ topic.title }}</h1>
       <span
-        v-for="message in contents"
+        v-for="message in topic.messages"
         :key="message.id"
       >
       <Message
@@ -19,7 +20,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import Message from './Message'
 
 export default {
@@ -29,9 +30,11 @@ export default {
   },
   computed: {
     ...mapState([
-      'contents',
       'rules',
       'currentStream'
+    ]),
+    ...mapGetters([
+      'sortedTopics'
     ])
   },
   methods: {
