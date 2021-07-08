@@ -191,7 +191,7 @@ section p {
 }
 @media print {
   .title {
-    display: none;
+    /* display: none; */
   }
 }
 </style>
