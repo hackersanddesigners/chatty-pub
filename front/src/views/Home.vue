@@ -4,13 +4,22 @@
       {{ show_ui ? "Hide" : "Show" }} UI
     </button>
     <splitpanes class="default-theme">
-      <pane v-if="show_ui" size="10" min-size="5">
+      <pane v-if="show_ui" size="10" min-size="5" @resize="resizer">
         <Streams />
-        <button @click="toggle_ui">{{ show_ui ? "Hide" : "Show" }} UI</button>
-        <button @click="print">Print</button>
+        <div class="controls">
+          <button @click="toggle_ui">{{ show_ui ? "Hide" : "Show" }} UI</button>
+          <button @click="print">Print</button>
+          <input
+            type="checkbox"
+            id="msg-data"
+            value="1"
+            v-model="show_message_data"
+          />
+          <label for="msg-data">Show chat message data</label>
+        </div>
       </pane>
       <pane size="55">
-        <Content :print="!show_ui" />
+        <Content :print="!show_ui" :show_message_data="show_message_data" />
       </pane>
       <pane v-if="show_ui" size="35" min-size="15">
         <Rules />
@@ -41,6 +50,8 @@ export default {
   data: () => {
     return {
       show_ui: true,
+      show_message_data: false,
+      panel_sizes: { 0: 10, 1: 55, 2: 35 },
     };
   },
   computed: {
@@ -49,6 +60,9 @@ export default {
     },
   },
   methods: {
+    resizer(e, i) {
+      console.log(e, i);
+    },
     print() {
       // let prev = this.show_ui;
       this.toggle_ui(null, false);
@@ -90,6 +104,11 @@ export default {
   height: 100vh;
 }
 
+.controls {
+  display: flex;
+  flex-direction: column;
+}
+
 .print .pane-wrapper {
   height: auto;
 }
@@ -102,6 +121,21 @@ export default {
   width: 100%;
   height: 100%;
 }
+
+/* absolutely needed to make the page breaks work (next style) */
+.print section {
+  display: block !important;
+}
+
+.print .body {
+  page-break-after: always;
+  border-bottom: 3px dotted green;
+}
+.print .body:first-of-type {
+  page-break-after: always;
+  border-bottom: 3px dotted yellow;
+}
+
 .float-btn {
   position: fixed;
   z-index: 1000;

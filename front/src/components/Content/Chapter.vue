@@ -6,10 +6,12 @@
     </h3>
     <div v-if="desiresContent || print">
       <span v-for="message in topic.messages" :key="message.id">
-        <Message :message="message" />
+        <Message :message="message" :show_message_data="show_message_data" />
         <span>&nbsp;</span>
       </span>
     </div>
+
+    <div style="float: none"><div style="page-break-after: always"></div></div>
   </div>
 </template>
 
@@ -26,7 +28,7 @@ export default {
       desiresContent: false,
     };
   },
-  props: ["topic", "print"],
+  props: ["topic", "print", "show_message_data"],
   computed: {
     toggleSymbol() {
       let r = "";

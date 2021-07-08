@@ -6,6 +6,7 @@
       :key="topic.title"
       :topic="topic"
       :print="print"
+      :show_message_data="show_message_data"
     />
   </section>
 </template>
@@ -24,7 +25,7 @@ export default {
     ...mapGetters(["sortedTopics"]),
   },
   methods: {},
-  props: ["print"],
+  props: ["print", "show_message_data"],
 };
 </script>
 
