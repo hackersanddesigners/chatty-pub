@@ -24,14 +24,13 @@ This script aims to provide the necessary instructions to host a workshop around
 ## How It Works
 ## Preparation
 
-Before the summer academy: Most important is for all workshop participants to set up a Zulip account on our server. The H&D zulip instance can be found at https://chat.hackersanddesigners.nl/ (public sign ups have temporariy been open).
+Before the summer academy: Most important is for all workshop participants to set up a Zulip account on our server. The H&D zulip instance can be found at https://chat.hackersanddesigners.nl/ (public sign ups are temporariy open).
 
 On the first day of the summer academy (monday): Participants are introduced to the Zulip interface and instructed to use it for communication during the course of the week. Zulip makes use of a rather unconventional (but powerful) chat-threading logic, so it would be good to spend some time interacting with it and settle into this new environment.
 
 Workshop hosts and participants are encouraged to think about how they would like to document their processes during the summer academy. What is included and what isn't? How is this shared? Is there a regular moment during the day dedicated to documentation or is it more ad-hoc? We suggest using Etherpad for collaborative note taking, and regularly making screenshots or screenrecordings and photos. We have previously compiled a so-called "tool-ecology", a list of tools we have good experiences with and recommend using during the summer academy: https://etherpad.hackersanddesigners.nl/p/hdsa2021-tool-ecology. 
 
-Texts, images, and conversations [you mean recordings of conversations as in sound files? or why do you make a difference to text?] will make great material for our workshop.
-
+Texts, notes, chats, images, and screenshots will make great material for our workshop.
 
 ## Workshop
 
