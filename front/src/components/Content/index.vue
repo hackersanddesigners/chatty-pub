@@ -1,6 +1,6 @@
 <template>
   <section :class="['content', currentStream]">
-    <h1 class="title"> {{ currentStream }} </h1>
+    <h1 class="title"> {{ currentStream.replace('pub-', '') }} </h1>
     <Chapter
       v-for="topic in sortedTopics"
       :key="topic.title"

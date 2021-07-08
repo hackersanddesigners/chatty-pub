@@ -21,7 +21,6 @@ This script aims to provide the necessary instructions to host a workshop around
 - a printer
 
 
-## How It Works
 ## Preparation
 
 Before the summer academy: Most important is for all workshop participants to set up a Zulip account on our server. The H&D zulip instance can be found at https://chat.hackersanddesigners.nl/ (public sign ups are temporariy open).
@@ -31,6 +30,40 @@ On the first day of the summer academy (monday): Participants are introduced to 
 Workshop hosts and participants are encouraged to think about how they would like to document their processes during the summer academy. What is included and what isn't? How is this shared? Is there a regular moment during the day dedicated to documentation or is it more ad-hoc? We suggest using Etherpad for collaborative note taking, and regularly making screenshots or screenrecordings and photos. We have previously compiled a so-called "tool-ecology", a list of tools we have good experiences with and recommend using during the summer academy: https://etherpad.hackersanddesigners.nl/p/hdsa2021-tool-ecology. 
 
 Texts, notes, chats, images, and screenshots will make great material for our workshop.
+
+## How It Works
+### Zulip
+
+On Zulip, conversations are categorized into different "Streams", which are comparable to "channels" in other messaging services like Discord. Streams can be public or private and host conversations consisting of text, images, files, reactions, etc..
+
+What differentiates Zulip from most messaging platforms is the way streams are sub-threaded. Zulip introduces the concept of "Topics", which, in the plainest terms, means that messages have subjects. When sending a message to a stream in Zulip, you can also specify the topic of the message and the stream automatically filters messages by their shared topics. If your message's topic doesn't exist yet, it will be created when you send your message.
+
+Zulip allows you to react to messages using emoji's as well. We will make heavy use of emojis during this workshop.
+
+There are several ways to engage with Zulip, including a web-client, a desktop app, and a mobile app.
+### ChattyPub
+
+https://chattypub.hackersanddesigners.nl
+
+ChattyPub is a website that acts as a different interface to the same Zulip service. ChattyPub takes a stream from Zulip, combines messages into long-form articles and uses a design system combining Emojis and CSS syntax to style the messages, effectively turning the stream into a (printable!) webpage.
+
+## Making a publication with Zulip & ChattyPub
+
+1. Create a stream on Zulip
+    - Ensure that the stream name starts with `pub-`.
+    - Ensure that the stream is public.
+2. Go to [ChattyPub](https://chattypub.hackersanddesigners.nl). The stream you created will be visible on the left-side navigation.
+3. Click on your stream.
+4. The main (middle) section of the website will have:
+    - Your stream name (which will be the name of your publication)
+    - The topics of your stream (which will act as "Chapters" in your publication)
+    - Topics are collapsed by default, click the expand button next to a topic to display it's messages as an article.
+    - To create a new topic, return to Zulip and type a message to your stream, making sure to send it to the topic you want to create.
+5. The right-hand side of the interface is reserved for one topic in your stream: "rules".
+    - Go back to Zulip and create a topic in your stream called "rules"
+    - This topic will house definitions for styles you want to apply to messges in your stream.
+    - 
+
 
 ## Workshop
 
