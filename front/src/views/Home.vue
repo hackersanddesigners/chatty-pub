@@ -10,7 +10,7 @@
         <button @click="print">Print</button>
       </pane>
       <pane size="55">
-        <Content />
+        <Content :print="!show_ui" />
       </pane>
       <pane v-if="show_ui" size="35" min-size="15">
         <Rules />
@@ -54,7 +54,7 @@ export default {
       this.toggle_ui(null, false);
       setTimeout(() => {
         window.print();
-        if (prev) this.toggle_ui(null, true);
+        // if (prev) this.toggle_ui(null, true);
       }, 1000);
       let paged = new Previewer();
       console.log(paged);
@@ -98,7 +98,7 @@ export default {
   overflow: initial;
 }
 
-iframe {
+.print .content iframe {
   width: 100%;
   height: 100%;
 }
