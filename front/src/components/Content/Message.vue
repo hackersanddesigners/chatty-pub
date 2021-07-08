@@ -1,7 +1,7 @@
 <template>
   <span :class="classes" class="message">
     <vue3-markdown-it :source="content" v-bind="$mdOpts"></vue3-markdown-it>
-    <div class="reactions">
+    <div class="reactions ui">
       <template v-for="reaction in reactions" :key="reaction">
         {{ reaction }}
       </template>
@@ -27,15 +27,15 @@ export default {
       c = c.replaceAll('src="', 'src="' + url);
       c = c.replaceAll('href="/', 'href="' + url + "/");
 
-      const referrers = this.$store.state
-      .topics.find(t => t.title == this.message.subject)
-      .messages.filter(
-        (m) =>
-          m.responseTo &&
-          m.responseTo.id == this.message.id &&
-          m.responseTo.sender_id == this.message.sender_id &&
-          this.message.content.includes(m.responseTo.quote)
-      );
+      const referrers = this.$store.state.topics
+        .find((t) => t.title == this.message.subject)
+        .messages.filter(
+          (m) =>
+            m.responseTo &&
+            m.responseTo.id == this.message.id &&
+            m.responseTo.sender_id == this.message.sender_id &&
+            this.message.content.includes(m.responseTo.quote)
+        );
       referrers.forEach((m) => {
         const classes = m.reactions.map((r) => "u" + r.emoji_code).join(" ");
         c = c.replace(
@@ -82,6 +82,7 @@ export default {
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.5);
   font-size: 3rem;
+  pointer-events: none;
 }
 .reactions,
 .reactions::before,

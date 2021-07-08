@@ -109,7 +109,7 @@ iframe {
 
 @media print {
   .ui {
-    display: none;
+    display: none !important;
   }
 }
 </style>
