@@ -38,50 +38,31 @@ Texts, images, and conversations [you mean recordings of conversations as in sou
 
 The workshop is split over two sessions (over two days) of 4 hours each.
 
-Opening Session: Introductions & first encounters with ChattyPub
+_Opening Session: Introductions & first encounters with ChattyPub_
 - Introductory presentation ( 1hr ) -- will be livestreamed in the morning / recorded and shared afterwards. 
     - Context and background on H&D's publishing activities (Anja & Juliette) -- [we can also prepare a slideshow as pdf with relevant links that can be shared afterwards] 
     - Introduction to ChattyPub (Karl).
     - Introduction to CSS [https://github.com/hackersanddesigners/chatty-pub/blob/master/front/docs/CSS.md] (Heerko).
     - How it all comes together (emojis ;])(who is doing this? Karl?)
+ - Experimenting with ChattyPub! ( 2 hrs ) [How are people going to do this asynchronously? it needs maybe more direction and steps from here]+1
+    - all levels of technical knowledge should be accommodated [yes but how? if people are not experieced where do they find instructions?]+1
+    - it's reccommended to group together participants with different levels of experience with CSS
+- Brainstorm Session (1 hr) [also for the brainstorm it would be nice to add some suggestions for how to do this if you are not in Amsterdam and maybe not even togeter in a room.]
+    - in groups of 2-3, participants brainstorm publications they will make during the main session [Is this brainstorm about content? or about the negotiation process for the layout? can we come up with a format for the brainstorm or some questions as an aid?]
+    - If you are planning to print your publication, take into account the printing limitations of your home printer or local print shop [take into account in what way? regarding the format? will i need to adjust something in the css? or in regards to bw/color? ] 
 
-
-    Experimenting with ChattyPub! ( 2 hrs ) [How are people going to do this asynchronously? it needs maybe more direction and steps from here]+1
-
-    all levels of technical knowledge should be accommodated [yes but how? if people are not experieced where do they find instructions?]+1
-
-    it's reccommended to group together participants with different levels of experience with CSS
-
-    Brainstorm Session (1 hr) [also for the brainstorm it would be nice to add some suggestions for how to do this if you are not in Amsterdam and maybe not even togeter in a room.]
-
-    in groups of 2-3, participants brainstorm publications they will make during the main session [Is this brainstorm about content? or about the negotiation process for the layout? can we come up with a format for the brainstorm or some questions as an aid?]
-
-    If you are planning to print your publication, take into account the printing limitations of your home printer or local print shop [take into account in what way? regarding the format? will i need to adjust something in the css? or in regards to bw/color? ] 
-
-
-Main Session: Chat => Print
-
-    Making publications ( 2 hrs )
-
-    Groups work on the publications planned in the previous session [how? will there be channels prepared? are people making their own channels?]
-
-    Organizers are available to help where needed [who are the organizers? in vienna and pittsburgh people will be online on their own.. how do they prepare for that?]
-
-    Printing Publications ( 1 hr )
-
-    A printer is required in the space (or easily accessible)
-
-    Accommodating for different paper sizes is an added bonus
-
-    Binding could be fun too
-
-    Sharing outcomes and reflections ( 1 hr ) [add link and time in different time zones]
-
-    Round of publications
-
-    Reflection on process
-
-    Feedback on ChattyPub
+_Main Session: Chat => Print_
+- Making publications ( 2 hrs )
+    - Groups work on the publications planned in the previous session [how? will there be channels prepared? are people making their own channels?]
+    - Organizers are available to help where needed [who are the organizers? in vienna and pittsburgh people will be online on their own.. how do they prepare for that?]
+- Printing Publications ( 1 hr )
+    - A printer is required in the space (or easily accessible)
+    - Accommodating for different paper sizes is an added bonus
+    - Binding could be fun too
+- Sharing outcomes and reflections ( 1 hr ) [add link and time in different time zones]
+    - Round of publications
+    - Reflection on process
+    - Feedback on ChattyPub
 
 
 
