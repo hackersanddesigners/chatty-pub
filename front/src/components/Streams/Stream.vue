@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ selected: selected }">
     <p class="name">
       <router-link :to="stream.name">
         {{ stream.name }}
@@ -16,15 +16,21 @@ export default {
     'stream'
   ],
   computed: {
+    selected() { return this.$store.state.currentStream == this.stream.name }
   },
 }
 </script>
 
 <style scoped>
 div {
+  padding: 0.5em;
+}
+div .selected {
+  background: rgb(247, 146, 247);
 }
 div p {
   margin: 0;
 }
+
 
 </style>
