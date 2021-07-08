@@ -8,24 +8,23 @@ The workshop will explore in a practical manner how the process of co-designing 
 
 Commands allow you to style the texts and images, but someone else can change their appearance again later! How will we negotiate these design decisions synchronously and asynchronously? The outcome could be a zine, posters or a webpage.
 
-[I think it needs a more descriptive explanation here of what actually happens in the tool]
-
 This script aims to provide the necessary instructions to host a workshop around ChattyPub that can accomodate different skills and knowledges in different contexts. 
 
 
 ## Goals
 - Learn to collaboratively write, design, and print documents using ChattyPub
 - Produce publications of / relating to HDSA2021 (documentation, prototypes, conversations, etc...)
-- Learn and/or practice styling with CSS
-- Applying CSS styles to emojis ?
+- Learn and/or practice styling with CSS & Emojis
 
 ## Requirements
 - an account for the Hackers & Designers Zulip instance:  https://chat.hackersanddesigners.nl/.
 - a printer
 
+
+## How It Works
 ## Preparation
 
-Before the summer academy: Most important is for all workshop participants to set up a Zulip account on our server. The H&D zulip instance can be found at https://chat.hackersanddesigners.nl/. André will set up accounts for everyone (or we temporarily enable public account creation?)
+Before the summer academy: Most important is for all workshop participants to set up a Zulip account on our server. The H&D zulip instance can be found at https://chat.hackersanddesigners.nl/ (public sign ups have temporariy been open).
 
 On the first day of the summer academy (monday): Participants are introduced to the Zulip interface and instructed to use it for communication during the course of the week. Zulip makes use of a rather unconventional (but powerful) chat-threading logic, so it would be good to spend some time interacting with it and settle into this new environment.
 
@@ -63,8 +62,3 @@ _Main Session: Chat => Print_
     - Round of publications
     - Reflection on process
     - Feedback on ChattyPub
-
-
-
-
-Resources
