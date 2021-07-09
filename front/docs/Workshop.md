@@ -17,7 +17,8 @@ This script aims to provide the necessary instructions to host a workshop around
 - Learn and/or practice styling with CSS & Emojis
 
 ## Requirements
-- an account for the Hackers & Designers Zulip instance:  https://chat.hackersanddesigners.nl/.
+- a computer, web-browser, and connection to the internet
+- an account for the Hackers & Designers Zulip instance:  https://chat.hackersanddesigners.nl/
 - a printer
 
 
@@ -43,11 +44,12 @@ Zulip allows you to react to messages using emoji's as well. We will make heavy 
 There are several ways to engage with Zulip, including a web-client, a desktop app, and a mobile app.
 ### ChattyPub
 
-https://chattypub.hackersanddesigners.nl
+http://chattypub.hackersanddesigners.nl
 
 ChattyPub is a website that acts as a different interface to the same Zulip service. ChattyPub takes a stream from Zulip, combines messages into long-form articles and uses a design system combining Emojis and CSS syntax to style the messages, effectively turning the stream into a (printable!) webpage.
 
 ## Making a publication with Zulip & ChattyPub
+### Content
 
 1. Create a stream on Zulip
     - Ensure that the stream name starts with `pub-`.
@@ -58,12 +60,31 @@ ChattyPub is a website that acts as a different interface to the same Zulip serv
     - Your stream name (which will be the name of your publication)
     - The topics of your stream (which will act as "Chapters" in your publication)
     - Topics are collapsed by default, click the expand button next to a topic to display it's messages as an article.
-    - To create a new topic, return to Zulip and type a message to your stream, making sure to send it to the topic you want to create.
-5. The right-hand side of the interface is reserved for one topic in your stream: "rules".
-    - Go back to Zulip and create a topic in your stream called "rules"
-    - This topic will house definitions for styles you want to apply to messges in your stream.
-    - 
+5. To create a new topic (chapter), return to Zulip and type a message to your stream, making sure to send it to the topic you want to create.
 
+### Rules
+
+The right-hand side of the ChattyPub interface is reserved for one topic in your stream: "rules". This topic will house definitions for styles you want to apply to messages in your stream. 
+
+Go back to Zulip and create the topic in your stream called "rules".
+
+Every message you send to this topic should consist of a single emoji followed by a set of styles you'd like applied to messages. For example:
+
+```CSS
+🍓 {
+  color: red;
+  text-decoration: underline;
+}
+```
+These messages should be unique and follow the CSS syntax, as described in the [introduction to CSS](https://github.com/hackersanddesigners/chatty-pub/blob/master/front/docs/CSS.md). If you are comfortable with CSS, you can skip to the part of the document that describes [how CSS is used in ChattyPub](https://github.com/hackersanddesigners/chatty-pub/blob/master/front/docs/CSS.md#css-in-chatty-pub).
+
+To apply these styles to the contents of your publication, head back to any other topic in your stream, select a message you'd like to style, and react to it with the emoji whose styles you want to apply. On ChattyPub, the message should be rendered with these styles.
+
+If you'd like to style only a part of a message, select the message in Zulip and quote and respond to it (in the 3-dot menu). This will produce a text in your input box on the bottom of the interface. Delete the parts of the quoted message that you don't want the styles applied to, and send your response. When you react with an emoji to your own response, the part of the message you quoted will inherit the styles defined for that emoji.
+
+### Printing
+
+TBD
 
 ## Workshop
 

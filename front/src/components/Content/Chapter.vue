@@ -5,7 +5,7 @@
       <span>{{ topic.title }}</span>
     </h3>
     <div v-if="desiresContent || print">
-      <span v-for="message in topic.messages" :key="message.id">
+      <span v-for="message in messagesToShow" :key="message.id">
         <Message :message="message" :show_message_data="show_message_data" />
         <span>&nbsp;</span>
       </span>
@@ -37,6 +37,9 @@ export default {
       }
       return r;
     },
+    messagesToShow() {
+      return this.topic.messages.filter(m => !m.responseTo)
+    }
   },
 };
 </script>
