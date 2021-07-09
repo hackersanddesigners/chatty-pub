@@ -18,7 +18,7 @@
 export default {
   methods: {
     toEmojiCode: (emoji) => {
-      console.log(emoji);
+      // console.log(emoji);
       return emoji.replace(/\p{Emoji}/gu, (m) => m.codePointAt(0).toString(16));
     },
 

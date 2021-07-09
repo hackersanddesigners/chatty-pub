@@ -1,22 +1,39 @@
 <template>
-  <span :class="classes" class="message">
-    <vue3-markdown-it :source="content" v-bind="$mdOpts"></vue3-markdown-it>
-    <div class="reactions">
+  <div class="message-outer">
+    <div class="message-data" v-if="show_message_data">
+      <div class="from">{{ message.sender_full_name }}</div>
+      <div class="time">{{ time }}</div>
+    </div>
+    <div :class="classes" class="message">
+      <vue3-markdown-it :source="content" v-bind="$mdOpts"></vue3-markdown-it>
+    </div>
+    <div class="message-data-reactions" v-if="show_message_data">
+      <span
+        class="reaction"
+        v-for="reaction in message.reactions"
+        :key="reaction"
+      >
+        {{ String.fromCodePoint("0x" + reaction.emoji_code) }}
+      </span>
+    </div>
+    <div class="reactions ui">
       <template v-for="reaction in reactions" :key="reaction">
         {{ reaction }}
       </template>
     </div>
-  </span>
+  </div>
 </template>
 
 <script>
+import emoji from "../../mixins/emoji";
 var EmojiConvertor = require("emoji-js");
 var emojiConv = new EmojiConvertor();
 /*eslint no-unused-vars: "off"*/
 /*eslint no-undef: "off"*/
 export default {
   name: "Message",
-  props: ["message"],
+  props: ["message", "show_message_data"],
+  mixins: [emoji],
   computed: {
     rawJSON() {
       return "```json\n" + JSON.stringify(this.message, null, 2) + "\n```";
@@ -27,15 +44,15 @@ export default {
       c = c.replaceAll('src="', 'src="' + url);
       c = c.replaceAll('href="/', 'href="' + url + "/");
 
-      const referrers = this.$store.state
-      .topics.find(t => t.title == this.message.subject)
-      .messages.filter(
-        (m) =>
-          m.responseTo &&
-          m.responseTo.id == this.message.id &&
-          m.responseTo.sender_id == this.message.sender_id &&
-          this.message.content.includes(m.responseTo.quote)
-      );
+      const referrers = this.$store.state.topics
+        .find((t) => t.title == this.message.subject)
+        .messages.filter(
+          (m) =>
+            m.responseTo &&
+            m.responseTo.id == this.message.id &&
+            m.responseTo.sender_id == this.message.sender_id &&
+            this.message.content.includes(m.responseTo.quote)
+        );
       referrers.forEach((m) => {
         const classes = m.reactions.map((r) => "u" + r.emoji_code).join(" ");
         c = c.replace(
@@ -57,6 +74,12 @@ export default {
     },
     classes() {
       return this.message.reactions.map((r) => "u" + r.emoji_code);
+    },
+    time() {
+      var ts = this.message.timestamp;
+      var ts_ms = ts * 1000;
+      var date_ob = new Date(ts_ms);
+      return date_ob.toLocaleString();
     },
   },
   created() {
@@ -82,11 +105,27 @@ export default {
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.5);
   font-size: 3rem;
+  pointer-events: none;
 }
 .reactions,
 .reactions::before,
 .reactions::after {
   all: revert;
   display: none;
+}
+
+.message-data {
+  display: flex;
+  border-bottom: 1px solid #666;
+}
+.message-data > div {
+  flex-grow: 1;
+}
+
+.message-data .from:after {
+  content: ":";
+}
+.message-data .time {
+  text-align: right;
 }
 </style>
