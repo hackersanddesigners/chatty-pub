@@ -1,37 +1,29 @@
 <template>
   <section class="streams">
     <!-- <p class="title">{{ $.type.name }}</p> -->
-    <Stream
-      v-for="stream in streams"
-      :key="stream.id"
-      :stream="stream"
-    />
-  </section>   
+    <Stream v-for="stream in streams" :key="stream.id" :stream="stream" />
+  </section>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import Stream from './Stream'
+import { mapState } from "vuex";
+import Stream from "./Stream";
 
 export default {
-  name: 'Streams',
-  components: { 
-    Stream 
+  name: "Streams",
+  components: {
+    Stream,
   },
   computed: {
-    ...mapState([
-      'streams',
-    ])
-  }
-}
+    ...mapState(["streams"]),
+  },
+};
 </script>
 
 <style scoped>
 .streams {
   min-width: 10em;
   padding: 0;
-}
-@media print {
-  .streams { display: none; } 
+  margin-bottom: 1em;
 }
 </style>

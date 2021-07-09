@@ -3,27 +3,48 @@
     <button v-if="!show_ui" @click="toggle_ui" class="float-btn ui">
       {{ show_ui ? "Hide" : "Show" }} UI
     </button>
-    <splitpanes class="default-theme">
-      <pane v-if="show_ui" size="10" min-size="5" @resize="resizer">
+    <splitpanes class="default-theme" @resize="resizer">
+      <pane
+        class="controls-pane"
+        v-if="show_ui"
+        :size="panel_sizes[0]"
+        min-size="5"
+      >
         <Streams />
         <div class="controls">
           <button @click="toggle_ui">{{ show_ui ? "Hide" : "Show" }} UI</button>
           <button @click="print">Print</button>
-          <input
-            type="checkbox"
-            id="msg-data"
-            value="1"
-            v-model="show_message_data"
-          />
-          <label for="msg-data">Show chat message data</label>
+          <!-- <button @click="print_preview">Preview</button> -->
+          <label for="msg-data"
+            ><input
+              type="checkbox"
+              id="msg-data"
+              value="1"
+              v-model="show_message_data"
+            />
+            Show chat message data</label
+          >
+          <p class="notice">
+            Regrettably support for
+            <a href="https://caniuse.com/css-paged-media">@page</a> is very poor
+            in most browsers. Use Google Chrome for best results when printing
+            or creating PDFs.
+          </p>
         </div>
       </pane>
-      <pane size="55">
-        <Content :print="!show_ui" :show_message_data="show_message_data" />
+      <pane :size="panel_sizes[1]">
+        <Content
+          :print="!show_ui || expand_content"
+          :show_message_data="show_message_data"
+          ref="content"
+        />
       </pane>
-      <pane v-if="show_ui" size="35" min-size="15">
+      <pane v-if="show_ui" :size="panel_sizes[2]" min-size="15">
         <Rules />
       </pane>
+      <!-- <pane v-if="show_ui" size="35" min-size="15"
+        ><div ref="preview"></div>
+      </pane> -->
     </splitpanes>
   </div>
 </template>
@@ -38,6 +59,8 @@ import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
 import { Previewer } from "pagedjs";
 
+import { ref, onMounted } from "vue";
+
 export default {
   name: "Home",
   components: {
@@ -47,11 +70,22 @@ export default {
     Splitpanes,
     Pane,
   },
+  setup() {
+    const preview = ref(null);
+
+    onMounted(() => {
+      console.log("preview", preview.value); // <div>This is a root element</div>
+    });
+    return {
+      preview,
+    };
+  },
   data: () => {
     return {
       show_ui: true,
       show_message_data: false,
       panel_sizes: { 0: 10, 1: 55, 2: 35 },
+      expand_content: false,
     };
   },
   computed: {
@@ -60,28 +94,33 @@ export default {
     },
   },
   methods: {
-    resizer(e, i) {
-      console.log(e, i);
+    resizer(panels) {
+      for (let i = 0; i < panels.length; i++) {
+        this.panel_sizes[i] = panels[i].size;
+      }
     },
     print() {
-      // let prev = this.show_ui;
+      let prev = this.show_ui;
       this.toggle_ui(null, false);
       setTimeout(() => {
         window.print();
-        // if (prev) this.toggle_ui(null, true);
+        if (prev) this.toggle_ui(null, true);
       }, 1000);
+    },
+    print_preview() {
+      this.expand_content = true;
+      let content = document.getElementById("content");
       let paged = new Previewer();
-      console.log(paged);
-      // let flow = paged
-      //   .preview(DOMContent, ["path/to/css/file.css"], document.body)
-      //   .then((flow) => {
-      //     console.log("Rendered", flow.total, "pages.");
-      //   });
-      // console.log(flow);
+      paged
+        .preview(content, ["path/to/css/file.css"], this.preview)
+        .then((flow) => {
+          console.log("Rendered", flow.total, "pages.");
+        });
     },
     toggle_ui(evt, state) {
       if (state !== undefined) this.show_ui = state;
       else this.show_ui = !this.show_ui;
+      this.$forceUpdate();
     },
   },
 };
@@ -95,9 +134,16 @@ export default {
   width: 100%;
   display: flex;
 }
+.controls-pane {
+  background-color: #aaa;
+}
 
 .splitpanes--vertical .splitpanes__pane {
   overflow-y: scroll;
+}
+
+.splitpanes.default-theme .splitpanes__pane {
+  background-color: unset;
 }
 
 .pane-wrapper {
@@ -107,6 +153,7 @@ export default {
 .controls {
   display: flex;
   flex-direction: column;
+  padding: 1em;
 }
 
 .print .pane-wrapper {
@@ -129,12 +176,12 @@ export default {
 
 .print .body {
   page-break-after: always;
-  border-bottom: 3px dotted green;
+  /* border-bottom: 3px dotted green; */
 }
-.print .body:first-of-type {
+/* .print .body:first-of-type {
   page-break-after: always;
   border-bottom: 3px dotted yellow;
-}
+} */
 
 .float-btn {
   position: fixed;
