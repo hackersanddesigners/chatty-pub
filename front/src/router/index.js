@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from '../views/Home'
+import Docs from '../views/Docs.vue'
 
 const path = '/' 
 
