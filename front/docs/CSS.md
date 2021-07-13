@@ -2,11 +2,13 @@
 
 In this document we take a look at what CSS is and how it can be applied to a publication in **Chatty-pub**.
 
-- [What is CSS](#css)
+- [What is CSS](#what-is-css)
 - [Rules](#rules)
-- [Css in chatty-pub](#chatty-pub)
+- [Css in chatty-pub](#css-in-chatty-pub)
 - [Print settings](#print-settings)
-- [Typing Emoji](#emoji)
+- [Typing Emoji](#typing-emoji)
+
+---
 
 ## What is CSS?
 
@@ -19,6 +21,8 @@ But what HTML does not do is speficy how these elements should look. That is whe
 
 CSS can be used for very basic document text styling — for example changing the color and size of headings and links. It can be used to create layout — for example turning a single column of text into a layout with a main content area and a sidebar for related information. It can even be used for effects such as animation.
 In Chatty-pub we're mostly interested in the first part.
+
+---
 
 ## Rules
 
@@ -79,6 +83,8 @@ In the `h1` example above, we set the following property: `font-size: 20px;`. Th
 
 [More information on units](https://www.w3.org/Style/Examples/007/units.en.html).
 
+---
+
 ## CSS in Chatty-pub
 
 When you react to a message in Zulip with an emoji, this emoji gets turned into a class in **Chatty-pub**. So lets say you responded to a message with the strawberry 🍓 emoji. In **Chatty-Pub** the message will have class with that emoji as selector. (You can confirm this by rolling over the message, the emoji should popup on a overlay.) So now to style that message, you go to the #rules channel and add a message with the following content:
@@ -128,6 +134,8 @@ It is possible to bypass the parser and add arbitrary code to the CSS on the pag
 ```
 </code>
 
+---
+
 ## Print settings
 
 To set the paper size we can use the special selector `@page`. The following snippet set the page size to A5.
@@ -138,7 +146,7 @@ To set the paper size we can use the special selector `@page`. The following sni
 }
 ```
 
-Regrettably browser support for `@page` is [spotty](https://caniuse.com/css-paged-media). You will get the best results using Google Chrome.
+Regrettably [browser support](https://caniuse.com/css-paged-media) for `@page` is spotty. Currently only Google Chrome will allow you to set page sizes etc.
 
 [Pagedmedia.org](https://www.pagedmedia.org/pagedjs-sneak-peeks/) has an excellent explanation on using `@page`. The [Paged media module](https://developer.mozilla.org/en-US/docs/Web/CSS/Paged_Media) at Mozilla also.
 
@@ -173,7 +181,33 @@ A colors value can defined in multiple ways:
 
 ### Fonts
 
-- TBD/Todo
+- [font-family](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family) - The font-family CSS property specifies a prioritized list of one or more font family names and/or generic family names for the selected element.
+
+You can choose one of the following generic fonts. Which exact font will be used is dependant on your computers' settings.
+
+```css
+font-family: serif;
+font-family: sans-serif;
+font-family: monospace;
+font-family: cursive;
+font-family: fantasy;
+```
+
+It is also possible to specify an exact font name, but it will only be used if it is actually available on your system.
+For example following statement will try to use Helvetica if available, but will fallback on a generic sans-serif font if not.
+
+```css
+font-family: "Helvetica Neue", sans-serif;
+```
+
+(Note the quotes around the font name)
+
+We have not yet implemented a way to upload and use fonts. Working on it!
+
+- [font-size](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size) - The font-size CSS property sets the size of the font. Changing the font size also updates the sizes of the font size-relative <length> units, such as em, ex, and so forth.
+- [font-style](https://developer.mozilla.org/en-US/docs/Web/CSS/font-style) - The font-style CSS property sets whether a font should be styled with a normal, italic, or oblique face from its font-family.
+- [font-weigh](https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight) - The font-weight CSS property sets the weight (or boldness) of the font. The weights available depend on the font-family that is currently set.
+- [line-height](https://developer.mozilla.org/en-US/docs/Web/CSS/line-height) - The line-height CSS property sets the height of a line box. It's commonly used to set the distance between lines of text.
 
 ### Text
 
