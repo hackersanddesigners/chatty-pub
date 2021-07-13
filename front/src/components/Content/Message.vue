@@ -53,12 +53,14 @@ export default {
             m.responseTo.sender_id == this.message.sender_id &&
             this.message.content.includes(m.responseTo.quote)
         );
+      console.log(c, referrers)
       referrers.forEach((m) => {
         const classes = m.reactions.map((r) => "u" + r.emoji_code).join(" ");
         c = c.replace(
           m.responseTo.quote,
           `<span class="${classes}">${m.responseTo.quote}</span>`
         );
+        console.log(c)
       });
       return c;
     },

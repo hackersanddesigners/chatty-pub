@@ -38,7 +38,8 @@ export default {
       return r;
     },
     messagesToShow() {
-      return this.topic.messages.filter(m => !m.responseTo)
+      return this.topic.messages
+      .filter(m => !m.responseTo)
     }
   },
 };

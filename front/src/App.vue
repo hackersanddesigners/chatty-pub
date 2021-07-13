@@ -32,7 +32,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["isMobile", "pubStr", "currentStream"]),
+    ...mapState(["isMobile", "pubStr", "currentStream", "streams"]),
   },
   created() {
     this.$store.commit("setMobile", this.checkIfMobile());
@@ -46,7 +46,7 @@ export default {
       this.$store.commit("setTopics", []);
       this.$store.commit("setRules", []);
       this.$store.commit("setCurStream", to.path.replace("/", ""));
-      if (this.currentStream != "") {
+      if (this.currentStream != "" && this.streams.includes(this.currentStream)) {
         this.setUpDoc(this.currentStream);
       }
     });

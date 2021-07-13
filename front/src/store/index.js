@@ -70,9 +70,10 @@ const handleHTMLReply = message => {
       .replace(/">[^]+/gm, ''),
     quote: message.content
       .replace(/.*[^]+<\/p>\n<blockquote>\n<p>/gm, '')
-      .replace(/ <\/p>\n<\/blockquote>/gm, '')
+      .replace(/<\/p>\n<\/blockquote>/gm, '')
+      // .replace(/\n/gm, '')
   }
-  // console.log(message.responseTo)
+  console.log(message.responseTo)
 }
 
 export default createStore({

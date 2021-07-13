@@ -14,6 +14,11 @@ export default createRouter({
       component: Home,
     },
     {
+      path: '/docs',
+      name: 'Docs',
+      component: Docs,
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'Home',
       component: Home,

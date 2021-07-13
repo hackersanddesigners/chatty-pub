@@ -1,6 +1,6 @@
 <template>
   <section id="content" :class="['content', currentStream]">
-    <h1 class="title">{{ currentStream.replace("pub-", "") }}</h1>
+    <h1 class="title">{{ title }}</h1>
     <Chapter
       v-for="topic in sortedTopics"
       :key="topic.title"
@@ -21,8 +21,13 @@ export default {
     Chapter,
   },
   computed: {
-    ...mapState(["currentStream"]),
+    ...mapState(["currentStream", "streams"]),
     ...mapGetters(["sortedTopics"]),
+    title() {
+      return this.streams.includes(this.currentStream) ? 
+        this.currentStream.replace("pub-", "") : 'Stream  does not exist.'
+    }
+    
   },
   methods: {},
   props: ["print", "show_message_data"],
