@@ -46,7 +46,7 @@ export default {
       this.$store.commit("setTopics", []);
       this.$store.commit("setRules", []);
       this.$store.commit("setCurStream", to.path.replace("/", ""));
-      if (this.currentStream != "" && this.streams.includes(this.currentStream)) {
+      if (this.currentStream != "" && this.streams.find(s => s.name == this.currentStream)) {
         this.setUpDoc(this.currentStream);
       }
     });

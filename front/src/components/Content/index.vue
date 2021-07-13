@@ -24,7 +24,7 @@ export default {
     ...mapState(["currentStream", "streams"]),
     ...mapGetters(["sortedTopics"]),
     title() {
-      return this.streams.includes(this.currentStream) ? 
+      return this.streams.find(s => s.name == this.currentStream) ? 
         this.currentStream.replace("pub-", "") : 'Stream  does not exist.'
     }
     
