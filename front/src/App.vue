@@ -46,14 +46,16 @@ export default {
       }
     })
 
-    this.$router.afterEach((to) => {
-      this.$store.commit("setTopics", []);
-      this.$store.commit("setRules", []);
-      this.$store.commit("setCurStream", to.path.replace("/", ""));
-      if (this.currentStream != ""
-       && this.streams.find(s => s.name == this.currentStream)
-       ) {
-        this.setUpDoc(this.currentStream);
+    this.$router.afterEach((to, from) => {
+      if (to.path !== from.path) {
+        this.$store.commit("setTopics", []);
+        this.$store.commit("setRules", []);
+        this.$store.commit("setCurStream", to.path.replace("/", ""));
+        if (this.currentStream != ""
+        && this.streams.find(s => s.name == this.currentStream)
+        ) {
+          this.setUpDoc(this.currentStream);
+        }
       }
     });
   },
