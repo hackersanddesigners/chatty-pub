@@ -1,12 +1,12 @@
 <template>
-  <div class="rule" :style="rule.rules">
-    <template v-if="rule.is_codeblock">
+  <div class="rule" :class="classes" :style="rule.rules">
+    <pre v-if="rule.is_codeblock">
       {{ contentFiltered }}
-    </template>
+    </pre>
     <template v-else>
-    <p :title="toEmojiCode(rule.className)">{{ rule.className }} {</p>
-    <p v-for="dec in rule.rules" :key="dec">&nbsp; {{ dec }}</p>
-    <p>}</p>
+      <p :title="toEmojiCode(rule.className)">{{ rule.className }} {</p>
+      <p v-for="dec in rule.rules" :key="dec">&nbsp; {{ dec }}</p>
+      <p>}</p>
     </template>
   </div>
 </template>
@@ -29,17 +29,44 @@ export default {
 
       return c;
     },
+    classes() {
+      let style = "";
+      if (this.rule.is_codeblock) {
+        style += " raw";
+      }
+      return style;
+    },
   },
 };
 </script>
 
 <style scoped>
-
 .rule {
   margin: 1em 0;
 }
 
 .rule p {
   margin: 0;
+}
+
+.rule.raw {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid black;
+  position: relative;
+}
+
+.rule.raw:after {
+  content: "raw css";
+  background-color: #333;
+  border-radius: 10px;
+  position: absolute;
+  bottom: -0.5em;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px;
+  border: 1px solid white;
 }
 </style>
