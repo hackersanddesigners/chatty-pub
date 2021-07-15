@@ -180,7 +180,8 @@ export default createStore({
         //   id: mid, content: content,
         // }, state.currentStream)
 
-        // vue will not update if i use rules.push(rule)        
+        // vue will not update if i use rules.push(rule)  
+        state.rules.splice(state.rules.indexOf(rule), 1)      
         const newRules = [...state.rules, ...[toCSS({
           id: mid, content: content,
         }, state.currentStream)]]

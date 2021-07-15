@@ -109,11 +109,11 @@ export default {
       switch (event.type) {
         case "message":
           switch (event.message.subject) {
-            case "content":
-              this.$store.commit("addMessage", event.message);
-              break;
             case "rules":
               this.$store.commit("addRule", event.message);
+              break;
+            default:
+              this.$store.commit("addMessage", event.message);
               break;
           }
           break;
