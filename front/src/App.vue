@@ -40,13 +40,19 @@ export default {
       this.$store.commit("setMobile", this.checkIfMobile());
     });
 
-    this.getStreams();
+    this.$router.beforeEach(async (to) => {
+      if (!this.zulipClient || this.streams.length == 0) {
+        await this.getStreams()
+      }
+    })
 
     this.$router.afterEach((to) => {
       this.$store.commit("setTopics", []);
       this.$store.commit("setRules", []);
       this.$store.commit("setCurStream", to.path.replace("/", ""));
-      if (this.currentStream != "" && this.streams.find(s => s.name == this.currentStream)) {
+      if (this.currentStream != ""
+       && this.streams.find(s => s.name == this.currentStream)
+       ) {
         this.setUpDoc(this.currentStream);
       }
     });
@@ -56,16 +62,19 @@ export default {
     checkIfMobile: () => window.innerWidth < 700,
 
     getStreams() {
-      api.zulip.init().then((client) => {
-        this.zulipClient = client;
-        api.zulip.getStreams(client).then((result) => {
-          this.$store.commit(
-            "setStreams",
-            result.streams.filter((s) => s.name.startsWith(this.pubStr))
-          );
-        });
-        api.zulip.listen(this.zulipClient, this.eventHandler);
-      });
+      return new Promise((resolve) => {
+        api.zulip.init().then((client) => {
+          this.zulipClient = client;
+          api.zulip.getStreams(client).then((result) => {
+            this.$store.commit(
+              "setStreams",
+              result.streams.filter((s) => s.name.startsWith(this.pubStr))
+            );
+            resolve()
+          });
+          api.zulip.listen(this.zulipClient, this.eventHandler);
+        });  
+      })
     },
 
     setUpDoc(stream) {
