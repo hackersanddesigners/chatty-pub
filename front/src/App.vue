@@ -65,11 +65,14 @@ export default {
       return new Promise(resolve => {
         api.zulip.init().then((client) => {
           this.zulipClient = client;
-          api.zulip.getStreams(client).then((result) => {
-            console.log(result.streams)
+          api.zulip.getStreams(client).then(async (streams) => {
+            for (let stream of streams) {
+              stream.topics = await api.zulip.getTopics(client, stream.stream_id)
+            }
+            console.log(streams)
             this.$store.commit(
               "setStreams",
-              result.streams.filter((s) => s.name.startsWith(this.pubStr))
+              streams.filter((s) => s.topics.find(t => t.name == 'rules'))
             );
             resolve()
           });
