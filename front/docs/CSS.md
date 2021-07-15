@@ -5,6 +5,7 @@ In this document we take a look at what CSS is and how it can be applied to a pu
 - [What is CSS](#what-is-css)
 - [Rules](#rules)
 - [Css in chatty-pub](#css-in-chatty-pub)
+- [Uploading fonts](#uploading-fonts)
 - [Print settings](#print-settings)
 - [Typing Emoji](#typing-emoji)
 
@@ -136,6 +137,37 @@ It is possible to bypass the parser and add arbitrary code to the CSS on the pag
 
 ---
 
+## Uploading fonts
+
+It is also possible to upload a font to the application. To do this, you send the font (.ttf or .woff work best) in a message to the #rules channel of the publication you want to use it in.
+
+Then:
+
+1. Copy the link to the uploaded font.
+2. Add a @font-face rule for the font, but wrap it in three backticks. Like so:
+
+- `font-name`: Can be any name you like, and you just use the same name later in your style rule.
+- `font-url`: Paste the url of the file you just uploaded here.
+
+````css
+```
+@font-face {
+  font-family: "font name";
+  src: "font url";
+}
+```
+````
+
+You can then use the font in this way:
+
+```css
+🤘 {
+  font-family: "font name";
+}
+```
+
+> Please only upload free or open-source fonts to our server!
+
 ## Print settings
 
 To set the paper size we can use the special selector `@page`. The following snippet set the page size to A5.
@@ -194,15 +226,13 @@ font-family: fantasy;
 ```
 
 It is also possible to specify an exact font name, but it will only be used if it is actually available on your system.
-For example following statement will try to use Helvetica if available, but will fallback on a generic sans-serif font if not.
+For example following statement will try to use Helvetica if available, but will fallback on a generic sans-serif font if not. (Note the quotes around the font name).
 
 ```css
 font-family: "Helvetica Neue", sans-serif;
 ```
 
-(Note the quotes around the font name)
-
-We have not yet implemented a way to upload and use fonts. Working on it!
+Also see the section on uploading fonts below.
 
 - [font-size](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size) - The font-size CSS property sets the size of the font. Changing the font size also updates the sizes of the font size-relative <length> units, such as em, ex, and so forth.
 - [font-style](https://developer.mozilla.org/en-US/docs/Web/CSS/font-style) - The font-style CSS property sets whether a font should be styled with a normal, italic, or oblique face from its font-family.
@@ -217,6 +247,7 @@ We have not yet implemented a way to upload and use fonts. Working on it!
 - [white-space](https://developer.mozilla.org/en-US/docs/Web/CSS/white-space) - The white-space CSS property sets how white space inside an element is handled.
 - [word-break](https://developer.mozilla.org/en-US/docs/Web/CSS/word-break) - The word-break CSS property sets whether line breaks appear wherever the text would otherwise overflow its content box.
 - [word-spacing](https://developer.mozilla.org/en-US/docs/Web/CSS/word-spacing) - The word-spacing CSS property sets the length of space between words and between tags.
+- [text-shadow](https://developer.mozilla.org/en-US/docs/Web/CSS/text-shadow) - The text-shadow CSS property adds shadows to text.
 
 ### Transforms
 
