@@ -183,7 +183,7 @@ export default {
   /* border-bottom: 3px dotted green; */
 }
 
-#content img {
+.body img {
   max-width: 100%;
 }
 
