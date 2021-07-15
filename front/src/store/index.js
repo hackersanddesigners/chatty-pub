@@ -10,19 +10,20 @@ var EmojiConvertor = require('emoji-js');
 var emojiConv = new EmojiConvertor();
 
 let toCSS = (message, currentStream) => {
-  // console.log(message)
   let className = "",
     emoji_code = "",
     rules = [],
     parentClassName = currentStream,
-    id = message.id
+    id = message.id,
+    is_codeblock = message.content.includes("<code>");
 
   // let regex = /[/s]?(?<selector>.+)\s*\n?{\n?(?<prop>[\s\w.~:>-]+\s*:\s*.+;?\n?)*\n?}/gm
   let regex = /\s?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
   let content = stripHtml(message.content).result;
+
   let results = content.matchAll(regex);
   results = Array.from(results);
-  //console.log(results)
+
   if (results.length > 0) {
     className = emojiConv.replace_colons(results[0]['groups']['selector']);
     if (emoji.methods.containsEmoji(className)) {
@@ -30,8 +31,7 @@ let toCSS = (message, currentStream) => {
     }
     rules = results[0]['groups']['props'].split("\n");
     rules = rules.filter((rule) => validateRule(rule))
-    // console.log(className, emoji_code, rules, parentClassName, id)
-    return { className, emoji_code, rules, parentClassName, id };
+    return { className, emoji_code, rules, parentClassName, id, content, is_codeblock };
   }
   return null;
 }

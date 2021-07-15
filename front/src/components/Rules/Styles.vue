@@ -17,6 +17,9 @@ export default {
     generateStyleRules() {
       let styles = "";
       this.rules.map((r) => {
+        if (r.is_codeblock) {
+          styles += r.content;
+        } else {
         if (r.className.startsWith("@")) {
           styles += r.className;
         } else {
@@ -32,6 +35,7 @@ export default {
           styles += s;
         });
         styles += "}";
+        }
       });
       return styles;
     },

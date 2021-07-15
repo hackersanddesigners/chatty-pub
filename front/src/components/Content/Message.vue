@@ -17,9 +17,9 @@
       </span>
     </div>
     <div class="reactions ui">
-      <template v-for="reaction in reactions" :key="reaction">
+      <span v-for="reaction in reactions" :key="reaction">
         {{ reaction }}
-      </template>
+      </span>
     </div>
   </div>
 </template>
@@ -83,7 +83,9 @@ export default {
       );
     },
     classes() {
-      return this.message.reactions.map((r) => "u" + r.emoji_code);
+      return this.message.reactions.map(
+        (r) => r.emoji_code + " u" + r.emoji_code
+      );
     },
     time() {
       var ts = this.message.timestamp;
