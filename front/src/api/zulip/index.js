@@ -31,8 +31,8 @@ const
      .messages
      .retrieve(params || {
         anchor: "newest",
-        num_before: 100,
-        num_after: 0,
+        // num_before: 100,
+        // num_after: 0,
         // apply_markdown: false,
         narrow: [
           { operator: "stream", operand: stream },
@@ -50,7 +50,7 @@ const
      .messages
      .retrieve(params || {
         anchor: "newest",
-        num_before: 100,
+        num_before: 1000,
         num_after: 0,
         // apply_markdown: false,
         narrow: [{ operator: "stream", operand: stream }],

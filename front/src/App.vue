@@ -40,7 +40,7 @@ export default {
       this.$store.commit("setMobile", this.checkIfMobile());
     });
 
-    this.$router.beforeEach(async (to) => {
+    this.$router.beforeEach(async () => {
       if (!this.zulipClient || this.streams.length == 0) {
         await this.getStreams()
       }
@@ -62,10 +62,11 @@ export default {
     checkIfMobile: () => window.innerWidth < 700,
 
     getStreams() {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         api.zulip.init().then((client) => {
           this.zulipClient = client;
           api.zulip.getStreams(client).then((result) => {
+            console.log(result.streams)
             this.$store.commit(
               "setStreams",
               result.streams.filter((s) => s.name.startsWith(this.pubStr))
