@@ -39,10 +39,18 @@ export default {
       return "```json\n" + JSON.stringify(this.message, null, 2) + "\n```";
     },
     content() {
-      let url = process.env.VUE_APP_ZULIP_site;
       let c = this.message.content.replace("\n", "<br/>");
+      // create absolute url on images and relative links
+      let url = process.env.VUE_APP_ZULIP_site;
       c = c.replaceAll('src="', 'src="' + url);
       c = c.replaceAll('href="/', 'href="' + url + "/");
+      // replace it with the mirror domain for uploads
+      // replace this: https://chat.hackersanddesigners.nl/user_uploads/
+      // with this: https://chatty-pub-files.hackersanddesigners.nl/files/
+      c = c.replaceAll(
+        url + "/user_uploads/",
+        "https://chatty-pub-files.hackersanddesigners.nl/files/"
+      );
 
       const referrers = this.$store.state.topics
         .find((t) => t.title == this.message.subject)
@@ -53,14 +61,14 @@ export default {
             m.responseTo.sender_id == this.message.sender_id &&
             this.message.content.includes(m.responseTo.quote)
         );
-      console.log(c, referrers)
+      console.log(c, referrers);
       referrers.forEach((m) => {
         const classes = m.reactions.map((r) => "u" + r.emoji_code).join(" ");
         c = c.replace(
           m.responseTo.quote,
           `<span class="${classes}">${m.responseTo.quote}</span>`
         );
-        console.log(c)
+        console.log(c);
       });
       return c;
     },
