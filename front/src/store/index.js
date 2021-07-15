@@ -15,7 +15,7 @@ let toCSS = (message, currentStream) => {
     rules = [],
     parentClassName = currentStream,
     id = message.id,
-    is_codeblock = message.content.includes("<code>");
+    is_codeblock = message.content.includes("<code>") || message.content.startsWith("```");
 
   // let regex = /[/s]?(?<selector>.+)\s*\n?{\n?(?<prop>[\s\w.~:>-]+\s*:\s*.+;?\n?)*\n?}/gm
   let regex = /\s?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
@@ -71,7 +71,7 @@ const handleHTMLReply = message => {
     quote: message.content
       .replace(/.*[^]+<\/p>\n<blockquote>\n<p>/gm, '')
       .replace(/<\/p>\n<\/blockquote>/gm, '')
-      // .replace(/\n/gm, '')
+    // .replace(/\n/gm, '')
   }
   console.log(message.responseTo)
 }
@@ -111,7 +111,7 @@ export default createStore({
         } else {
           state.topics.push({
             title: message.subject,
-            messages: [ message ]
+            messages: [message]
           })
         }
       }
@@ -156,7 +156,7 @@ export default createStore({
       if (toCSS(rule) !== null) {
         // state.rules.push(toCSS(rule, state.currentStream))
         // vue will not update if i use rules.push(rule)
-        state.rules = [...state.rules,...[toCSS(rule, state.currentStream)]]
+        state.rules = [...state.rules, ...[toCSS(rule, state.currentStream)]]
       }
     },
     editMessage: (state, { mid, content }) => {
@@ -181,7 +181,7 @@ export default createStore({
         // }, state.currentStream)
 
         // vue will not update if i use rules.push(rule)  
-        state.rules.splice(state.rules.indexOf(rule), 1)      
+        state.rules.splice(state.rules.indexOf(rule), 1)
         const newRules = [...state.rules, ...[toCSS({
           id: mid, content: content,
         }, state.currentStream)]]
@@ -206,11 +206,11 @@ export default createStore({
     rules: state => state.rules,
     sortedTopics: state => (
       [...state.topics]
-      .sort((a, b) => a.title.localeCompare(b.title))
-      .filter(t => (
-        t.messages.length > 0 &&
-        t.title != 'stream events'
-      ))
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .filter(t => (
+          t.messages.length > 0 &&
+          t.title != 'stream events'
+        ))
     )
   }
 
