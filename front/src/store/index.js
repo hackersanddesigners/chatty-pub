@@ -206,7 +206,10 @@ export default createStore({
     sortedTopics: state => (
       [...state.topics]
       .sort((a, b) => a.title.localeCompare(b.title))
-      .filter(t => t.messages.length > 0) 
+      .filter(t => (
+        t.messages.length > 0 &&
+        t.title != 'stream events'
+      ))
     )
   }
 
