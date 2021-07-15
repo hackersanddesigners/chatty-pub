@@ -52,7 +52,11 @@ export default {
       .replace(/\.|%[0-9a-z]{2}/gi, '')
     )},
     goTo(id) {
-      document.querySelector(`.${this.currentStream} ${id}`).scrollIntoView()
+      document
+      .querySelector(`.${this.currentStream} ${id}`)
+      .scrollIntoView({
+        behavior: 'smooth'
+      })
     }
   },
 };
