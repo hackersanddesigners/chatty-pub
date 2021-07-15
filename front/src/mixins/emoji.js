@@ -24,16 +24,13 @@ export default {
 
   methods: {
     toEmojiCode: (emoji) => {
-      // console.log(emoji);
       return emoji.replace(/\p{Emoji}/gu, (m) => m.codePointAt(0).toString(16));
     },
 
     // toEmojiCode: (emoji) => {
-    //   console.log(emoji)
     //   emoji.replace(/\p{Emoji}/gu, function (m) {
     //     toUTF16(m.codePointAt(0));
     //   });
-    //   console.log(emoji)
     //   return emoji;
     // },
 

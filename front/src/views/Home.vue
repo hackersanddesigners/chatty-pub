@@ -73,10 +73,6 @@ export default {
   },
   setup() {
     const preview = ref(null);
-
-    onMounted(() => {
-      console.log("preview", preview.value); // <div>This is a root element</div>
-    });
     return {
       preview,
     };

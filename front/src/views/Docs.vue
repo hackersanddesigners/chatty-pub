@@ -48,7 +48,6 @@ export default {
       this.selected = key;
     },
     clickEvent(evt) {
-      console.log(evt);
       let regex = new RegExp("[^.]+$");
       let url = evt.explicitOriginalTarget.href;
       let extension = url.match(regex);
