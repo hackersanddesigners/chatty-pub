@@ -10,30 +10,70 @@ var EmojiConvertor = require('emoji-js');
 var emojiConv = new EmojiConvertor();
 
 let toCSS = (message, currentStream) => {
+  let content = stripHtml(message.content).result;
   let className = "",
     emoji_code = "",
     rules = [],
     parentClassName = currentStream,
     id = message.id,
-    is_codeblock = message.content.includes("<code>") || message.content.startsWith("```");
-
+    is_codeblock = message.content.includes("<code>") || message.content.startsWith("```"),
+    is_font = /<p><a href=".+?\.(ttf|otf|woff)/gm.test(message.content);
   // let regex = /[/s]?(?<selector>.+)\s*\n?{\n?(?<prop>[\s\w.~:>-]+\s*:\s*.+;?\n?)*\n?}/gm
-  let regex = /\s?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
-  let content = stripHtml(message.content).result;
 
+  let type = is_codeblock ? "raw" : is_font ? "font" : "rule"; // okay okay okay, i know this is ugly :)
+
+  let regex = /\s?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
   let results = content.matchAll(regex);
   results = Array.from(results);
-
-  if (results.length > 0) {
+  if (is_font) { // font
+    let re_path = /\/user_uploads(\/.*?\.(?:ttf|otf|woff))/gm;
+    // content = message.content.matchAll(re_path);
+    content = re_path.exec(message.content)[1];
+    // console.log(message.content, content)
+    return { className: '', emoji_code: '', rules: [], parentClassName: '', id: id, content: font(content), type: type }
+  } else if (results.length > 0) { // rule and raw
     className = emojiConv.replace_colons(results[0]['groups']['selector']);
     if (emoji.methods.containsEmoji(className)) {
       emoji_code = emoji.methods.toEmojiCode(className);
     }
     rules = results[0]['groups']['props'].split("\n");
     rules = rules.filter((rule) => validateRule(rule))
-    return { className, emoji_code, rules, parentClassName, id, content, is_codeblock };
+    return { className, emoji_code, rules, parentClassName, id, content, type };
   }
   return null;
+}
+
+let font = (content) => {
+  let font = {
+    family: "",
+    src: "",
+    format: "",
+  };
+  let path = content;
+  let filename = getFilename(path);
+  let ext = filename.split(".").pop();
+  font.src =
+    "https://chatty-pub-files.hackersanddesigners.nl/files" + path;
+  font.format = getFormat(ext);
+  font.family = filename.replace(".", "_");
+  return font;
+}
+
+let getFilename = (str) => {
+  return str.split("\\").pop().split("/").pop();
+}
+
+let getFormat = (ext) => {
+  let fmt = "truetype";
+  switch (ext) {
+    case 'woff':
+      fmt = "woff";
+      break;
+    case 'eof':
+      fmt = "embedded-opentype";
+      break;
+  }
+  return fmt;
 }
 
 let validateRule = (rule) => {

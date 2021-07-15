@@ -1,8 +1,16 @@
 <template>
-  <div class="rule" :class="classes" :style="rule.rules">
-    <pre v-if="rule.is_codeblock">
-      {{ contentFiltered }}
+  <div class="rule" :class="classes" :style="rules">
+    <pre v-if="rule.type === 'raw'"
+      >{{ contentFiltered }}
     </pre>
+    <template v-else-if="rule.type === 'font'">
+      <pre>
+@font-face { 
+  font-family: "{{ font.family }}"; 
+  src: "{{ font.src }}" format({{ "font.format" }}); 
+}
+      </pre>
+    </template>
     <template v-else>
       <p :title="toEmojiCode(rule.className)">{{ rule.className }} {</p>
       <p v-for="dec in rule.rules" :key="dec">&nbsp; {{ dec }}</p>
@@ -20,10 +28,8 @@ export default {
   props: ["rule"],
   computed: {
     contentFiltered() {
-      var reg = this.emoji_regex;
-
+      let reg = this.emoji_regex;
       let c = this.rule.content.replace(reg, (c) => {
-        console.log("c", c, this.toEmojiCode(c));
         return c + ", .u" + this.toEmojiCode(c);
       });
 
@@ -31,10 +37,17 @@ export default {
     },
     classes() {
       let style = "";
-      if (this.rule.is_codeblock) {
+      if (this.rule.type == "raw") {
         style += " raw";
       }
       return style;
+    },
+    font() {
+      return this.rule.content;
+    },
+    rules() {
+      if (this.rule.type !== "font") return this.rule.rules;
+      else return ["font-family: " + this.font.family + ";"];
     },
   },
 };
@@ -59,6 +72,7 @@ export default {
 }
 
 .rule.raw:after {
+  all: revert;
   content: "raw css";
   background-color: #333;
   border-radius: 10px;
@@ -66,7 +80,9 @@ export default {
   bottom: -0.5em;
   left: 50%;
   transform: translateX(-50%);
-  padding: 3px;
+  padding: 0 10px;
   border: 1px solid white;
+  font-family: initial;
+  font-size: 1rem;
 }
 </style>
