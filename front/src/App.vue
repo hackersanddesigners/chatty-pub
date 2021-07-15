@@ -69,10 +69,12 @@ export default {
             for (let stream of streams) {
               stream.topics = await api.zulip.getTopics(client, stream.stream_id)
             }
-            console.log(streams)
             this.$store.commit(
               "setStreams",
-              streams.filter((s) => s.topics.find(t => t.name == 'rules'))
+              streams.filter((s) => (
+                s.topics.find(t => t.name == 'rules') ||
+                s.name.startsWith(this.pubStr)
+              ))
             );
             resolve()
           });
