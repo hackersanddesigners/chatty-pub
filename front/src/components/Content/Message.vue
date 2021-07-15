@@ -101,12 +101,12 @@ export default {
 </script>
 
 <style>
-.message {
+.message-outer {
   position: relative;
   display: block;
 }
 
-.message:hover .reactions {
+.message-outer:hover .reactions {
   display: flex;
   position: absolute;
   top: 0;
@@ -139,5 +139,9 @@ export default {
 }
 .message-data .time {
   text-align: right;
+}
+
+.message-data-reactions {
+  margin-bottom: 1em;
 }
 </style>
