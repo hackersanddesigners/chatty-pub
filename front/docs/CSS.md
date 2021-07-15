@@ -143,8 +143,8 @@ It is also possible to upload a font to the application. To do this, you send th
 
 Then:
 
-1. Copy the link to the uploaded font.
-2. Add a @font-face rule for the font, but wrap it in three backticks. Like so:
+1. Copy the link to the uploaded font. It may take a little while for the font to be available in **Chatty-pub**.
+2. Add a `@font-face` rule for the font, but wrap it in three backticks. Like so:
 
 - `font-name`: Can be any name you like, and you just use the same name later in your style rule.
 - `font-url`: Paste the url of the file you just uploaded here.
