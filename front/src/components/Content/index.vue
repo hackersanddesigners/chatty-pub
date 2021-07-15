@@ -1,5 +1,5 @@
 <template>
-  <section id="content" :class="['content', currentStream]">
+  <section id="content">
     <h1 class="title">{{ title }}</h1>
     <Chapter
       v-for="topic in sortedTopics"
@@ -35,9 +35,9 @@ export default {
 </script>
 
 <style scoped>
-.content {
+#content {
   /* max-width: 700px; */
-  background: unset;
+  /* background: unset; */
 }
 @media print {
   .title {

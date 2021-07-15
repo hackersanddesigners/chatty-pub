@@ -183,7 +183,7 @@ section {
   display: flex;
   flex-direction: column;
   /* overflow: scroll; */
-  background: lightgray;
+  /* background: lightgray; */
 }
 section p {
   margin-bottom: 0;

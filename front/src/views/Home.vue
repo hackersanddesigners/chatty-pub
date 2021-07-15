@@ -32,7 +32,10 @@
           </p>
         </div>
       </pane>
-      <pane :size="panel_sizes[1]">
+      <pane 
+        :size="panel_sizes[1]"
+        :class="currentStream"
+      >
         <Content
           :print="!show_ui || expand_content"
           :show_message_data="show_message_data"
@@ -92,6 +95,9 @@ export default {
     classes() {
       return this.show_ui ? "ui" : "print";
     },
+    currentStream() {
+      return this.$store.state.currentStream
+    }
   },
   methods: {
     resizer(panels) {
