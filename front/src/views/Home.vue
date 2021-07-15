@@ -27,15 +27,13 @@
           <p class="notice">
             Regrettably support for
             <a href="https://caniuse.com/css-paged-media">@page</a> is very poor
-            in most browsers. Use Google Chrome for best results when printing
-            or creating PDFs.
+            in most browsers. Use MS Edge, Opera or Google Chrome for best
+            results when printing or creating PDFs.
           </p>
+          <button @click="$router.push({ path: 'docs' })">Docs</button>
         </div>
       </pane>
-      <pane 
-        :size="panel_sizes[1]"
-        :class="currentStream"
-      >
+      <pane :size="panel_sizes[1]" :class="currentStream">
         <Content
           :print="!show_ui || expand_content"
           :show_message_data="show_message_data"
@@ -96,8 +94,8 @@ export default {
       return this.show_ui ? "ui" : "print";
     },
     currentStream() {
-      return this.$store.state.currentStream
-    }
+      return this.$store.state.currentStream;
+    },
   },
   methods: {
     resizer(panels) {
