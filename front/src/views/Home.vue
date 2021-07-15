@@ -182,6 +182,11 @@ export default {
   page-break-after: always;
   /* border-bottom: 3px dotted green; */
 }
+
+#content img {
+  max-width: 100%;
+}
+
 /* .print .body:first-of-type {
   page-break-after: always;
   border-bottom: 3px dotted yellow;
