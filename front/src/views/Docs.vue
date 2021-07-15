@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 <template>
-  <div class="docs">
+  <div class="docs markdown-body">
     <ul>
       <li><router-link to="/">Back to Chattypub</router-link></li>
       <li v-for="(file, key) in files" :key="key">
@@ -24,15 +24,17 @@ import VueMarkdownIt from "vue3-markdown-it";
 /*eslint no-undef: "off"*/
 
 // VueMarkdownIt.use();
-import css from "raw-loader!../../docs/CSS.md";
-import workshop from "raw-loader!../../docs/Workshop.md";
+import css from "../../docs/CSS.md";
+import workshop from "../../docs/Workshop.md";
+import chattypub from "../../docs/Chattypub.md";
+import "github-markdown-css/github-markdown.css";
 
 export default {
   name: "Docs",
   components: [VueMarkdownIt],
   data() {
     return {
-      files: { Workshop: workshop, CSS: css },
+      files: { Workshop: workshop, Chattypub: chattypub, CSS: css },
       selected: "",
     };
   },
