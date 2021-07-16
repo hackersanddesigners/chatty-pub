@@ -1,3 +1,8 @@
+<template>
+  <template></template>
+  <!-- placeholder for styles component -->
+</template>
+
 <script>
 import { mapState } from "vuex";
 import emoji from "../../mixins/emoji";

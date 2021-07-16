@@ -17,7 +17,7 @@
       </span>
     </div>
     <div class="reactions ui">
-      <span v-for="reaction in reactions" :key="reaction">
+      <span v-for="reaction in reactions" :key="reaction" :title="reaction">
         {{ reaction }}
       </span>
     </div>
@@ -124,6 +124,10 @@ export default {
 .reactions::after {
   all: revert;
   display: none;
+}
+
+.reactions span {
+  pointer-events: initial;
 }
 
 .message-data {

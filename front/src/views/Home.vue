@@ -25,7 +25,7 @@
             Show chat message data</label
           >
           <p class="notice">
-            Regrettably support for
+            Regrettably support for setting page size, page breaks etc. using
             <a href="https://caniuse.com/css-paged-media">@page</a> is very poor
             in most browsers. Use MS Edge, Opera or Google Chrome for best
             results when printing or creating PDFs.

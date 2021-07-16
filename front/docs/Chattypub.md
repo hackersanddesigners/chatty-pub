@@ -2,6 +2,15 @@
 
 ChattyPub is a design tool in the making – leveraging a chat interface to apply styles and formats to the content of a publication. ChattyPub is a collaborative publication/zine-making tool built on top of the chat platform [Zulip](https://chat.hackersanddesigners.nl). By sending messages, reacting with emoji and writing simple CSS style rules the publication can be collectively designed.
 
+- [Zulip](#zulip)
+- [ChattyPub](#using-chattypub)
+- [Making a publication with Zulip & ChattyPub](#content)
+  - [Content](#content)
+  - [Rules](#rules)
+  - [Printing](#printing)
+- [Typing Emoji](#typing-emoji)
+- [Problems?](#problems)
+
 ## Zulip
 
 On Zulip, conversations are categorized into different "Streams", which are comparable to "channels" in other messaging services like Discord. Streams can be public or private and host conversations consisting of text, images, files, reactions, etc..
@@ -12,7 +21,7 @@ Zulip allows you to react to messages using emoji's as well. We will make heavy 
 
 There are several ways to engage with Zulip, including a web-client, a desktop app, and a mobile app.
 
-## ChattyPub
+## Using ChattyPub
 
 http://chatty-pub.hackersanddesigners.nl
 
@@ -25,12 +34,12 @@ ChattyPub is a website that acts as a different interface to the same Zulip serv
 1. Create a stream on Zulip
    - Ensure that either (1) the stream name starts with `pub-` or (2) the stream includes a topic called "rules" (more on that later).
    - Ensure that the stream is public.
-2. Go to [ChattyPub](http://chatty-pub.hackersanddesigners.nl). The stream you created will be visible on the left-side navigation.
+2. Go to [ChattyPub](https://chatty-pub.hackersanddesigners.nl). The stream you created will be visible on the left-side navigation.
 3. Click on your stream.
 4. The main (middle) section of the website will have:
    1. Your stream name (which will be the name of your publication)
    2. The topics of your stream organized into a table of contents (which will act as "Chapters" in your publication)
-   3. The topics, in alphabetical order, displaying their messages, in chronological order. 
+   3. The topics, in alphabetical order, displaying their messages, in chronological order.
 5. To create a new topic (chapter), return to Zulip and type a message to your stream, making sure to send it to the topic you want to create.
 
 ### Rules
@@ -58,8 +67,24 @@ Keep in mind that you can edit your own messages! So if you make a mistake (forg
 
 ### Printing
 
+> Regrettably support for setting page size, page breaks etc. using [@page](https://caniuse.com/css-paged-media) is very poor in some browsers. Use MS Edge, Opera or Google Chrome for best results when printing or creating PDFs.
+
 To print, click on the print button on the left side of the application. This will hide the interface, make all content visible and open the browsers' Printing dialog box.
+
+If you want to use background colors or background images in your publication you may have to turn that on in the print settings dialog.
 
 There is more information on setting up pages sizes etc, in the CSS document.
 
-> Regrettably support for [@page](https://caniuse.com/css-paged-media) is very poor in most browsers. Use MS Edge, Opera or Google Chrome for best results when printing or creating PDFs.
+## Typing Emoji
+
+- [Windows](https://support.microsoft.com/en-us/windows/windows-10-keyboard-tips-and-tricks-588e0b72-0fff-6d3f-aeee-6e5116097942)
+- [Mac](https://www.howtogeek.com/684025/how-to-type-emoji-on-your-mac-with-a-keyboard-shortcut/)
+- Linux varies per distribution. If you run Linux you're probably capable of finding out how :)
+
+## Problems
+
+ChattyPub is very young and you're sure to run into problems. Feel free to contact `@Karl Moubarak`, `@andré` or `@heerko` at https://chat.hackersanddesigners.nl/
+
+Below are some things that we know of, and are working on:
+
+- :emoji: not working...

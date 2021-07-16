@@ -4,7 +4,7 @@
       >{{ contentFiltered }}
     </pre>
     <span v-else-if="rule.type === 'font'">
-      <pre>
+      <pre :style="rules">
 @font-face { 
   font-family: "{{ font.family }}"; 
   src: "{{ font.src }}" format({{ "font.format" }}); 
@@ -85,10 +85,11 @@ export default {
   bottom: -0.5em;
   left: 50%;
   transform: translateX(-50%);
-  padding: 0 10px;
+  padding: 5px 10px;
   /* border: 1px solid white; */
-  font-family: initial;
-  font-size: 1rem;
+  font-family: sans-serif;
+  font-size: 0.8rem;
+  box-shadow: 0 0 5px 5px rgba(255, 255, 0, 0.7);
 }
 
 .rule.type-font:after {
@@ -98,17 +99,19 @@ export default {
 .rule.type-font .instructions {
   display: none;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 10px;
+  left: 10px;
+  padding: 10px;
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
   align-content: center;
   justify-content: center;
   align-items: center;
   font-family: initial;
-  width: 100%;
-  height: 100%;
   background-color: rgba(255, 255, 255, 0.9);
   color: #000;
   border-radius: 10px;
+  box-shadow: 0 0 5px 5px white;
 }
 
 .rule.type-font:hover .instructions {
