@@ -3,14 +3,20 @@
     <pre v-if="rule.type === 'raw'"
       >{{ contentFiltered }}
     </pre>
-    <template v-else-if="rule.type === 'font'">
+    <span v-else-if="rule.type === 'font'">
       <pre>
 @font-face { 
   font-family: "{{ font.family }}"; 
   src: "{{ font.src }}" format({{ "font.format" }}); 
-}
-      </pre>
-    </template>
+}</pre
+      >
+      <div class="instructions">
+        <span
+          >Add the follow to your rule to use this font:<br />
+          font-family: "{{ font.family }}";
+        </span>
+      </div>
+    </span>
     <template v-else>
       <p :title="toEmojiCode(rule.className)">{{ rule.className }} {</p>
       <p v-for="dec in rule.rules" :key="dec">&nbsp; {{ dec }}</p>
@@ -36,11 +42,7 @@ export default {
       return c;
     },
     classes() {
-      let style = "";
-      if (this.rule.type == "raw") {
-        style += " raw";
-      }
-      return style;
+      return "type-" + this.rule.type;
     },
     font() {
       return this.rule.content;
@@ -56,13 +58,15 @@ export default {
 <style scoped>
 .rule {
   margin: 1em 0;
+  position: relative;
 }
 
 .rule p {
   margin: 0;
 }
 
-.rule.raw {
+.rule.type-raw,
+.rule.type-font {
   background-color: #333;
   color: #fff;
   padding: 10px;
@@ -71,7 +75,8 @@ export default {
   position: relative;
 }
 
-.rule.raw:after {
+.rule.type-font:after,
+.rule.type-raw:after {
   all: revert;
   content: "raw css";
   background-color: #333;
@@ -81,8 +86,32 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   padding: 0 10px;
-  border: 1px solid white;
+  /* border: 1px solid white; */
   font-family: initial;
   font-size: 1rem;
+}
+
+.rule.type-font:after {
+  content: "generated font rule";
+}
+
+.rule.type-font .instructions {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  font-family: initial;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #000;
+  border-radius: 10px;
+}
+
+.rule.type-font:hover .instructions {
+  display: flex;
 }
 </style>
