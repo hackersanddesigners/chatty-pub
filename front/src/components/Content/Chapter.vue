@@ -10,7 +10,7 @@
       </span>
     </div>
 
-    <div style="float: none"><div style="page-break-after: always"></div></div>
+    <!-- <div style="float: none"><div style="page-break-after: always"></div></div> -->
   </div>
 </template>
 
@@ -23,15 +23,13 @@ export default {
     Message,
   },
   data() {
-    return {
-    }
+    return {};
   },
   props: ["topic", "show_message_data"],
   computed: {
     messagesToShow() {
-      return this.topic.messages
-      .filter(m => !m.responseTo)
-    }
+      return this.topic.messages.filter((m) => !m.responseTo);
+    },
   },
 };
 </script>

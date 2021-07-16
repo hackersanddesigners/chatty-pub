@@ -1,20 +1,17 @@
 <template>
   <section>
     <h1 class="title">{{ title }}</h1>
-    <ul>
-      <li
-        v-for="topic in sortedTopics"
-        :key="topic.title"
-      >
-        <router-link 
+    <ul class="index">
+      <li v-for="topic in sortedTopics" :key="topic.title">
+        <router-link
           :to="`#${toValidID(topic.title)}`"
-          @click.stop="goTo(`#${toValidID(topic.title)}`)" 
+          @click.stop="goTo(`#${toValidID(topic.title)}`)"
         >
           {{ topic.title }}
         </router-link>
       </li>
     </ul>
-    <div style="float: none"><div style="page-break-after: always"></div></div>
+    <!-- <div style="float: none"><div style="page-break-after: always"></div></div> -->
     <Chapter
       v-for="topic in sortedTopics"
       :key="topic.title"
@@ -40,24 +37,22 @@ export default {
     ...mapState(["currentStream", "streams"]),
     ...mapGetters(["sortedTopics"]),
     title() {
-      return this.streams.find(s => s.name == this.currentStream) ? 
-        this.currentStream.replace("pub-", "") : 'Stream  does not exist.'
-    }
-    
+      return this.streams.find((s) => s.name == this.currentStream)
+        ? this.currentStream.replace("pub-", "")
+        : "Stream  does not exist.";
+    },
   },
   methods: {
-    toValidID(string) { return (
-      encodeURIComponent('ch-' + string)
-      .toLowerCase()
-      .replace(/\.|%[0-9a-z]{2}/gi, '')
-    )},
+    toValidID(string) {
+      return encodeURIComponent("ch-" + string)
+        .toLowerCase()
+        .replace(/\.|%[0-9a-z]{2}/gi, "");
+    },
     goTo(id) {
-      document
-      .querySelector(`.${this.currentStream} ${id}`)
-      .scrollIntoView({
-        behavior: 'smooth'
-      })
-    }
+      document.querySelector(`.${this.currentStream} ${id}`).scrollIntoView({
+        behavior: "smooth",
+      });
+    },
   },
 };
 </script>
@@ -67,5 +62,9 @@ export default {
   .title {
     /* display: none; */
   }
+}
+
+.index {
+  page-break-after: always;
 }
 </style>
