@@ -20,17 +20,17 @@ ChattyPub is a website that acts as a different interface to the same Zulip serv
 
 ## Making a publication with Zulip & ChattyPub
 
-## Content
+### Content
 
 1. Create a stream on Zulip
-   - Ensure that the stream name starts with `pub-`.
+   - Ensure that either (1) the stream name starts with `pub-` or (2) the stream includes a topic called "rules" (more on that later).
    - Ensure that the stream is public.
-2. Go to [ChattyPub](https://chattypub.hackersanddesigners.nl). The stream you created will be visible on the left-side navigation.
+2. Go to [ChattyPub](http://chatty-pub.hackersanddesigners.nl). The stream you created will be visible on the left-side navigation.
 3. Click on your stream.
 4. The main (middle) section of the website will have:
-   - Your stream name (which will be the name of your publication)
-   - The topics of your stream (which will act as "Chapters" in your publication)
-   - Topics are collapsed by default, click the expand button next to a topic to display it's messages as an article.
+   1. Your stream name (which will be the name of your publication)
+   2. The topics of your stream organized into a table of contents (which will act as "Chapters" in your publication)
+   3. The topics, in alphabetical order, displaying their messages, in chronological order. 
 5. To create a new topic (chapter), return to Zulip and type a message to your stream, making sure to send it to the topic you want to create.
 
 ### Rules
@@ -48,11 +48,11 @@ Every message you send to this topic should consist of a single emoji followed b
 }
 ```
 
-These messages should be unique and follow the CSS syntax, as described in the [introduction to CSS](https://github.com/hackersanddesigners/chatty-pub/blob/master/front/docs/CSS.md). If you are comfortable with CSS, you can skip to the part of the document that describes [how CSS is used in ChattyPub](https://github.com/hackersanddesigners/chatty-pub/blob/master/front/docs/CSS.md#css-in-chatty-pub).
+These messages should be unique and follow the CSS syntax, as described in the [introduction to CSS](#CSS). If you are comfortable with CSS, you can skip to the part of the document that describes [how CSS is used in ChattyPub](https://github.com/hackersanddesigners/chatty-pub/blob/master/front/docs/CSS.md#css-in-chatty-pub).
 
 To apply these styles to the contents of your publication, head back to any other topic in your stream, select a message you'd like to style, and react to it with the emoji whose styles you want to apply. On ChattyPub, the message should be rendered with these styles.
 
-If you'd like to style only a part of a message, select the message in Zulip and quote and respond to it (in the 3-dot menu). This will produce a text in your input box on the bottom of the interface. Delete the parts of the quoted message that you don't want the styles applied to, and send your response. When you react with an emoji to your own response, the part of the message you quoted will inherit the styles defined for that emoji.
+If you'd like to style only a part of a message, select the message in Zulip and quote and respond to it (in the 3-dot menu). This will produce a text in your input box on the bottom of the interface. Delete the parts of the quoted message that you don't want the styles applied to, and send your response. When you react with an emoji to your own response, the part of the original message you quoted will inherit the styles defined for that emoji.
 
 Keep in mind that you can edit your own messages! So if you make a mistake (forgetting the semi-colon at the end of a statement is a common one), roll over your message and click the little pen at the top righthand side of the message.
 

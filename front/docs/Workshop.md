@@ -34,6 +34,7 @@ Texts, notes, chats, images, and screenshots will make great material for our wo
 
 ## How It Works
 
+For an overview of how ChattyPub works with Zulip, go [here](#Chattypub).
 ## Workshop
 
 The workshop is split over two sessions (over two days) of 4 hours each.

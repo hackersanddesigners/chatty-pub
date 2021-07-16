@@ -12,6 +12,7 @@
       <vue3-markdown-it
         :source="source"
         :html="true"
+        v-bind="$mdOpts"
         @click.capture="clickEvent"
       />
     </div>
@@ -22,8 +23,6 @@
 import VueMarkdownIt from "vue3-markdown-it";
 /*eslint no-unused-vars: "off"*/
 /*eslint no-undef: "off"*/
-
-// VueMarkdownIt.use();
 import css from "../../docs/CSS.md";
 import workshop from "../../docs/Workshop.md";
 import chattypub from "../../docs/Chattypub.md";
@@ -76,8 +75,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .docs {
   padding: 1em;
+  max-width: 800px;
+  width: 100%;
+  margin: 1em auto;
 }
 </style>
