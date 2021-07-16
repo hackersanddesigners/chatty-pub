@@ -9,12 +9,7 @@
       </li>
     </ul>
     <div v-if="selected">
-      <vue3-markdown-it
-        :source="source"
-        :html="true"
-        v-bind="$mdOpts"
-        @click.capture="clickEvent"
-      />
+      <vue3-markdown-it :source="source" :html="true" v-bind="$mdOpts" />
     </div>
   </div>
 </template>
@@ -45,19 +40,6 @@ export default {
   methods: {
     select(key) {
       this.selected = key;
-    },
-    clickEvent(evt) {
-      let regex = new RegExp("[^.]+$");
-      let url = evt.explicitOriginalTarget.href;
-      let extension = url.match(regex);
-      if (extension.includes("md")) {
-        let filename = this.getFileName(url);
-        if (filename in this.files) {
-          this.selected = filename;
-          evt.preventDefault();
-        }
-      }
-      return false;
     },
     getFileName(url, includeExtension) {
       var matches =
