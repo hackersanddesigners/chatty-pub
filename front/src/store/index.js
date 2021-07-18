@@ -16,7 +16,7 @@ let toCSS = (message, currentStream) => {
   let className = "",
     emoji_code = "",
     rules = [],
-    parentClassName = currentStream,
+    parentClassName = (currentStream || "").replace(" ", "-"),
     id = message.id,
     is_codeblock = message.content.includes("<code>") || message.content.startsWith("```"),
     is_font = /<p><a href=".+?\.(ttf|otf|woff)/gm.test(message.content);

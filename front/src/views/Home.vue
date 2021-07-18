@@ -90,7 +90,7 @@ export default {
       return this.show_ui ? "ui" : "print";
     },
     currentStream() {
-      return this.$store.state.currentStream;
+      return this.$store.state.currentStream.replace(" ", "-");
     },
   },
   methods: {
@@ -121,6 +121,7 @@ export default {
       if (state !== undefined) this.show_ui = state;
       else this.show_ui = !this.show_ui;
       this.$forceUpdate();
+      Splitpanes.updatePaneComponents();
     },
   },
 };
