@@ -50,20 +50,32 @@ _Opening Session: Introductions & first encounters with ChattyPub_
   - participants with different levels of experience of CSS are grouped together
   - each group follows [these instructions](#content) to make one publication in ChattyPub
   - detailed instructions about CSS can be found [here](#CSS)
-- Brainstorm Session (1 hr) [also for the brainstorm it would be nice to add some suggestions for how to do this if you are not in Amsterdam and maybe not even togeter in a room.]
-  - in groups of 2-3, participants brainstorm publications they will make during the main session [Is this brainstorm about content? or about the negotiation process for the layout? can we come up with a format for the brainstorm or some questions as an aid?]
-  - If you are planning to print your publication, take into account the printing limitations of your home printer or local print shop [take into account in what way? regarding the format? will i need to adjust something in the css? or in regards to bw/color? ]
+- Brainstorm Session (1 hr)
+  - in groups of 2-3, participants brainstorm publications they will make during the main session 
+    - The goal is to document together, in print, parts of the summer academy.
+    - What have you been up to this last week?
+    - What did you make? What material did you collect / produce?
+    - How will you negotiate this design process?
+    - Are roles divided and then switched? 
+  - If you are planning to print your publication, take into account the printing limitations of your home printer or local print shop.
+    - Print settings such as the page size and orientation can all be configure with CSS.
+    - If participants are joining remotely, it's good that they are paired together.
 
 _Main Session: Chat => Print_
 
 - Making publications ( 2 hrs )
-  - Groups work on the publications planned in the previous session [how? will there be channels prepared? are people making their own channels?]
-  - Organizers are available to help where needed [who are the organizers? in vienna and pittsburgh people will be online on their own.. how do they prepare for that?]
+  - Groups work on the publications planned in the previous session 
+    - Each group makes a stream on Zulip for the publiction
+    - They create chapters for their contents
+    - They create a "rules" topic for their styles
+  - Organizers are available to help where needed
+    - At least one or two people per node should be able to help with CSS.
+    - Karl and Heerko will be available if bugs / errors occur.
 - Printing Publications ( 1 hr )
   - A printer is required in the space (or easily accessible)
   - Accommodating for different paper sizes is an added bonus
   - Binding could be fun too
-- Sharing outcomes and reflections ( 1 hr ) [add link and time in different time zones]
+- Sharing outcomes and reflections ( 1 hr ) 
   - Round of publications
   - Reflection on process
   - Feedback on ChattyPub
