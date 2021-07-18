@@ -34,7 +34,7 @@ Texts, notes, chats, images, and screenshots will make great material for our wo
 
 ## How It Works
 
-For an overview of how ChattyPub works with Zulip, go [here](#Chattypub).
+For an overview of how ChattyPub works with Zulip, go [here](/docs/Chattypub).
 ## Workshop
 
 The workshop is split over two sessions (over two days) of 4 hours each.
@@ -48,8 +48,8 @@ _Opening Session: Introductions & first encounters with ChattyPub_
   - How it all comes together (emojis ;])(Karl)
 - Experimenting with ChattyPub! ( 2 hrs )
   - participants with different levels of experience of CSS are grouped together
-  - each group follows [these instructions](#content) to make one publication in ChattyPub
-  - detailed instructions about CSS can be found [here](#CSS)
+  - each group follows [these instructions](/docs/Chattypub#content) to make one publication in ChattyPub
+  - detailed instructions about CSS can be found [here](/docs/CSS)
 - Brainstorm Session (1 hr)
   - in groups of 2-3, participants brainstorm publications they will make during the main session 
     - The goal is to document together, in print, parts of the summer academy.

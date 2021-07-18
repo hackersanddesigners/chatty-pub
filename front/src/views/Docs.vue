@@ -5,17 +5,22 @@
     <ul>
       <li><router-link to="/">Back to Chattypub</router-link></li>
       <li v-for="(file, key) in files" :key="key">
-        <a :href="'#' + key" @click="select(key)">{{ key }}</a>
+        <router-link :to="`/docs/${key}`">
+          {{ key }}
+        </router-link>
       </li>
     </ul>
-    <div v-if="selected">
-      <vue3-markdown-it :source="source" :html="true" v-bind="$mdOpts" />
+    <div v-if="$route.params.slug">
+      <vue3-markdown-it 
+        :source="source" 
+        :html="true" 
+        v-bind="$mdOpts" 
+      />
     </div>
   </div>
 </template>
 
 <script>
-import VueMarkdownIt from "vue3-markdown-it";
 /*eslint no-unused-vars: "off"*/
 /*eslint no-undef: "off"*/
 import css from "../../docs/CSS.md";
@@ -25,22 +30,33 @@ import "github-markdown-css/github-markdown.css";
 
 export default {
   name: "Docs",
-  components: [VueMarkdownIt],
   data() {
     return {
-      files: { Workshop: workshop, Chattypub: chattypub, CSS: css },
-      selected: "",
+      files: { 
+        Workshop: workshop, 
+        Chattypub: chattypub, 
+        CSS: css 
+      },
     };
   },
   computed: {
     source() {
-      return this.files[this.selected];
+      return this.files[this.$route.params.slug];
     },
   },
+  mounted() {
+    setTimeout(() => { 
+      if (this.source && this.$route.hash) {
+        document
+        .querySelector(this.$route.hash)
+        .scrollIntoView({
+          behavior: "smooth",
+        })
+      }
+      // this.handleLinks()
+    }, 100)
+  },
   methods: {
-    select(key) {
-      this.selected = key;
-    },
     getFileName(url, includeExtension) {
       var matches =
         url &&
@@ -53,6 +69,19 @@ export default {
       }
       return matches[1];
     },
+    handleLinks() {
+      Array.from(document.querySelectorAll('a'))
+      .forEach(a => {
+        a.addEventListener('click', e => {
+          if (a.pathname.startsWith('/docs/')) {
+            console.log(a)
+            this.$router.push(a.pathname)
+            e.preventDefault()
+            document.scroll({top: 0})
+          }
+        })
+      })
+    }
   },
 };
 </script>

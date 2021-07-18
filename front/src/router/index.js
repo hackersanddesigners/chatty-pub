@@ -19,6 +19,12 @@ export default createRouter({
       component: Docs,
     },
     {
+      path: '/docs/:slug',
+      name: 'Doc',
+      props: true,
+      component: Docs,
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'Home',
       component: Home,
