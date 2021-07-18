@@ -4,9 +4,19 @@ In this document we take a look at what CSS is and how it can be applied to a pu
 
 - [What is CSS](#what-is-css)
 - [Rules](#rules)
-- [Css in ChattyPub](#css-in-ChattyPub)
+- [Css in ChattyPub](#css-in-chattypub)
+  - [About formatting](#about-formatting)
+  - [Advanced CSS](#advanced-css)
 - [Uploading fonts](#uploading-fonts)
 - [Print settings](#print-settings)
+  - [Page breaks](#page-breaks)
+- [Common CSS properties](#properties)
+  - [Backgrounds and borders](#backgrounds)
+  - [Color](#color)
+  - [Box model](#box-model)
+  - [Fonts](#fonts)
+  - [Text](#text)
+  - [Transforms](#transforms)
 
 ---
 
@@ -123,7 +133,7 @@ You should be able to enter all regular CSS rules this way.
 
 **Bypassing the parser** -_Work in progress_-
 
-It is possible to bypass the parser and add arbitrary code to the CSS on the page. This allows you to add, for example, `@keyframes` for an animation or media queries. To do this send any message to the #rules channel and wrap the message in three backticks like this:
+It is possible to bypass the parser and add arbitrary code to the CSS on the page. This allows you to add, for example, `@keyframes` for an animation or media queries. To do this send any message to the `#rules` channel and wrap the message in three backticks like this:
 
 <code>
 ```
@@ -154,23 +164,39 @@ To set the paper size we can use the special selector `@page`. The following sni
 }
 ```
 
-Regrettably [browser support](https://caniuse.com/css-paged-media) for `@page` is spotty. Currently only MS Edge, Opera and Google Chrome will allow you to set page sizes etc.
+This example sets the page to landscape.
 
-[Pagedmedia.org](https://www.pagedmedia.org/pagedjs-sneak-peeks/) has an excellent explanation on using `@page`. The [Paged media module](https://developer.mozilla.org/en-US/docs/Web/CSS/Paged_Media) at Mozilla as well.
+```css
+@page {
+  size: landscape;
+}
+```
+
+Regrettably [browser support](https://caniuse.com/css-paged-media) for `@page` is spotty. Currently only MS Edge, Opera and Google Chrome will allow you to set page sizes etc, and even then it is a matter of trial and error.
+
+The [Paged media module](https://developer.mozilla.org/en-US/docs/Web/CSS/Paged_Media) at Mozilla has an excellent explanation on using `@page`.
 
 ### page breaks
 
 By default pages will automatically wrap to the next page. And ChattyPub adds a page break after each topic. If you want to force a page break you could write a rule for it, using the `page-break-after: always;` property:
 
+```css
+🍏 {
+  page-break-after: always;
+}
 ```
-📄 {
-page-break-after: always;
+
+If you don't want the page break after an article you can overwrite the default by using:
+
+```css
+.body {
+  page-break-after: avoid;
 }
 ```
 
 For some of these rules it may be necessary to use the methods described under [Advanced CSS](#advanced-css) above to enter these rules.
 
-## List of common and handy CSS properties
+## <a id="properties"></a>List of common and handy CSS properties
 
 There are hundreds of CSS properties. Below is a small selection of some basic properties mostly focussed on layout and type representation, grouped by module.
 

@@ -9,12 +9,14 @@ import { stripHtml } from "string-strip-html"
 var EmojiConvertor = require('emoji-js');
 var emojiConv = new EmojiConvertor();
 
+// let emojis = require('emojis');
+
 let toCSS = (message, currentStream) => {
   let content = stripHtml(message.content).result;
   let className = "",
     emoji_code = "",
     rules = [],
-    parentClassName = currentStream,
+    parentClassName = (currentStream || "").replace(" ", "-"),
     id = message.id,
     is_codeblock = message.content.includes("<code>") || message.content.startsWith("```"),
     is_font = /<p><a href=".+?\.(ttf|otf|woff)/gm.test(message.content);
@@ -25,14 +27,16 @@ let toCSS = (message, currentStream) => {
   let regex = /\s?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
   let results = content.matchAll(regex);
   results = Array.from(results);
+
   if (is_font) { // font
     let re_path = /\/user_uploads(\/.*?\.(?:ttf|otf|woff))/gm;
-    // content = message.content.matchAll(re_path);
     content = re_path.exec(message.content)[1];
-    // console.log(message.content, content)
     return { className: '', emoji_code: '', rules: [], parentClassName: '', id: id, content: font(content), type: type }
+  } else if (is_codeblock) {
+    return { className: '', emoji_code: '', rules: [], parentClassName: '', id: id, content: content, type: type }
   } else if (results.length > 0) { // rule and raw
     className = emojiConv.replace_colons(results[0]['groups']['selector']);
+
     if (emoji.methods.containsEmoji(className)) {
       emoji_code = emoji.methods.toEmojiCode(className);
     }
@@ -40,6 +44,7 @@ let toCSS = (message, currentStream) => {
     rules = rules.filter((rule) => validateRule(rule))
     return { className, emoji_code, rules, parentClassName, id, content, type };
   }
+  console.log("rejected rule", message)
   return null;
 }
 

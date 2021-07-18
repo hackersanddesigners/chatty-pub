@@ -90,7 +90,7 @@ export default {
       return this.show_ui ? "ui" : "print";
     },
     currentStream() {
-      return this.$store.state.currentStream;
+      return this.$store.state.currentStream.replace(" ", "-");
     },
   },
   methods: {
@@ -121,6 +121,7 @@ export default {
       if (state !== undefined) this.show_ui = state;
       else this.show_ui = !this.show_ui;
       this.$forceUpdate();
+      Splitpanes.updatePaneComponents();
     },
   },
 };
@@ -134,6 +135,7 @@ export default {
   width: 100%;
   display: flex;
 }
+
 .controls-pane {
   background-color: #aaa;
 }
@@ -174,19 +176,13 @@ export default {
   display: block !important;
 }
 
-.print .body {
+.body {
   page-break-after: always;
-  /* border-bottom: 3px dotted green; */
 }
 
 .body img {
   max-width: 100%;
 }
-
-/* .print .body:first-of-type {
-  page-break-after: always;
-  border-bottom: 3px dotted yellow;
-} */
 
 .float-btn {
   position: fixed;
