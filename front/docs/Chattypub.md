@@ -57,7 +57,7 @@ Every message you send to this topic should consist of a single emoji followed b
 }
 ```
 
-These messages should be unique and follow the CSS syntax, as described in the [introduction to CSS](#CSS). If you are comfortable with CSS, you can skip to the part of the document that describes [how CSS is used in ChattyPub](https://github.com/hackersanddesigners/chatty-pub/blob/master/front/docs/CSS.md#css-in-chatty-pub).
+These messages should be unique and follow the CSS syntax, as described in the [introduction to CSS](#CSS). If you are comfortable with CSS, you can skip to the part of the document that describes [how CSS is used in ChattyPub](#css-in-chatty-pub).
 
 To apply these styles to the contents of your publication, head back to any other topic in your stream, select a message you'd like to style, and react to it with the emoji whose styles you want to apply. On ChattyPub, the message should be rendered with these styles.
 

@@ -113,7 +113,7 @@ const handleHTMLReply = message => {
       .replace(/<\/p>\n<\/blockquote>/gm, '')
     // .replace(/\n/gm, '')
   }
-  console.log(message.responseTo)
+  console.table(message.responseTo)
 }
 
 export default createStore({

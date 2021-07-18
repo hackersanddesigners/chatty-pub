@@ -46,10 +46,10 @@ _Opening Session: Introductions & first encounters with ChattyPub_
   - Introduction to ChattyPub (Karl).
   - Introduction to CSS (Heerko).
   - How it all comes together (emojis ;])(Karl)
-- Experimenting with ChattyPub! ( 2 hrs ) [How are people going to do this asynchronously? it needs maybe more direction and steps from here]+1
-  - all levels of technical knowledge should be accommodated
-  - general knowledge and detailed instructions about CSS can be found [here](https://github.com/hackersanddesigners/chatty-pub/blob/master/front/docs/CSS.md)
-  - it's reccommended to group together participants with different levels of experience with CSS
+- Experimenting with ChattyPub! ( 2 hrs )
+  - participants with different levels of experience of CSS are grouped together
+  - each group follows [these instructions](#content) to make one publication in ChattyPub
+  - detailed instructions about CSS can be found [here](#CSS)
 - Brainstorm Session (1 hr) [also for the brainstorm it would be nice to add some suggestions for how to do this if you are not in Amsterdam and maybe not even togeter in a room.]
   - in groups of 2-3, participants brainstorm publications they will make during the main session [Is this brainstorm about content? or about the negotiation process for the layout? can we come up with a format for the brainstorm or some questions as an aid?]
   - If you are planning to print your publication, take into account the printing limitations of your home printer or local print shop [take into account in what way? regarding the format? will i need to adjust something in the css? or in regards to bw/color? ]
