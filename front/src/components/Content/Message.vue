@@ -17,9 +17,9 @@
       </span>
     </div>
     <div class="reactions ui">
-      <template v-for="reaction in reactions" :key="reaction">
+      <span v-for="reaction in reactions" :key="reaction" :title="reaction">
         {{ reaction }}
-      </template>
+      </span>
     </div>
   </div>
 </template>
@@ -61,14 +61,14 @@ export default {
             m.responseTo.sender_id == this.message.sender_id &&
             this.message.content.includes(m.responseTo.quote)
         );
-      console.log(c, referrers);
+      // console.log(c, referrers);
       referrers.forEach((m) => {
         const classes = m.reactions.map((r) => "u" + r.emoji_code).join(" ");
         c = c.replace(
           m.responseTo.quote,
           `<span class="${classes}">${m.responseTo.quote}</span>`
         );
-        console.log(c);
+        // console.log(c);
       });
       return c;
     },
@@ -83,7 +83,9 @@ export default {
       );
     },
     classes() {
-      return this.message.reactions.map((r) => "u" + r.emoji_code);
+      return this.message.reactions.map(
+        (r) => r.emoji_code + " u" + r.emoji_code
+      );
     },
     time() {
       var ts = this.message.timestamp;
@@ -99,12 +101,12 @@ export default {
 </script>
 
 <style>
-.message {
+.message-outer {
   position: relative;
   display: block;
 }
 
-.message:hover .reactions {
+.message-outer:hover .reactions {
   display: flex;
   position: absolute;
   top: 0;
@@ -124,6 +126,10 @@ export default {
   display: none;
 }
 
+.reactions span {
+  pointer-events: initial;
+}
+
 .message-data {
   display: flex;
   border-bottom: 1px solid #666;
@@ -137,5 +143,9 @@ export default {
 }
 .message-data .time {
   text-align: right;
+}
+
+.message-data-reactions {
+  margin-bottom: 1em;
 }
 </style>

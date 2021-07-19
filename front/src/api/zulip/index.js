@@ -20,7 +20,18 @@ const
      client
      .streams
      .retrieve()
-      .then(result => resolve(result))
+      .then(result => resolve(result.streams))
+      .catch(error => reject(error))
+    })
+  ),
+  
+  getTopics = (client, stream) => ( new
+    Promise((resolve, reject) => {
+     client
+     .streams
+     .topics
+     .retrieve({ stream_id: stream })
+      .then(result => resolve(result.topics))
       .catch(error => reject(error))
     })
   ),
@@ -31,7 +42,7 @@ const
      .messages
      .retrieve(params || {
         anchor: "newest",
-        num_before: 100,
+        num_before: 1000,
         num_after: 0,
         // apply_markdown: false,
         narrow: [
@@ -50,7 +61,7 @@ const
      .messages
      .retrieve(params || {
         anchor: "newest",
-        num_before: 100,
+        num_before: 1000,
         num_after: 0,
         // apply_markdown: false,
         narrow: [{ operator: "stream", operand: stream }],
@@ -115,6 +126,7 @@ export default {
   init,
   config,
   getStreams,
+  getTopics,
   getMsgs,
   getAllMsgs,
   listen,

@@ -25,17 +25,15 @@
             Show chat message data</label
           >
           <p class="notice">
-            Regrettably support for
+            Regrettably support for setting page size, page breaks etc. using
             <a href="https://caniuse.com/css-paged-media">@page</a> is very poor
-            in most browsers. Use Google Chrome for best results when printing
-            or creating PDFs.
+            in most browsers. Use MS Edge, Opera or Google Chrome for best
+            results when printing or creating PDFs.
           </p>
+          <button @click="$router.push({ path: 'docs' })">Docs</button>
         </div>
       </pane>
-      <pane 
-        :size="panel_sizes[1]"
-        :class="currentStream"
-      >
+      <pane :size="panel_sizes[1]" :class="currentStream">
         <Content
           :print="!show_ui || expand_content"
           :show_message_data="show_message_data"
@@ -75,10 +73,6 @@ export default {
   },
   setup() {
     const preview = ref(null);
-
-    onMounted(() => {
-      console.log("preview", preview.value); // <div>This is a root element</div>
-    });
     return {
       preview,
     };
@@ -96,8 +90,8 @@ export default {
       return this.show_ui ? "ui" : "print";
     },
     currentStream() {
-      return this.$store.state.currentStream
-    }
+      return this.$store.state.currentStream.replace(" ", "-");
+    },
   },
   methods: {
     resizer(panels) {
@@ -127,6 +121,7 @@ export default {
       if (state !== undefined) this.show_ui = state;
       else this.show_ui = !this.show_ui;
       this.$forceUpdate();
+      Splitpanes.updatePaneComponents();
     },
   },
 };
@@ -140,6 +135,7 @@ export default {
   width: 100%;
   display: flex;
 }
+
 .controls-pane {
   background-color: #aaa;
 }
@@ -180,14 +176,13 @@ export default {
   display: block !important;
 }
 
-.print .body {
+.body {
   page-break-after: always;
-  /* border-bottom: 3px dotted green; */
 }
-/* .print .body:first-of-type {
-  page-break-after: always;
-  border-bottom: 3px dotted yellow;
-} */
+
+.body img {
+  max-width: 100%;
+}
 
 .float-btn {
   position: fixed;

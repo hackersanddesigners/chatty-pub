@@ -9,31 +9,76 @@ import { stripHtml } from "string-strip-html"
 var EmojiConvertor = require('emoji-js');
 var emojiConv = new EmojiConvertor();
 
+// let emojis = require('emojis');
+
 let toCSS = (message, currentStream) => {
-  // console.log(message)
+  let content = stripHtml(message.content).result;
   let className = "",
     emoji_code = "",
     rules = [],
-    parentClassName = currentStream,
-    id = message.id
-
+    parentClassName = (currentStream || "").replace(" ", "-"),
+    id = message.id,
+    is_codeblock = message.content.includes("<code>") || message.content.startsWith("```"),
+    is_font = /<p><a href=".+?\.(ttf|otf|woff)/gm.test(message.content);
   // let regex = /[/s]?(?<selector>.+)\s*\n?{\n?(?<prop>[\s\w.~:>-]+\s*:\s*.+;?\n?)*\n?}/gm
+
+  let type = is_codeblock ? "raw" : is_font ? "font" : "rule"; // okay okay okay, i know this is ugly :)
+
   let regex = /\s?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
-  let content = stripHtml(message.content).result;
   let results = content.matchAll(regex);
   results = Array.from(results);
-  //console.log(results)
-  if (results.length > 0) {
+
+  if (is_font) { // font
+    let re_path = /\/user_uploads(\/.*?\.(?:ttf|otf|woff))/gm;
+    content = re_path.exec(message.content)[1];
+    return { className: '', emoji_code: '', rules: [], parentClassName: '', id: id, content: font(content), type: type }
+  } else if (is_codeblock) {
+    return { className: '', emoji_code: '', rules: [], parentClassName: '', id: id, content: content, type: type }
+  } else if (results.length > 0) { // rule and raw
     className = emojiConv.replace_colons(results[0]['groups']['selector']);
+
     if (emoji.methods.containsEmoji(className)) {
       emoji_code = emoji.methods.toEmojiCode(className);
     }
     rules = results[0]['groups']['props'].split("\n");
     rules = rules.filter((rule) => validateRule(rule))
-    // console.log(className, emoji_code, rules, parentClassName, id)
-    return { className, emoji_code, rules, parentClassName, id };
+    return { className, emoji_code, rules, parentClassName, id, content, type };
   }
+  console.log("rejected rule", message)
   return null;
+}
+
+let font = (content) => {
+  let font = {
+    family: "",
+    src: "",
+    format: "",
+  };
+  let path = content;
+  let filename = getFilename(path);
+  let ext = filename.split(".").pop();
+  font.src =
+    "https://chatty-pub-files.hackersanddesigners.nl/files" + path;
+  font.format = getFormat(ext);
+  font.family = filename.replace(".", "_");
+  return font;
+}
+
+let getFilename = (str) => {
+  return str.split("\\").pop().split("/").pop();
+}
+
+let getFormat = (ext) => {
+  let fmt = "truetype";
+  switch (ext) {
+    case 'woff':
+      fmt = "woff";
+      break;
+    case 'eof':
+      fmt = "embedded-opentype";
+      break;
+  }
+  return fmt;
 }
 
 let validateRule = (rule) => {
@@ -71,9 +116,9 @@ const handleHTMLReply = message => {
     quote: message.content
       .replace(/.*[^]+<\/p>\n<blockquote>\n<p>/gm, '')
       .replace(/<\/p>\n<\/blockquote>/gm, '')
-      // .replace(/\n/gm, '')
+    // .replace(/\n/gm, '')
   }
-  console.log(message.responseTo)
+  console.table(message.responseTo)
 }
 
 export default createStore({
@@ -111,7 +156,7 @@ export default createStore({
         } else {
           state.topics.push({
             title: message.subject,
-            messages: [ message ]
+            messages: [message]
           })
         }
       }
@@ -156,7 +201,7 @@ export default createStore({
       if (toCSS(rule) !== null) {
         // state.rules.push(toCSS(rule, state.currentStream))
         // vue will not update if i use rules.push(rule)
-        state.rules = [...state.rules,...[toCSS(rule, state.currentStream)]]
+        state.rules = [...state.rules, ...[toCSS(rule, state.currentStream)]]
       }
     },
     editMessage: (state, { mid, content }) => {
@@ -180,7 +225,8 @@ export default createStore({
         //   id: mid, content: content,
         // }, state.currentStream)
 
-        // vue will not update if i use rules.push(rule)        
+        // vue will not update if i use rules.push(rule)  
+        state.rules.splice(state.rules.indexOf(rule), 1)
         const newRules = [...state.rules, ...[toCSS({
           id: mid, content: content,
         }, state.currentStream)]]
@@ -205,8 +251,11 @@ export default createStore({
     rules: state => state.rules,
     sortedTopics: state => (
       [...state.topics]
-      .sort((a, b) => a.title.localeCompare(b.title))
-      .filter(t => t.messages.length > 0) 
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .filter(t => (
+          t.messages.length > 0 &&
+          t.title != 'stream events'
+        ))
     )
   }
 

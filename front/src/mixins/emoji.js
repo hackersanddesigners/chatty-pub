@@ -16,18 +16,21 @@
 // }
 
 export default {
+  data() {
+    return {
+      emoji_regex: /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?(?:\u200d(?:[^\ud800-\udfff]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?)*/gi
+    }
+  },
+
   methods: {
     toEmojiCode: (emoji) => {
-      // console.log(emoji);
       return emoji.replace(/\p{Emoji}/gu, (m) => m.codePointAt(0).toString(16));
     },
 
     // toEmojiCode: (emoji) => {
-    //   console.log(emoji)
     //   emoji.replace(/\p{Emoji}/gu, function (m) {
     //     toUTF16(m.codePointAt(0));
     //   });
-    //   console.log(emoji)
     //   return emoji;
     // },
 

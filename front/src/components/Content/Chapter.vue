@@ -1,17 +1,16 @@
 <template>
-  <div :class="['body', topic.title]">
-    <h3 @click="desiresContent = !desiresContent" class="header">
-      <span class="expandToggle" v-html="toggleSymbol"></span>
+  <div class="body">
+    <h2 class="header">
       <span>{{ topic.title }}</span>
-    </h3>
-    <div v-if="desiresContent || print">
+    </h2>
+    <div>
       <span v-for="message in messagesToShow" :key="message.id">
         <Message :message="message" :show_message_data="show_message_data" />
         <span>&nbsp;</span>
       </span>
     </div>
 
-    <div style="float: none"><div style="page-break-after: always"></div></div>
+    <!-- <div style="float: none"><div style="page-break-after: always"></div></div> -->
   </div>
 </template>
 
@@ -24,23 +23,13 @@ export default {
     Message,
   },
   data() {
-    return {
-      desiresContent: false,
-    };
+    return {};
   },
-  props: ["topic", "print", "show_message_data"],
+  props: ["topic", "show_message_data"],
   computed: {
-    toggleSymbol() {
-      let r = "";
-      if (!this.print) {
-        r = this.desiresContent ? "▼ " : "► ";
-      }
-      return r;
-    },
     messagesToShow() {
-      return this.topic.messages
-      .filter(m => !m.responseTo)
-    }
+      return this.topic.messages.filter((m) => !m.responseTo);
+    },
   },
 };
 </script>

@@ -40,14 +40,22 @@ export default {
       this.$store.commit("setMobile", this.checkIfMobile());
     });
 
-    this.getStreams();
+    this.$router.beforeEach(async () => {
+      if (!this.zulipClient || this.streams.length == 0) {
+        await this.getStreams()
+      }
+    })
 
-    this.$router.afterEach((to) => {
-      this.$store.commit("setTopics", []);
-      this.$store.commit("setRules", []);
-      this.$store.commit("setCurStream", to.path.replace("/", ""));
-      if (this.currentStream != "" && this.streams.find(s => s.name == this.currentStream)) {
-        this.setUpDoc(this.currentStream);
+    this.$router.afterEach((to, from) => {
+      if (to.path !== from.path) {
+        this.$store.commit("setTopics", []);
+        this.$store.commit("setRules", []);
+        this.$store.commit("setCurStream", to.path.replace("/", ""));
+        if (this.currentStream != ""
+        && this.streams.find(s => s.name == this.currentStream)
+        ) {
+          this.setUpDoc(this.currentStream);
+        }
       }
     });
   },
@@ -56,16 +64,25 @@ export default {
     checkIfMobile: () => window.innerWidth < 700,
 
     getStreams() {
-      api.zulip.init().then((client) => {
-        this.zulipClient = client;
-        api.zulip.getStreams(client).then((result) => {
-          this.$store.commit(
-            "setStreams",
-            result.streams.filter((s) => s.name.startsWith(this.pubStr))
-          );
-        });
-        api.zulip.listen(this.zulipClient, this.eventHandler);
-      });
+      return new Promise(resolve => {
+        api.zulip.init().then((client) => {
+          this.zulipClient = client;
+          api.zulip.getStreams(client).then(async (streams) => {
+            for (let stream of streams) {
+              stream.topics = await api.zulip.getTopics(client, stream.stream_id)
+            }
+            this.$store.commit(
+              "setStreams",
+              streams.filter((s) => (
+                s.topics.find(t => t.name == 'rules') ||
+                s.name.startsWith(this.pubStr)
+              ))
+            );
+            resolve()
+          });
+          api.zulip.listen(this.zulipClient, this.eventHandler);
+        });  
+      })
     },
 
     setUpDoc(stream) {
@@ -94,11 +111,11 @@ export default {
       switch (event.type) {
         case "message":
           switch (event.message.subject) {
-            case "content":
-              this.$store.commit("addMessage", event.message);
-              break;
             case "rules":
               this.$store.commit("addRule", event.message);
+              break;
+            default:
+              this.$store.commit("addMessage", event.message);
               break;
           }
           break;

@@ -1,9 +1,21 @@
 <template>
-  <section id="content">
+  <section>
     <h1 class="title">{{ title }}</h1>
+    <ul class="index">
+      <li v-for="topic in sortedTopics" :key="topic.title">
+        <router-link
+          :to="`#${toValidID(topic.title)}`"
+          @click.stop="goTo(`#${toValidID(topic.title)}`)"
+        >
+          {{ topic.title }}
+        </router-link>
+      </li>
+    </ul>
+    <!-- <div style="float: none"><div style="page-break-after: always"></div></div> -->
     <Chapter
       v-for="topic in sortedTopics"
       :key="topic.title"
+      :id="toValidID(topic.title)"
       :topic="topic"
       :print="print"
       :show_message_data="show_message_data"
@@ -20,28 +32,39 @@ export default {
   components: {
     Chapter,
   },
+  props: ["print", "show_message_data"],
   computed: {
     ...mapState(["currentStream", "streams"]),
     ...mapGetters(["sortedTopics"]),
     title() {
-      return this.streams.find(s => s.name == this.currentStream) ? 
-        this.currentStream.replace("pub-", "") : 'Stream  does not exist.'
-    }
-    
+      return this.streams.find((s) => s.name == this.currentStream)
+        ? this.currentStream.replace("pub-", "")
+        : "Stream  does not exist.";
+    },
   },
-  methods: {},
-  props: ["print", "show_message_data"],
+  methods: {
+    toValidID(string) {
+      return encodeURIComponent("ch-" + string)
+        .toLowerCase()
+        .replace(/\.|%[0-9a-z]{2}/gi, "");
+    },
+    goTo(id) {
+      document.querySelector(`.${this.currentStream} ${id}`).scrollIntoView({
+        behavior: "smooth",
+      });
+    },
+  },
 };
 </script>
 
 <style scoped>
-#content {
-  /* max-width: 700px; */
-  /* background: unset; */
-}
 @media print {
   .title {
     /* display: none; */
   }
+}
+
+.index {
+  page-break-after: always;
 }
 </style>
