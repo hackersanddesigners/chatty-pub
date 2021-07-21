@@ -14,6 +14,7 @@
 // let u = (codeUnit) => {
 //   return "\\u" + codeUnit.toString(16).toUpperCase();
 // }
+import zulip_emoji from "../data/emoji_codes.json";
 
 export default {
   data() {
@@ -27,6 +28,14 @@ export default {
       return emoji.replace(/\p{Emoji}/gu, (m) => m.codePointAt(0).toString(16));
     },
 
+    shortcodeToEmoji: (code) => {
+      if (code.indexOf(":") !== 0) return code;
+      let k = code.replaceAll(":", '').trim();
+      let emoji = zulip_emoji.name_to_codepoint[k];
+      console.log(k, emoji, parseInt(emoji,16), String.fromCodePoint(parseInt("0x"+emoji)))
+      return String.fromCodePoint(parseInt("0x"+emoji))
+    },
+    
     // toEmojiCode: (emoji) => {
     //   emoji.replace(/\p{Emoji}/gu, function (m) {
     //     toUTF16(m.codePointAt(0));
