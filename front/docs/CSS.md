@@ -135,14 +135,14 @@ You should be able to enter all regular CSS rules this way.
 
 It is possible to bypass the parser and add arbitrary code to the CSS on the page. This allows you to add, for example, `@keyframes` for an animation or media queries. To do this send any message to the `#rules` channel and wrap the message in three backticks like this:
 
-<code>
+~~~~
 ```
 @keyframes example {
   from {background-color: red;}
   to {background-color: yellow;}
 }
 ```
-</code>
+~~~~
 
 ---
 

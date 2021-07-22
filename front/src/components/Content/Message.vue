@@ -18,7 +18,7 @@
     </div>
     <div class="reactions ui">
       <span v-for="reaction in reactions" :key="reaction" :title="reaction">
-        {{ reaction }}
+        {{ shortcodeToEmoji(reaction) }}
       </span>
     </div>
   </div>
