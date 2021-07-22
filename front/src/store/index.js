@@ -6,14 +6,13 @@ import { createStore } from 'vuex'
 import emoji from "../mixins/emoji"
 import { stripHtml } from "string-strip-html"
 
+/* 
 
-// var EmojiConvertor = require('emoji-js');
-// var emojiConv = new EmojiConvertor();
+TODO: fix this frankenfunction. Its not pretty but it works, so I am leaving it for now. 
 
-// let emojis = require('emojis');
+Does various conversion and parsing to turn a message in the rules channel into an object we can use in the rules and style component 
 
-
-
+*/
 let toCSS = (message, currentStream) => {
   let content = stripHtml(message.content).result;
   let className = "",
@@ -23,9 +22,8 @@ let toCSS = (message, currentStream) => {
     id = message.id,
     is_codeblock = message.content.includes("<code>") || message.content.startsWith("```"),
     is_font = /<p><a href=".+?\.(ttf|otf|woff)/gm.test(message.content);
-  // let regex = /[/s]?(?<selector>.+)\s*\n?{\n?(?<prop>[\s\w.~:>-]+\s*:\s*.+;?\n?)*\n?}/gm
-  console.log(message);
-  let type = is_codeblock ? "raw" : is_font ? "font" : "rule"; // okay okay okay, i know this is ugly :)
+  
+  let type = is_codeblock ? "raw" : is_font ? "font" : "rule"; 
 
   let regex = /\s?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
   let results = content.matchAll(regex);
@@ -38,12 +36,9 @@ let toCSS = (message, currentStream) => {
   } else if (is_codeblock) {
     return { className: '', emoji_code: '', rules: [], parentClassName: '', id: id, content: content, type: type }
   } else if (results.length > 0) { // rule and raw
-    // className = emojiConv.replace_colons(results[0]['groups']['selector']);
     className = emoji.methods.shortcodeToEmoji(results[0]['groups']['selector']);
-    console.log(className)
     if (emoji.methods.containsEmoji(className)) {
       emoji_code = emoji.methods.toEmojiCode(className);
-      console.log("??",className, emoji_code);
     }
     rules = results[0]['groups']['props'].split("\n");
     rules = rules.filter((rule) => validateRule(rule))
