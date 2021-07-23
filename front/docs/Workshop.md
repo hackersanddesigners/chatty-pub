@@ -42,9 +42,9 @@ The workshop is split over two sessions (over two days) of 4 hours each.
 _Opening Session: Introductions & first encounters with ChattyPub_
 
 - Introductory presentation ( 1hr ) -- will be livestreamed in the morning / recorded and shared afterwards.
-  - Context and background on H&D's publishing activities (Anja & Juliette)
+  - Context and background on H&D's publishing activities (Anja & Juliette) [slides](https://hackersanddesigners.github.io/chatty-pub-css-slides/assets/hdsa-chattypub-intro.pdf)
   - Introduction to ChattyPub (Karl).
-  - Introduction to CSS (Heerko).
+  - Introduction to CSS (Heerko). [slides](https://hackersanddesigners.github.io/chatty-pub-css-slides/)
   - How it all comes together (emojis ;])(Karl)
 - Experimenting with ChattyPub! ( 2 hrs )
   - participants with different levels of experience of CSS are grouped together

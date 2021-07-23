@@ -39,6 +39,7 @@ export default {
       return "```json\n" + JSON.stringify(this.message, null, 2) + "\n```";
     },
     content() {
+      if(!this.message.content) return "";
       let c = this.message.content.replace("\n", "<br/>");
       // create absolute url on images and relative links
       let url = process.env.VUE_APP_ZULIP_site;
@@ -51,6 +52,8 @@ export default {
         url + "/user_uploads/",
         "https://chatty-pub-files.hackersanddesigners.nl/files/"
       );
+
+      c = this.replaceAllEmojiCodes(c);
 
       const referrers = this.$store.state.topics
         .find((t) => t.title == this.message.subject)
