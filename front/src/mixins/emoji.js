@@ -32,7 +32,8 @@ export default {
       if (code.indexOf(":") !== 0) return code;
       let k = code.replaceAll(":", '').trim();
       let emoji = zulip_emoji.name_to_codepoint[k];
-      console.log(k, emoji, parseInt(emoji,16), String.fromCodePoint(parseInt("0x"+emoji)))
+      if (!emoji) return code;
+      // console.log(k, emoji, parseInt(emoji,16), String.fromCodePoint(parseInt("0x"+emoji)))
       return String.fromCodePoint(parseInt("0x"+emoji))
     },
     
