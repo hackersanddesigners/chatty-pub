@@ -32,7 +32,8 @@ ChattyPub is a website that acts as a different interface to the same Zulip serv
 ### Content
 
 1. Create a stream on Zulip
-   - Ensure that either (1) the stream name starts with `pub-` or (2) the stream includes a topic called "rules" (more on that later).
+   - Ensure that either (1) the stream name starts with `pub-` or (2) the stream descriptio includes this text:`_PUB_`.
+   - Ensure that the stream name does not have any uderscores.
    - Ensure that the stream is public.
 2. Go to [ChattyPub](https://chatty-pub.hackersanddesigners.nl). The stream you created will be visible on the left-side navigation.
 3. Click on your stream.
