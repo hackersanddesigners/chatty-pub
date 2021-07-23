@@ -1,7 +1,7 @@
 # CSS
 
 In this document we take a look at what CSS is and how it can be applied to a publication in ChattyPub.
-The slides based on this document can be found <a href="https://hackersanddesigners.github.io/chatty-pub-css-slides/">here</a>.
+## The slides based on this document can be found <a href="https://hackersanddesigners.github.io/chatty-pub-css-slides/">here</a>.
 
 - [What is CSS](#what-is-css)
 - [Rules](#rules)
