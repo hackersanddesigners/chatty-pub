@@ -131,7 +131,8 @@ export default {
             }
             break;
           } 
-
+          break;
+          
         case "delete_message":
           this.$store.commit("deleteMessage", event.message_id);
           break;
