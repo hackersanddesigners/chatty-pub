@@ -34,9 +34,9 @@ let toCSS = (message, currentStream) => {
     content = re_path.exec(message.content)[1];
     return { className: '', emoji_code: '', rules: [], parentClassName: '', id: id, content: font(content), type: type }
   } else if (is_codeblock) {
-    return { className: '', emoji_code: '', rules: [], parentClassName: '', id: id, content: content, type: type }
+    return { className: '', emoji_code: '', rules: [], parentClassName: '', id: id, content: cleanupCodeBlock(content), type: type }
   } else if (results.length > 0) { // rule and raw
-    className = emoji.methods.shortcodeToEmoji(results[0]['groups']['selector']);
+    className = emoji.methods.replaceAllEmojiCodes(results[0]['groups']['selector']);
     if (emoji.methods.containsEmoji(className)) {
       emoji_code = emoji.methods.toEmojiCode(className);
     }
@@ -46,6 +46,10 @@ let toCSS = (message, currentStream) => {
   }
   console.log("rejected rule", message)
   return null;
+}
+
+let cleanupCodeBlock = (content) => {
+  return content.replaceAll('```', '');
 }
 
 let font = (content) => {
