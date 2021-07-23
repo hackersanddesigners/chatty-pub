@@ -1,6 +1,13 @@
 <template>
   <section>
     <h1 class="title">{{ title }}</h1>
+    <vue3-markdown-it 
+      class="description"
+      :source="description"
+      v-bind="$mdOpts" 
+    >
+      
+    </vue3-markdown-it>
     <ul class="index">
       <li v-for="topic in sortedTopics" :key="topic.title">
         <router-link
@@ -42,6 +49,11 @@ export default {
         : this.$route.path == '/'
         ? "<= pick a stream" 
         : "Stream  does not exist.";
+    },
+    description() {
+      return this.title && 
+        this.streams.find((s) => s.name == this.currentStream.name)
+        .description.replace('_PUB_', '')
     },
   },
   methods: {
