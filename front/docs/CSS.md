@@ -1,6 +1,7 @@
 # CSS
 
 In this document we take a look at what CSS is and how it can be applied to a publication in ChattyPub.
+The slides based on this document can be found <a href="https://hackersanddesigners.github.io/chatty-pub-css-slides/">here</a>.
 
 - [What is CSS](#what-is-css)
 - [Rules](#rules)
@@ -113,9 +114,7 @@ Because of the way Zulip handles the emoji reactions, not all emoji are availabl
 
 ### About formatting
 
-You can't enter a tab character in Zulip and the indentation before the property in the rule isn't absolutely necessary. So feel free to leave it out. If you absolutely want to have the indentation, you could write the rule in your favorite editor and copy and paste it into Zulip. If you only want to style a single property you could have the whole rule on a single line like this: `🌕 { box-shadow: 0 0 20px rgba(255,0,0,0.5); }`,
-
-_Don't forget the semi-colon at the end of the property line!_
+You can't enter a tab character in Zulip and the indentation before the property in the rule isn't absolutely necessary. So feel free to leave it out. If you absolutely want to have the indentation, you could write the rule in your favorite editor and copy and paste it into Zulip. Make sure that the selector, each property and the closing accolade are all on their own line. __Don't forget the semi-colon at the end of each property line!__
 
 ### Advanced CSS
 
@@ -148,7 +147,7 @@ It is possible to bypass the parser and add arbitrary code to the CSS on the pag
 
 ## Uploading fonts
 
-It is also possible to upload a custom font to the application. To do this, you send the font in a message to the #rules channel of the publication you want to use it in. You can use `.ttf`, `.otf` or `.woff` formats depending on the browser you are using. The mesage must only contain the font, no other text. ChattyPub will then automatically generate a @font-face rule for the font. The font-family name will be based on the filename.
+It is also possible to upload a custom font to the application. To do this, you send the font in a message to the #rules channel of the publication you want to use it in. You can use `.ttf`, `.otf` or `.woff`/`.woff2` formats depending on the browser you are using. The mesage must only contain the font, no other text. ChattyPub will then automatically generate a @font-face rule for the font. The font-family name will be based on the filename.
 
 Once uploaded the font should show up in the CSS rules section of ChattyPub. To use the font in a style rule, just copy/paste the `font-family: "font_name_ttf";` and add it to a rule in the #rules channel.
 
@@ -169,6 +168,14 @@ This example sets the page to landscape.
 ```css
 @page {
   size: landscape;
+}
+```
+
+We've tried to get the browser to add crop and alignment marks, but we've haven't been able to get it to work. If you do, please let us know!
+
+```css
+@page {
+  marks: crop cross;
 }
 ```
 
