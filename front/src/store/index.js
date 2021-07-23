@@ -18,13 +18,13 @@ let toCSS = (message, currentStream) => {
   let className = "",
     emoji_code = "",
     rules = [],
-    parentClassName = (currentStream || "").replace(" ", "-"),
+    parentClassName = (currentStream && currentStream.slug || ""),
     id = message.id,
     is_codeblock = message.content.includes("<code>") || message.content.startsWith("```"),
     is_font = /<p><a href=".+?\.(ttf|otf|woff)/gm.test(message.content);
   
   let type = is_codeblock ? "raw" : is_font ? "font" : "rule"; 
-  console.log(type,message.content);
+  // console.log(type, message.content);
   let regex = /\s?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
   let results = content.matchAll(regex);
   results = Array.from(results);
@@ -121,7 +121,7 @@ const handleHTMLReply = message => {
       .replace(/<\/p>\n<\/blockquote>/gm, '')
     // .replace(/\n/gm, '')
   }
-  console.table(message.responseTo)
+  // console.table(message.responseTo)
 }
 
 export default createStore({
@@ -131,7 +131,7 @@ export default createStore({
   state: {
     isMobile: false,
     streams: [],
-    currentStream: '',
+    currentStream: {},
     rules: [],
     topics: [],
     pubStr: 'pub-',
@@ -144,7 +144,7 @@ export default createStore({
     setCurStream: (state, stream) => state.currentStream = stream,
     setTopics: (state, topics) => state.topics = topics,
     addMessage: (state, message) => {
-      if (message.display_recipient == state.currentStream) {
+      if (message.display_recipient == state.currentStream.name) {
         if (message.content.startsWith('@_**')) {
           handleMDReply(message)
         } else if (

@@ -50,11 +50,22 @@ export default {
       if (to.path !== from.path) {
         this.$store.commit("setTopics", []);
         this.$store.commit("setRules", []);
-        this.$store.commit("setCurStream", to.path.replace("/", ""));
-        if (this.currentStream != ""
-        && this.streams.find(s => s.name == this.currentStream)
+        this.$store.commit("setCurStream", {
+          name: to.path.replace('/', '').replaceAll('_', ' '),
+          slug: to.path.replace('/', '').replaceAll(' ', '_')
+        });
+        if (
+          this.currentStream.slug != ""
+         &&
+          this.streams.find(s => 
+          s.name == this.currentStream.name &&
+          s.slug == this.currentStream.slug
+        )
         ) {
+          console.log('found stream')
           this.setUpDoc(this.currentStream);
+        } else {
+          console.log('stream does not exist')
         }
       }
     });
@@ -67,15 +78,15 @@ export default {
       return new Promise(resolve => {
         api.zulip.init().then((client) => {
           this.zulipClient = client;
-          api.zulip.getStreams(client).then(async (streams) => {
-            for (let stream of streams) {
-              stream.topics = await api.zulip.getTopics(client, stream.stream_id)
+          api.zulip.getStreams(client).then(streams => {
+            for (const stream of streams) {
+              stream.slug = stream.name.replaceAll(' ', '_')
             }
             this.$store.commit(
               "setStreams",
               streams.filter((s) => (
-                s.topics.find(t => t.name == 'rules') ||
-                s.name.startsWith(this.pubStr)
+                s.name.startsWith(this.pubStr) ||
+                s.description.includes('_PUB_')
               ))
             );
             resolve()
@@ -88,13 +99,13 @@ export default {
     setUpDoc(stream) {
       api.zulip.getSubs(this.zulipClient).then((result) => {
         if (
-          !result.subscriptions.map((s) => s.name).includes(this.currentStream)
+          !result.subscriptions.map((s) => s.name).includes(this.currentStream.name)
         ) {
-          api.zulip.addSub(this.zulipClient, this.currentStream);
+          api.zulip.addSub(this.zulipClient, this.currentStream.name);
         }
       });
 
-      api.zulip.getAllMsgs(this.zulipClient, stream).then((result) => {
+      api.zulip.getAllMsgs(this.zulipClient, stream.name).then((result) => {
         for (let m = 0; m < result.messages.length; m++) {
           const message = result.messages[m];
           if (message.subject == "rules") {
@@ -107,7 +118,7 @@ export default {
     },
 
     eventHandler(event) {
-      console.log(event);
+      console.log('event:', event);
       switch (event.type) {
         case "message":
           switch (event.message.subject) {

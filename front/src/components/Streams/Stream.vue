@@ -1,7 +1,7 @@
 <template>
   <div :class="{ selected: selected }">
     <p class="name">
-      <router-link :to="stream.name">
+      <router-link :to="stream.slug">
         {{ stream.name }}
       </router-link>
     </p>

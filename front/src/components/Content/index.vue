@@ -37,8 +37,10 @@ export default {
     ...mapState(["currentStream", "streams"]),
     ...mapGetters(["sortedTopics"]),
     title() {
-      return this.streams.find((s) => s.name == this.currentStream)
-        ? this.currentStream.replace("pub-", "")
+      return this.streams.find((s) => s.name == this.currentStream.name)
+        ? this.currentStream.name
+        : this.$route.path == '/'
+        ? "<= pick a stream" 
         : "Stream  does not exist.";
     },
   },

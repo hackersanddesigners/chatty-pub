@@ -90,7 +90,7 @@ export default {
       return this.show_ui ? "ui" : "print";
     },
     currentStream() {
-      return this.$store.state.currentStream.replace(" ", "-");
+      return this.$store.state.currentStream.slug;
     },
   },
   methods: {
