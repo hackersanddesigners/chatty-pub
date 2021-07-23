@@ -144,24 +144,22 @@ export default createStore({
     setCurStream: (state, stream) => state.currentStream = stream,
     setTopics: (state, topics) => state.topics = topics,
     addMessage: (state, message) => {
-      if (message.display_recipient == state.currentStream.name) {
-        if (message.content.startsWith('@_**')) {
-          handleMDReply(message)
-        } else if (
-          message.content.includes('user-mention') &&
-          message.content.includes('blockquote')
-        ) {
-          handleHTMLReply(message)
-        }
-        const topic = state.topics.find(topic => topic.title == message.subject)
-        if (topic) {
-          topic.messages.push(message)
-        } else {
-          state.topics.push({
-            title: message.subject,
-            messages: [message]
-          })
-        }
+      if (message.content.startsWith('@_**')) {
+        handleMDReply(message)
+      } else if (
+        message.content.includes('user-mention') &&
+        message.content.includes('blockquote')
+      ) {
+        handleHTMLReply(message)
+      }
+      const topic = state.topics.find(topic => topic.title == message.subject)
+      if (topic) {
+        topic.messages.push(message)
+      } else {
+        state.topics.push({
+          title: message.subject,
+          messages: [message]
+        })
       }
     },
     deleteMessage: (state, { mid, subject }) => {

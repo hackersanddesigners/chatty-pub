@@ -121,15 +121,17 @@ export default {
       console.log('event:', event);
       switch (event.type) {
         case "message":
-          switch (event.message.subject) {
-            case "rules":
-              this.$store.commit("addRule", event.message);
-              break;
-            default:
-              this.$store.commit("addMessage", event.message);
-              break;
-          }
-          break;
+          if (event.message.display_recipient == this.currentStream.name) {
+            switch (event.message.subject) {
+              case "rules":
+                this.$store.commit("addRule", event.message);
+                break;
+              default:
+                this.$store.commit("addMessage", event.message);
+                break;
+            }
+            break;
+          } 
 
         case "delete_message":
           this.$store.commit("deleteMessage", event.message_id);
