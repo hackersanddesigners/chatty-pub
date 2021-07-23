@@ -81,6 +81,7 @@ export default {
       //   return emojiConv.replace_colons(":" + r.emoji_name + ":");
       // });
       // return [];
+      // console.log(this.message)
       return this.message.reactions.map((r) =>
         emojiConv.replace_colons(":" + r.emoji_name + ":")
       );

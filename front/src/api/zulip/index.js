@@ -25,6 +25,16 @@ const
     })
   ),
   
+  getUsers = client => ( new
+    Promise((resolve, reject) => {
+     client
+     .users
+     .retrieve()
+      .then(result => resolve(result.members))
+      .catch(error => reject(error))
+    })
+  ),
+  
   getTopics = (client, stream) => ( new
     Promise((resolve, reject) => {
      client
@@ -126,6 +136,7 @@ export default {
   init,
   config,
   getStreams,
+  getUsers,
   getTopics,
   getMsgs,
   getAllMsgs,

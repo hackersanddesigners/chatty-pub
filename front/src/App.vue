@@ -76,23 +76,22 @@ export default {
 
     getStreams() {
       return new Promise(resolve => {
-        api.zulip.init().then((client) => {
+        api.zulip.init().then(async client => {
           this.zulipClient = client;
-          api.zulip.getStreams(client).then(streams => {
-            for (const stream of streams) {
-              stream.slug = stream.name.replaceAll(' ', '_')
-            }
-            this.$store.commit(
-              "setStreams",
-              streams.filter((s) => (
-                s.name.startsWith(this.pubStr) ||
-                s.description.includes('_PUB_')
-              ))
-            );
-            resolve()
-          });
+          const streams = await api.zulip.getStreams(client)
+          for (const stream of streams) {
+            stream.slug = stream.name.replaceAll(' ', '_')
+          }
+          this.$store.commit(
+            "setStreams",
+            streams.filter((s) => (
+              s.name.startsWith(this.pubStr) ||
+              s.description.includes('_PUB_')
+            ))
+          );
           api.zulip.listen(this.zulipClient, this.eventHandler);
-        });  
+          resolve()
+        });
       })
     },
 

@@ -6,7 +6,6 @@
       :source="description"
       v-bind="$mdOpts" 
     >
-      
     </vue3-markdown-it>
     <ul class="index">
       <li v-for="topic in sortedTopics" :key="topic.title">
@@ -18,7 +17,18 @@
         </router-link>
       </li>
     </ul>
-    <!-- <div style="float: none"><div style="page-break-after: always"></div></div> -->
+    <p class="authors">
+      <span 
+        class="author"
+        v-for="author in authors"
+        :key="author"
+      >
+        <span>{{ author }}</span>
+        <span v-if="isLast(author, authors)">.</span>
+        <span v-else-if="isBeforeLast(author, authors)"> and </span>
+        <span v-else>, </span>
+      </span>
+    </p>
     <Chapter
       v-for="topic in sortedTopics"
       :key="topic.title"
@@ -43,8 +53,12 @@ export default {
   computed: {
     ...mapState(["currentStream", "streams"]),
     ...mapGetters(["sortedTopics"]),
-    title() {
+    
+    foundStream() {
       return this.streams.find((s) => s.name == this.currentStream.name)
+    },
+    title() {
+      return this.foundStream 
         ? this.currentStream.name
         : this.$route.path == '/'
         ? "<= pick a stream" 
@@ -52,9 +66,22 @@ export default {
     },
     description() {
       return this.title && 
-        this.streams.find((s) => s.name == this.currentStream.name)
-        .description.replace('_PUB_', '')
+      this.foundStream &&
+      this.foundStream.description.replace('_PUB_', '')
     },
+    authors() {
+      return [
+        ...new Set(
+          this.title &&
+          this.foundStream &&
+          this.sortedTopics
+          .map(t => t.messages)
+          .flat()
+          .map(m => m.sender_full_name)
+        ),
+        ...[ 'Pub Bot' ]
+      ]
+    }
   },
   methods: {
     toValidID(string) {
@@ -67,18 +94,18 @@ export default {
         behavior: "smooth",
       });
     },
+    isLast: (item, array) => (
+      array.indexOf(item) === array.length - 1
+    ),
+    isBeforeLast: (item, array) => (
+      array.indexOf(item) === array.length - 2
+    ),
   },
 };
 </script>
 
 <style scoped>
-@media print {
-  .title {
-    /* display: none; */
-  }
-}
-
-.index {
+.authors {
   page-break-after: always;
 }
 </style>
