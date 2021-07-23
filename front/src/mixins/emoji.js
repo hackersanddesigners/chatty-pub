@@ -49,5 +49,14 @@ export default {
       const regexExp = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
       return regexExp.test(str); // true
     },
+
+
+    replaceAllEmojiCodes(content) {
+      let regex = /:([^\s]+):/gm;
+      content = content.replaceAll(regex, (match) => {
+        return this.shortcodeToEmoji(match);
+      })
+      return content;
+    }
   }
 }
