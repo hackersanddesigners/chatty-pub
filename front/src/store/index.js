@@ -24,7 +24,7 @@ let toCSS = (message, currentStream) => {
     is_font = /<p><a href=".+?\.(ttf|otf|woff)/gm.test(message.content);
   
   let type = is_codeblock ? "raw" : is_font ? "font" : "rule"; 
-
+  console.log(type,message.content);
   let regex = /\s?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
   let results = content.matchAll(regex);
   results = Array.from(results);
@@ -73,6 +73,9 @@ let getFormat = (ext) => {
   switch (ext) {
     case 'woff':
       fmt = "woff";
+      break;
+    case 'woff2':
+      fmt = "woff2";
       break;
     case 'eof':
       fmt = "embedded-opentype";
