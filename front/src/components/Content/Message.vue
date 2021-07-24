@@ -1,10 +1,10 @@
 <template>
-  <div class="message-outer">
+  <div class="message-outer"  :class="classes">
     <div class="message-data" v-if="show_message_data">
       <div class="from">{{ message.sender_full_name }}</div>
       <div class="time">{{ time }}</div>
     </div>
-    <div :class="classes" class="message">
+    <div class="message">
       <vue3-markdown-it :source="content" v-bind="$mdOpts"></vue3-markdown-it>
     </div>
     <div class="message-data-reactions" v-if="show_message_data">
@@ -88,7 +88,7 @@ export default {
     },
     classes() {
       return this.message.reactions.map(
-        (r) => r.emoji_code + " u" + r.emoji_code
+        (r) => String.fromCodePoint(parseInt("0x"+r.emoji_code)) + " u" + r.emoji_code
       );
     },
     time() {

@@ -4,10 +4,10 @@
       <span>{{ topic.title }}</span>
     </h2>
     <div>
-      <span v-for="message in messagesToShow" :key="message.id">
+      <template v-for="message in messagesToShow" :key="message.id">
         <Message :message="message" :show_message_data="show_message_data" />
-        <span>&nbsp;</span>
-      </span>
+        <!-- <span>&nbsp;</span> -->
+      </template>
     </div>
 
     <!-- <div style="float: none"><div style="page-break-after: always"></div></div> -->
