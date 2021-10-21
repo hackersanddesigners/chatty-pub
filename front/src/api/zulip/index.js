@@ -2,9 +2,9 @@ const
 
   zulip   = require("zulip-js"),
   config  = {
-    username: process.env.VUE_APP_ZULIP_email,
-    apiKey: process.env.VUE_APP_ZULIP_key,
-    realm: process.env.VUE_APP_ZULIP_site,
+    username : process.env.VUE_APP_ZULIP_email,
+    apiKey   : process.env.VUE_APP_ZULIP_key,
+    realm    : process.env.VUE_APP_ZULIP_site,
   },
   
   init    = () => ( new 

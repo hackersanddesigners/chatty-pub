@@ -60,7 +60,7 @@ export default {
           this.streams.find(s => 
           s.name == this.currentStream.name &&
           s.slug == this.currentStream.slug
-        )
+         )
         ) {
           console.log('found stream')
           this.setUpDoc(this.currentStream);
@@ -87,7 +87,10 @@ export default {
             streams.filter((s) => (
               s.name.startsWith(this.pubStr) ||
               s.description.includes('_PUB_')
-            ))
+            )).sort((a, b) => 
+              b.date_created - 
+              a.date_created
+            )
           );
           api.zulip.listen(this.zulipClient, this.eventHandler);
           resolve()

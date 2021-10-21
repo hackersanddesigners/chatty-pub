@@ -8,12 +8,12 @@ import store          from './store'
 
 import 'highlight.js/styles/vs.css';
 
-const app = createApp(App)
+const app    = createApp(App)
 
 const mdOpts = {
-  html: true,
-  linkify: true,
-  typographer: true
+  html        : true,
+  linkify     : true,
+  typographer : true
 }
 
 app.config.globalProperties.$http   = Axios
@@ -25,6 +25,3 @@ app
   .use(router)
   .use(store)
   .mount('#app')
-
-
-
