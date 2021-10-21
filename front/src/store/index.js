@@ -133,21 +133,21 @@ export default createStore({
   strict: process.env.NODE_ENV !== 'production',
 
   state: {
-    isMobile: false,
-    streams: [],
-    currentStream: {},
-    rules: [],
-    topics: [],
-    pubStr: 'pub-',
+    isMobile      : false,
+    streams       : [],
+    currentStream : {},
+    rules         : [],
+    topics        : [],
+    pubStr        : 'pub-',
   },
 
   mutations: {
 
-    setMobile: (state, mobile) => state.isMobile = mobile,
-    setStreams: (state, streams) => state.streams = streams,
-    setCurStream: (state, stream) => state.currentStream = stream,
-    setTopics: (state, topics) => state.topics = topics,
-    addMessage: (state, message) => {
+    setMobile    : (state, mobile)  => state.isMobile = mobile,
+    setStreams   : (state, streams) => state.streams = streams,
+    setCurStream : (state, stream)  => state.currentStream = stream,
+    setTopics    : (state, topics)  => state.topics = topics,
+    addMessage   : (state, message) => {
       if (message.content.startsWith('@_**')) {
         handleMDReply(message)
       } else if (
@@ -253,14 +253,25 @@ export default createStore({
   },
 
   getters: {
+
     rules: state => state.rules,
-    sortedTopics: state => (
+
+    filteredTopics: state => (
       [...state.topics]
-        .sort((a, b) => a.title.localeCompare(b.title))
-        .filter(t => (
-          t.messages.length > 0 &&
-          t.title != 'stream events'
-        ))
+      .filter(t => (
+        t.messages.length > 0 &&
+        t.title != 'stream events'
+      ))
+    ),
+
+    sortedTopics: (state, getters) => (
+      getters.filteredTopics
+      .sort((a,b) => 
+        a.title.localeCompare(b.title, undefined, { 
+          numeric     : true,
+          sensitivity : 'base'
+        })
+      )
     )
   }
 
