@@ -22,9 +22,6 @@ export default {
   components: {
     Message,
   },
-  data() {
-    return {};
-  },
   props: ["topic", "show_message_data"],
   computed: {
     messagesToShow() {

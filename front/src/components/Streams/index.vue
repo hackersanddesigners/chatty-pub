@@ -1,7 +1,11 @@
 <template>
   <section class="streams">
-    <!-- <p class="title">{{ $.type.name }}</p> -->
-    <Stream v-for="stream in streams" :key="stream.id" :stream="stream" />
+    <Stream 
+      v-for="stream in streams" 
+      :key="stream.id" 
+      :stream="stream" 
+      :isSelected="currentStream.name == stream.name"
+    />
   </section>
 </template>
 
@@ -15,7 +19,10 @@ export default {
     Stream,
   },
   computed: {
-    ...mapState(["streams"]),
+    ...mapState([
+      "streams",
+      "currentStream"
+    ]),
   },
 };
 </script>

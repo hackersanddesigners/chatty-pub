@@ -169,6 +169,7 @@ export default {
 <style>
 :root {
   --back: white;
+  --pink: rgb(255, 133, 218);
 }
 
 html,

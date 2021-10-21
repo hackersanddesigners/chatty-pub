@@ -7,28 +7,12 @@
       v-bind="$mdOpts" 
     >
     </vue3-markdown-it>
-    <ul class="index">
-      <li v-for="topic in sortedTopics" :key="topic.title">
-        <router-link
-          :to="`#${toValidID(topic.title)}`"
-          @click.stop="goTo(`#${toValidID(topic.title)}`)"
-        >
-          {{ topic.title }}
-        </router-link>
-      </li>
-    </ul>
-    <p class="authors">
-      <span 
-        class="author"
-        v-for="author in authors"
-        :key="author"
-      >
-        <span>{{ author }}</span>
-        <span v-if="isLast(author, authors)">.</span>
-        <span v-else-if="isBeforeLast(author, authors)"> and </span>
-        <span v-else>, </span>
-      </span>
-    </p>
+    <Toc 
+      :sortedTopics="sortedTopics"
+    />
+    <Authors 
+      :authors="authors"
+    />
     <Chapter
       v-for="topic in sortedTopics"
       :key="topic.title"
@@ -42,20 +26,23 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Chapter from "./Chapter.vue";
+import Authors from './Authors';
+import Chapter from "./Chapter";
+import Toc from './Toc';
 
 export default {
   name: "Content",
   components: {
     Chapter,
+    Toc,
+    Authors,
   },
   props: ["print", "show_message_data"],
   computed: {
     ...mapState(["currentStream", "streams"]),
     ...mapGetters(["sortedTopics"]),
-    
     foundStream() {
-      return this.streams.find((s) => s.name == this.currentStream.name)
+      return this.streams.find(s => s.name == this.currentStream.name)
     },
     title() {
       return this.foundStream 
@@ -81,31 +68,19 @@ export default {
         ),
         ...[ 'Pub Bot' ]
       ]
-    }
+    } 
   },
   methods: {
     toValidID(string) {
       return encodeURIComponent("ch-" + string)
         .toLowerCase()
-        .replace(/\.|%[0-9a-z]{2}/gi, "");
+        .replace(/\.|%[0-9a-z]{2}/gi, "")
+        .replace(/\(|\)/gi, "");
     },
-    goTo(id) {
-      document.querySelector(`${id}`).scrollIntoView({
-        behavior: "smooth",
-      });
-    },
-    isLast: (item, array) => (
-      array.indexOf(item) === array.length - 1
-    ),
-    isBeforeLast: (item, array) => (
-      array.indexOf(item) === array.length - 2
-    ),
   },
 };
 </script>
 
 <style scoped>
-.authors {
-  page-break-after: always;
-}
+
 </style>
