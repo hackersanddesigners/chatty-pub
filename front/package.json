@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "css-polyfills": "0.0.16",
     "emoji-js": "^3.5.0",
     "markdown-it": "^12.0.6",
     "moment": "^2.29.1",

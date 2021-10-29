@@ -1,0 +1,11 @@
+@media print {
+  .index li a::before { 
+    /* content: target-counter(attr(href), page);  */
+    /* display: block; */
+    content: leader('.') target-counter(attr(href url), page, lower-roman); 
+  }
+}
+
+@page {
+  counter-increment: page;
+}
