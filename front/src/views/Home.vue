@@ -14,6 +14,12 @@
         <div class="controls">
           <button @click="toggle_ui">{{ show_ui ? "Hide" : "Show" }} UI</button>
           <button @click="print">Print</button>
+
+          <label for="checkbox">
+            <input type="checkbox" id="checkbox" v-model="only_current_topic" />
+            Display only current topic
+          </label>
+
           <!-- <button @click="print_preview">Preview</button> -->
           <label for="msg-data"
             ><input
@@ -38,6 +44,7 @@
           :print="!show_ui || expand_content"
           :show_message_data="show_message_data"
           ref="content"
+          :only_current_topic="only_current_topic"
         />
       </pane>
       <pane v-if="show_ui" :size="panel_sizes[2]" min-size="15">
@@ -58,8 +65,7 @@ import Content from "../components/Content";
 import Rules from "../components/Rules";
 import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
-import { Previewer } from "pagedjs";
-
+// import { Previewer } from "pagedjs";
 import { ref, onMounted } from "vue";
 
 export default {
@@ -83,6 +89,7 @@ export default {
       show_message_data: false,
       panel_sizes: { 0: 10, 1: 55, 2: 35 },
       expand_content: false,
+      only_current_topic: false,
     };
   },
   computed: {
@@ -107,16 +114,16 @@ export default {
         if (prev) this.toggle_ui(null, true);
       }, 1000);
     },
-    print_preview() {
-      this.expand_content = true;
-      let content = document.getElementById("content");
-      let paged = new Previewer();
-      paged
-        .preview(content, ["path/to/css/file.css"], this.preview)
-        .then((flow) => {
-          console.log("Rendered", flow.total, "pages.");
-        });
-    },
+    // print_preview() {
+    //   this.expand_content = true;
+    //   let content = document.getElementById("content");
+    //   let paged = new Previewer();
+    //   paged
+    //     .preview(content, ["path/to/css/file.css"], this.preview)
+    //     .then((flow) => {
+    //       console.log("Rendered", flow.total, "pages.");
+    //     });
+    // },
     toggle_ui(evt, state) {
       if (state !== undefined) this.show_ui = state;
       else this.show_ui = !this.show_ui;
