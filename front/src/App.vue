@@ -108,6 +108,7 @@ export default {
       });
 
       api.zulip.getAllMsgs(this.zulipClient, stream.name).then((result) => {
+        console.log(result.messages.length)
         for (let m = 0; m < result.messages.length; m++) {
           const message = result.messages[m];
           if (message.subject == "rules") {
