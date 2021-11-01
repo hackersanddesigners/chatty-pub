@@ -7,7 +7,7 @@
     <div :class="classes" class="message">
       <vue3-markdown-it :source="content" v-bind="$mdOpts"></vue3-markdown-it>
     </div>
-    <div class="message-data-reactions" v-if="show_message_data">
+    <div class="message-data-reactions" v-if="show_message_data && message.reactions.length > 0">
       <span
         class="reaction"
         v-for="reaction in message.reactions"
@@ -40,7 +40,9 @@ export default {
     },
     content() {
       if(!this.message.content) return "";
-      let c = this.message.content.replace("\n", "<br/>");
+      // let c = this.message.content.replaceAll("\n", "<br/>");
+      let c = this.message.content;
+
       // create absolute url on images and relative links
       let url = process.env.VUE_APP_ZULIP_site;
       c = c.replaceAll('src="', 'src="' + url);
@@ -73,6 +75,8 @@ export default {
         );
         // console.log(c);
       });
+
+      
       return c;
     },
     reactions() {
