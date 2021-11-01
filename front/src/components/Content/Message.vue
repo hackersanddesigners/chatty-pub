@@ -1,21 +1,22 @@
 <template>
-  <div class="message-outer">
+  <div class="message-outer" :class="show_message_data?'show_message_data':''">
     <div class="message-data" v-if="show_message_data">
       <div class="from">{{ message.sender_full_name }}</div>
       <div class="time">{{ time }}</div>
     </div>
     <div :class="classes" class="message">
       <vue3-markdown-it :source="content" v-bind="$mdOpts"></vue3-markdown-it>
+      <div class="message-data-reactions" v-if="show_message_data && message.reactions.length > 0">
+        <span
+          class="reaction"
+          v-for="reaction in message.reactions"
+          :key="reaction"
+        >
+          {{ String.fromCodePoint("0x" + reaction.emoji_code) }}
+        </span>
+      </div>
     </div>
-    <div class="message-data-reactions" v-if="show_message_data && message.reactions.length > 0">
-      <span
-        class="reaction"
-        v-for="reaction in message.reactions"
-        :key="reaction"
-      >
-        {{ String.fromCodePoint("0x" + reaction.emoji_code) }}
-      </span>
-    </div>
+    
     <div class="reactions ui">
       <span v-for="reaction in reactions" :key="reaction" :title="reaction">
         {{ shortcodeToEmoji(reaction) }}
@@ -114,6 +115,13 @@ export default {
   display: block;
 }
 
+.reactions,
+.reactions::before,
+.reactions::after {
+  all: revert;
+  display: none;
+}
+
 .message-outer:hover .reactions {
   display: flex;
   position: absolute;
@@ -127,12 +135,7 @@ export default {
   font-size: 3rem;
   pointer-events: none;
 }
-.reactions,
-.reactions::before,
-.reactions::after {
-  all: revert;
-  display: none;
-}
+
 
 .reactions span {
   pointer-events: initial;
@@ -153,7 +156,14 @@ export default {
   text-align: right;
 }
 
+.show_message_data .message {
+  padding-bottom: 1rem;
+}
+
 .message-data-reactions {
-  margin-bottom: 1em;
+  all: initial;
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 </style>
