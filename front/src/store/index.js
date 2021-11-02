@@ -123,7 +123,7 @@ const handleHTMLReply = message => {
     quote: message.content
       .replace(/.*[^]+<\/p>\n<blockquote>\n<p>/gm, '')
       .replace(/<\/p>\n<\/blockquote>/gm, '')
-    // .replace(/\n/gm, '')
+    .replace(/\n/gm, '')
   }
   // console.table(message.responseTo)
 }

@@ -91,7 +91,7 @@ export default {
       return c;
     },
     hasRulesShortcode(){
-      console.log(this.content, this.content.includes("[rules]"));
+      // console.log(this.content, this.content.includes("[rules]"));
       return this.content.includes('[rules]');
     },
     reactions() {
@@ -179,5 +179,11 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+/* important! hides default link & image tag auto-created by zulip for file links */
+
+.message_inline_ref {
+display: none;
 }
 </style>

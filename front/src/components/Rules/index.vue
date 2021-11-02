@@ -1,6 +1,5 @@
 <template>
   <section class="rules">
-    <!-- <p class="title">{{ $.type.name }}</p> -->
     <Rule
       v-for="rule in rules"
       :key="rule.id"
