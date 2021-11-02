@@ -170,9 +170,9 @@ export default {
   text-align: right;
 }
 
-.show_message_data .message {
+/* .show_message_data .message {
   padding-bottom: 1rem;
-}
+} */
 
 .message-data-reactions {
   all: initial;
