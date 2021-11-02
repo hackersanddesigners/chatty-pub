@@ -46,9 +46,6 @@ export default {
   props: ["message", "show_message_data"],
   mixins: [emoji],
   computed: {
-    rawJSON() {
-      return "```json\n" + JSON.stringify(this.message, null, 2) + "\n```";
-    },
     content() {
       if(!this.message.content) return "";
       // let c = this.message.content.replaceAll("\n", "<br/>");
@@ -178,7 +175,8 @@ export default {
   all: initial;
   position: absolute;
   bottom: 0;
-  left: 0;
+  /* left: 0; */
+  right: 0;
 }
 
 /* important! hides default link & image tag auto-created by zulip for file links */
