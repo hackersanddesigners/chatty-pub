@@ -1,5 +1,5 @@
 <template>
-  <div class="message-outer" :class="show_message_data?'show_message_data':''">
+  <div class="message-outer" :class="(show_message_data && message.reactions.length > 0 )?'show_message_data':''">
     <div class="message-data" v-if="show_message_data">
       <div class="from">{{ message.sender_full_name }}</div>
       <div class="time">{{ time }}</div>
