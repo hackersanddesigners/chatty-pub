@@ -5,7 +5,12 @@
       <div class="time">{{ time }}</div>
     </div>
     <div :class="classes" class="message">
-      <vue3-markdown-it :source="content" v-bind="$mdOpts"></vue3-markdown-it>
+      <template v-if="hasRulesShortcode">
+        <Rules />
+      </template>
+      <template v-else>
+        <vue3-markdown-it :source="content" v-bind="$mdOpts"></vue3-markdown-it>
+      </template>
       <div class="message-data-reactions" v-if="show_message_data && message.reactions.length > 0">
         <span
           class="reaction"
@@ -27,12 +32,17 @@
 
 <script>
 import emoji from "../../mixins/emoji";
+import Rules from "../Rules/index.vue";
+
 var EmojiConvertor = require("emoji-js");
 var emojiConv = new EmojiConvertor();
 /*eslint no-unused-vars: "off"*/
 /*eslint no-undef: "off"*/
 export default {
   name: "Message",
+  components: {
+    Rules,
+  },
   props: ["message", "show_message_data"],
   mixins: [emoji],
   computed: {
@@ -79,6 +89,10 @@ export default {
 
       
       return c;
+    },
+    hasRulesShortcode(){
+      console.log(this.content, this.content.includes("[rules]"));
+      return this.content.includes('[rules]');
     },
     reactions() {
       // return this.message.reactions.map((r) => {
