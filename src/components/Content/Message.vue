@@ -60,7 +60,7 @@ export default {
       // with this: https://chatty-pub-files.hackersanddesigners.nl/files/
       c = c.replaceAll(
         url + "/user_uploads/",
-        "http://chatty-pub-files.hackersanddesigners.nl/files/"
+        "https://chatty-pub-files.hackersanddesigners.nl/files/"
       );
 
       c = this.replaceAllEmojiCodes(c);
