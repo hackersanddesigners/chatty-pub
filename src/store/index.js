@@ -62,7 +62,7 @@ let font = (content) => {
   let filename = getFilename(path);
   let ext = filename.split(".").pop();
   font.src =
-    "http://chatty-pub-files.hackersanddesigners.nl/files" + path;
+    "https://chatty-pub-files.hackersanddesigners.nl/files" + path;
   font.format = getFormat(ext);
   font.family = filename.replace(".", "_");
   return font;
