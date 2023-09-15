@@ -21,7 +21,7 @@
     "vue-router": "^4.0.8",
     "vue3-markdown-it": "^1.0.9",
     "vuex": "^4.0.1",
-    "vue-html2pdf": "^1.8.0",
+    "vue-html2pdf": "^1.8.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
