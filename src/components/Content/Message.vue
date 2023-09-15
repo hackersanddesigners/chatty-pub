@@ -21,7 +21,7 @@
         </span>
       </div>
     </div>
-    
+
     <div class="reactions ui">
       <span v-for="reaction in reactions" :key="reaction" :title="reaction">
         {{ shortcodeToEmoji(reaction) }}
@@ -60,7 +60,7 @@ export default {
       // with this: https://chatty-pub-files.hackersanddesigners.nl/files/
       c = c.replaceAll(
         url + "/user_uploads/",
-        "https://chatty-pub-files.hackersanddesigners.nl/files/"
+        "http://chatty-pub-files.hackersanddesigners.nl/files/"
       );
 
       c = this.replaceAllEmojiCodes(c);
@@ -84,7 +84,7 @@ export default {
         // console.log(c);
       });
 
-      
+
       return c;
     },
     hasRulesShortcode(){

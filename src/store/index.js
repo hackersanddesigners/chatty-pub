@@ -6,11 +6,11 @@ import { createStore } from 'vuex'
 import emoji from "../mixins/emoji"
 import { stripHtml } from "string-strip-html"
 
-/* 
+/*
 
-TODO: fix this frankenfunction. Its not pretty but it works, so I am leaving it for now. 
+TODO: fix this frankenfunction. Its not pretty but it works, so I am leaving it for now.
 
-Does various conversion and parsing to turn a message in the rules channel into an object we can use in the rules and style component 
+Does various conversion and parsing to turn a message in the rules channel into an object we can use in the rules and style component
 
 */
 let toCSS = (message, currentStream) => {
@@ -22,8 +22,8 @@ let toCSS = (message, currentStream) => {
     id = message.id,
     is_codeblock = message.content.includes("<code>") || message.content.startsWith("```"),
     is_font = /<p><a href=".+?\.(ttf|otf|woff)/gm.test(message.content);
-  
-  let type = is_codeblock ? "raw" : is_font ? "font" : "rule"; 
+
+  let type = is_codeblock ? "raw" : is_font ? "font" : "rule";
   // console.log(type, message.content);
   let regex = /\s?(?<selector>.+)\s*\n?{\n?(?<props>(.*;\n?)+)}/gm
   let results = content.matchAll(regex);
@@ -62,7 +62,7 @@ let font = (content) => {
   let filename = getFilename(path);
   let ext = filename.split(".").pop();
   font.src =
-    "https://chatty-pub-files.hackersanddesigners.nl/files" + path;
+    "http://chatty-pub-files.hackersanddesigners.nl/files" + path;
   font.format = getFormat(ext);
   font.family = filename.replace(".", "_");
   return font;
@@ -230,7 +230,7 @@ export default createStore({
         //   id: mid, content: content,
         // }, state.currentStream)
 
-        // vue will not update if i use rules.push(rule)  
+        // vue will not update if i use rules.push(rule)
         state.rules.splice(state.rules.indexOf(rule), 1)
         const newRules = [...state.rules, ...[toCSS({
           id: mid, content: content,
@@ -266,8 +266,8 @@ export default createStore({
 
     sortedTopics: (state, getters) => (
       getters.filteredTopics
-      .sort((a,b) => 
-        a.title.localeCompare(b.title, undefined, { 
+      .sort((a,b) =>
+        a.title.localeCompare(b.title, undefined, {
           numeric     : true,
           sensitivity : 'base'
         })
