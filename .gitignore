@@ -27,3 +27,5 @@ zuliprc
 upload.sh
 
 
+.env.development
+.env.production

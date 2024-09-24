@@ -58,9 +58,13 @@ export default {
       // replace it with the mirror domain for uploads
       // replace this: https://chat.hackersanddesigners.nl/user_uploads/
       // with this: https://chatty-pub-files.hackersanddesigners.nl/files/
+
+      const replacement_from_url = process.env.VUE_APP_PATH_REPLACE_FROM;
+      const replacement_to_url = process.env.VUE_APP_PATH_REPLACE_TO;
+      
       c = c.replaceAll(
-        url + "/user_uploads/",
-        "https://chatty-pub-files.hackersanddesigners.nl/files/"
+        replacement_from_url,
+        replacement_to_url
       );
 
       c = this.replaceAllEmojiCodes(c);
