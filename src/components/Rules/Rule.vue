@@ -31,7 +31,7 @@ import emoji from "../../mixins/emoji";
 export default {
   name: "Rule",
   mixins: [emoji],
-  props: ["rule"],
+  props: ["rule", "boring"],
   computed: {
     contentFiltered() {
       let reg = this.emoji_regex;
@@ -48,6 +48,7 @@ export default {
       return this.rule.content;
     },
     rules() {
+      if (this.boring) return [""];
       if (this.rule.type !== "font") return this.rule.rules;
       else return ["font-family: " + this.font.family + ";"];
     },

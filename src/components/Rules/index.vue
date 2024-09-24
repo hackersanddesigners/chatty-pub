@@ -1,11 +1,9 @@
 <template>
   <section class="rules">
-    <Rule
-      v-for="rule in rules"
-      :key="rule.id"
-      :rule="rule"
-    />
-  </section>   
+    <label style="display:none"><input type="checkbox" name="" id="" 
+      v-model="boring_rules" >Unstyled rules</label>
+    <Rule v-for="rule in rules" :key="rule.id" :rule="rule" :boring="boring_rules" />
+  </section>
 </template>
 
 <script>
@@ -14,17 +12,35 @@ import Rule from './Rule'
 
 export default {
   name: 'Rules',
-  components: { 
-    Rule 
+  components: {
+    Rule
   },
   computed: {
     ...mapState([
       'rules',
     ])
   },
+  data: () => {
+    return {
+      boring_rules: false,
+    };
+  },
   watch: {
     rules() {
       console.log('rules')
+    }
+  },
+  mounted() {
+    window.addEventListener('keydown', this.handleKeydown);
+  },
+  unmounted() {
+    window.removeEventListener('keydown', this.handleKeydown);
+  },
+  methods: {
+    handleKeydown(event) {
+      if (event.key === 'P') {
+        this.boring_rules = !this.boring_rules;
+      }
     }
   }
 }
@@ -36,6 +52,8 @@ export default {
 }
 
 @media print {
-  .rules { display: none; } 
+  .rules {
+    display: none;
+  }
 }
 </style>
