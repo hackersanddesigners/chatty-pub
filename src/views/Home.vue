@@ -43,8 +43,8 @@
         <Content
           :print="!show_ui || expand_content"
           :show_message_data="show_message_data"
-          ref="content"
           :only_current_topic="only_current_topic"
+          ref="content"
         />
       </pane>
       <pane v-if="show_ui" :size="panel_sizes[2]" min-size="15">
@@ -97,8 +97,8 @@ export default {
       return this.show_ui ? "ui" : "print";
     },
     currentStream() {
-      return this.$store.state.currentStream.slug;
-    },
+      return this.$store.state.currentStream?.slug || "";
+    }
   },
   methods: {
     resizer(panels) {

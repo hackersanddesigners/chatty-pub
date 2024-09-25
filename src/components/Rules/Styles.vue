@@ -54,6 +54,7 @@ export default {
     createStyleElement() {
       var style = document.createElement("style");
       style.innerText = this.generateStyleRules();
+      style.classList.add("chattypub-rules");
       return style;
     },
   },
