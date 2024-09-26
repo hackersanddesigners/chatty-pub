@@ -53,7 +53,7 @@ export default {
   box-shadow: 0 0 2em 0em var(--pink);
   max-height: 0;
   transition: all 0.1s ease;
-  overflow: scroll;
+  overflow-y: auto;
 }
 .li.selected .index li {
   list-style: none;
@@ -74,6 +74,7 @@ export default {
 .li.selected:hover .index {
   max-height: 40em;
   transition: all 0.1s ease;
+  box-shadow: none;
 }
 @media print {
   .index li a::after { 
