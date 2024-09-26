@@ -5,7 +5,7 @@
   >
     <li v-for="topic in sortedTopics" :key="topic.title">
       <router-link
-        :to="`#${toValidID(topic.title)}`"
+        :to="{ hash: `#${toValidID(topic.title)}`, query: $route.query }"
         @click.stop="goTo(`#${toValidID(topic.title)}`)"
       >
         {{ topic.title }}

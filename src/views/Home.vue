@@ -11,33 +11,13 @@
         min-size="5"
       >
         <Streams />
-        <div class="controls">
-          <button @click="toggle_ui">{{ show_ui ? "Hide" : "Show" }} UI</button>
-          <button @click="print">Print</button>
-
-          <label for="checkbox">
-            <input type="checkbox" id="checkbox" v-model="only_current_topic" />
-            Display only current topic
-          </label>
-
-          <!-- <button @click="print_preview">Preview</button> -->
-          <label for="msg-data"
-            ><input
-              type="checkbox"
-              id="msg-data"
-              value="1"
-              v-model="show_message_data"
-            />
-            Show chat message data</label
-          >
-          <p class="notice">
-            Regrettably support for setting page size, page breaks etc. using
-            <a href="https://caniuse.com/css-paged-media">@page</a> is very poor
-            in most browsers. Use MS Edge, Opera or Google Chrome for best
-            results when printing or creating PDFs.
-          </p>
-          <button @click="$router.push({ path: 'docs' })">Docs</button>
-        </div>
+        <UiControls
+          @toggleUI="toggle_ui"
+          @print="print"
+          @toggleTopic="only_current_topic = $event"
+          @toggleMessageData="show_message_data = $event"
+          @goDocs="$router.push({ path: 'docs' })"
+        />
       </pane>
       <pane :size="panel_sizes[1]" :class="currentStream">
         <Content
@@ -50,23 +30,17 @@
       <pane v-if="show_ui" :size="panel_sizes[2]" min-size="15">
         <Rules />
       </pane>
-      <!-- <pane v-if="show_ui" size="35" min-size="15"
-        ><div ref="preview"></div>
-      </pane> -->
     </splitpanes>
   </div>
 </template>
 
 <script>
-/*eslint no-unused-vars: "off"*/
-/*eslint no-undef: "off"*/
 import Streams from "../components/Streams";
 import Content from "../components/Content";
 import Rules from "../components/Rules";
+import UiControls from "../components/UIControls";
 import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
-// import { Previewer } from "pagedjs";
-import { ref, onMounted } from "vue";
 
 export default {
   name: "Home",
@@ -76,14 +50,9 @@ export default {
     Rules,
     Splitpanes,
     Pane,
+    UiControls,
   },
-  setup() {
-    const preview = ref(null);
-    return {
-      preview,
-    };
-  },
-  data: () => {
+  data() {
     return {
       show_ui: true,
       show_message_data: false,
@@ -92,6 +61,7 @@ export default {
       only_current_topic: false,
     };
   },
+
   computed: {
     classes() {
       return this.show_ui ? "ui" : "print";
@@ -114,21 +84,9 @@ export default {
         if (prev) this.toggle_ui(null, true);
       }, 1000);
     },
-    // print_preview() {
-    //   this.expand_content = true;
-    //   let content = document.getElementById("content");
-    //   let paged = new Previewer();
-    //   paged
-    //     .preview(content, ["path/to/css/file.css"], this.preview)
-    //     .then((flow) => {
-    //       console.log("Rendered", flow.total, "pages.");
-    //     });
-    // },
     toggle_ui(evt, state) {
       if (state !== undefined) this.show_ui = state;
       else this.show_ui = !this.show_ui;
-      this.$forceUpdate();
-      // Splitpanes.updatePaneComponents();
     },
   },
 };
@@ -157,12 +115,6 @@ export default {
 
 .pane-wrapper {
   height: 100vh;
-}
-
-.controls {
-  display: flex;
-  flex-direction: column;
-  padding: 1em;
 }
 
 .print .pane-wrapper {

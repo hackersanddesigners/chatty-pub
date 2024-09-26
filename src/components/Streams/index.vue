@@ -32,5 +32,7 @@ export default {
   min-width: 10em;
   padding: 0;
   margin-bottom: 1em;
+  max-height: 50vh;
+  overflow-y: auto;
 }
 </style>
