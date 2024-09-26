@@ -141,16 +141,10 @@ export default {
   display: flex;
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.5);
-  font-size: 3rem;
+  right: 0;
+  font-size: 1rem;
   pointer-events: none;
 }
-
 
 .reactions span {
   pointer-events: initial;
