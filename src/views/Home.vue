@@ -19,7 +19,6 @@
     </splitpanes>
   </div>
 </template>
-
 <script>
 import Streams from "../components/Streams";
 import Content from "../components/Content";
@@ -92,12 +91,12 @@ export default {
       }
     },
     getUIState() {
-      return this.$route.query.ui !== 'false';
+      return this.$route.query.hui !== 'true';
     },
     updateQueryParams(showUI) {
       const query = {
         ...this.$route.query, 
-        ui: showUI ? 'true' : 'false',
+        hui: showUI ? 'false' : 'true',  // 'false' als de UI wordt getoond, 'true' als de UI verborgen wordt
       };
       this.$router.replace({ query }).catch(() => { });
     },
@@ -107,6 +106,7 @@ export default {
   },
 };
 </script>
+
 
 <style>
 #home {

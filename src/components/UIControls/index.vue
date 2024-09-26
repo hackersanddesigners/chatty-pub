@@ -7,12 +7,14 @@
     </label>
 
     <label for="msgData">
-      <input type="checkbox" id="msgData" v-model="localShowMessageData" @change="handleToggleMessageData" title="Show message sender, date time and reactions" />
+      <input type="checkbox" id="msgData" v-model="localShowMessageData" @change="handleToggleMessageData"
+        title="Show message sender, date time and reactions" />
       Show chat message data
     </label>
 
     <label for="plaintext">
-      <input type="checkbox" id="plaintext" v-model="localPlainTextCSS" @change="handlePlaintextCSS" title="Enable/disable applying the CSS to the styles itself" />
+      <input type="checkbox" id="plaintext" v-model="localPlainTextCSS" @change="handlePlaintextCSS"
+        title="Enable/disable applying the CSS to the styles itself" />
       Plaintext CSS
     </label>
 
@@ -41,7 +43,7 @@ export default {
   },
   data() {
     return {
-      localShowUI: this.showUI,
+      localHideUI: this.showUI,
       localOnlyCurrentTopic: this.onlyCurrentTopic,
       localShowMessageData: this.showMessageData,
       localPlainTextCSS: this.plaintextCSS,
@@ -55,14 +57,13 @@ export default {
       return this.$route.query[param];
     },
     initializeFromQueryParams() {
-      const queryShowUI = this.getQueryParam('ui') === 'true'; // Use 'ui'
+      const queryHideUI = this.getQueryParam('hui') === 'true'; // hide ui
       const queryOnlyCurrentTopic = this.getQueryParam('top') === 'true';
       const queryShowMessageData = this.getQueryParam('dat') === 'true';
       const queryPlaintextCSS = this.getQueryParam('css') === 'true';
 
-      if (this.getQueryParam('ui') !== undefined) {
-        this.localShowUI = queryShowUI;
-        this.$emit('toggleUI', this.localShowUI);
+      if (this.getQueryParam('hui') !== undefined) {
+        this.localHideUI = queryHideUI;
       }
       if (this.getQueryParam('top') !== undefined) {
         this.localOnlyCurrentTopic = queryOnlyCurrentTopic;
@@ -74,45 +75,41 @@ export default {
       }
       if (this.getQueryParam('css') !== undefined) {
         this.localPlainTextCSS = queryPlaintextCSS;
-        this.$emit('togglePlaintextCSS', this.localPlainTextCSS);
       }
     },
-    updateQueryParams() {
+    updateQueryParams(paramsToUpdate) {
       const query = {
         ...this.$route.query,
-        ui: this.localShowUI ? 'true' : 'false',  // Make sure 'ui' is properly set
-        top: this.localOnlyCurrentTopic ? 'true' : 'false',
-        dat: this.localShowMessageData ? 'true' : 'false',
-        css: this.localPlainTextCSS ? 'true' : 'false',
+        ...paramsToUpdate,  // Alleen de relevante parameters bijwerken
       };
 
       this.$router.replace({
         path: this.$route.path,
-        query,                  
+        query,
         hash: this.$route.hash
       });
     },
     handleToggleUI() {
-      this.localShowUI = !this.localShowUI;  // Toggle UI state
-      this.$emit('toggleUI', this.localShowUI);
-      this.updateQueryParams();
+      this.localHideUI = !this.localHideUI;
+      this.$emit('toggleUI', !this.localHideUI);
+      this.updateQueryParams({ hui: this.localHideUI ? 'true' : 'false' });  // Update alleen de 'ui' parameter
     },
     handleToggleTopic() {
       this.$emit('toggleTopic', this.localOnlyCurrentTopic);
-      this.updateQueryParams();
+      this.updateQueryParams({ top: this.localOnlyCurrentTopic ? 'true' : 'false' });  // Update alleen de 'top' parameter
     },
     handleToggleMessageData() {
       this.$emit('toggleMessageData', this.localShowMessageData);
-      this.updateQueryParams();
+      this.updateQueryParams({ dat: this.localShowMessageData ? 'true' : 'false' });  // Update alleen de 'dat' parameter
     },
     handlePlaintextCSS() {
       this.$emit('togglePlaintextCSS', this.localPlainTextCSS);
-      this.updateQueryParams();
+      this.updateQueryParams({ css: this.localPlainTextCSS ? 'true' : 'false' });
     }
   },
   watch: {
     showUI(newVal) {
-      this.localShowUI = newVal;
+      this.localHideUI = newVal;
     },
     onlyCurrentTopic(newVal) {
       this.localOnlyCurrentTopic = newVal;
