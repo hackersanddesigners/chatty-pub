@@ -1,31 +1,17 @@
 <template>
   <div class="pane-wrapper" :class="classes">
-    <button v-if="!show_ui" @click="toggle_ui" class="float-btn ui">
+    <button v-if="!show_ui" @click="toggle_ui(true)" class="float-btn ui">
       {{ show_ui ? "Hide" : "Show" }} UI
     </button>
-    <splitpanes class="default-theme" @resize="resizer">
-      <pane
-        class="controls-pane"
-        v-if="show_ui"
-        :size="panel_sizes[0]"
-        min-size="5"
-      >
+    <splitpanes class="default-theme" @resized="resizer" ref="panes">
+      <pane class="controls-pane" v-if="show_ui" :size="panel_sizes[0]" min-size="5">
         <Streams />
-        <UiControls
-          @toggleUI="toggle_ui"
-          @print="print"
-          @toggleTopic="only_current_topic = $event"
-          @toggleMessageData="show_message_data = $event"
-          @goDocs="$router.push({ path: 'docs' })"
-        />
+        <UiControls @print="print" @toggleTopic="only_current_topic = $event"
+          @toggleMessageData="show_message_data = $event" @goDocs="$router.push({ path: 'docs' })" />
       </pane>
       <pane :size="panel_sizes[1]" :class="currentStream">
-        <Content
-          :print="!show_ui || expand_content"
-          :show_message_data="show_message_data"
-          :only_current_topic="only_current_topic"
-          ref="content"
-        />
+        <Content :print="!show_ui || expand_content" :show_message_data="show_message_data"
+          :only_current_topic="only_current_topic" ref="content" />
       </pane>
       <pane v-if="show_ui" :size="panel_sizes[2]" min-size="15">
         <Rules />
@@ -54,39 +40,69 @@ export default {
   },
   data() {
     return {
-      show_ui: true,
       show_message_data: false,
       panel_sizes: { 0: 10, 1: 55, 2: 35 },
+      init_panel_sizes: { 0: 10, 1: 55, 2: 35 },
       expand_content: false,
       only_current_topic: false,
     };
   },
-
   computed: {
     classes() {
       return this.show_ui ? "ui" : "print";
     },
     currentStream() {
       return this.$store.state.currentStream?.slug || "";
+    },
+    show_ui() {
+      return this.getUIState();
+    },
+  },
+  watch: {
+    show_ui(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.toggle_ui(newVal);
+      }
     }
   },
   methods: {
     resizer(panels) {
+      if (!panels) return;
       for (let i = 0; i < panels.length; i++) {
         this.panel_sizes[i] = panels[i].size;
       }
     },
     print() {
-      let prev = this.show_ui;
-      this.toggle_ui(null, false);
+      const prev = this.show_ui;
+      this.toggle_ui(false);
       setTimeout(() => {
         window.print();
-        if (prev) this.toggle_ui(null, true);
+        if (prev) this.toggle_ui(true);
       }, 1000);
     },
-    toggle_ui(evt, state) {
-      if (state !== undefined) this.show_ui = state;
-      else this.show_ui = !this.show_ui;
+    toggle_ui(state) {
+      const newState = state !== undefined ? state : !this.show_ui;
+      this.updateQueryParams(newState);
+      if (newState === true) {
+        setTimeout(() => {
+          this.resetPanelSizes();
+        }, 100);
+      } else {
+        this.init_panel_sizes = JSON.parse(JSON.stringify(this.panel_sizes));
+      }
+    },
+    getUIState() {
+      return this.$route.query.ui !== 'false';
+    },
+    updateQueryParams(showUI) {
+      const query = {
+        ...this.$route.query, 
+        ui: showUI ? 'true' : 'false',
+      };
+      this.$router.replace({ query }).catch(() => { });
+    },
+    resetPanelSizes() {
+      this.panel_sizes = JSON.parse(JSON.stringify(this.init_panel_sizes));
     },
   },
 };

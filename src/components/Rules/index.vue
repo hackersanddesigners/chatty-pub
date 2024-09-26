@@ -1,8 +1,8 @@
 <template>
   <section class="rules">
-    <label style="display:none"><input type="checkbox" name="" id="" 
-      v-model="boring_rules" >Unstyled rules</label>
-    <Rule v-for="rule in rules" :key="rule.id" :rule="rule" :boring="boring_rules" />
+    <!-- <label style="display:none"><input type="checkbox" name="" id="" 
+      v-model="boring_rules" >Unstyled rules</label> -->
+    <Rule v-for="rule in rules" :key="rule.id" :rule="rule" :boring="plainCSS" />
   </section>
 </template>
 
@@ -18,13 +18,16 @@ export default {
   computed: {
     ...mapState([
       'rules',
-    ])
+    ]),
+    plainCSS() {
+      return this.getCSSState();
+    },
   },
-  data: () => {
-    return {
-      boring_rules: false,
-    };
-  },
+  // data: () => {
+  //   return {
+  //     boring_rules: false,
+  //   };
+  // },
   watch: {
     rules() {
       console.log('rules')
@@ -37,11 +40,14 @@ export default {
     window.removeEventListener('keydown', this.handleKeydown);
   },
   methods: {
-    handleKeydown(event) {
-      if (event.key === 'P') {
-        this.boring_rules = !this.boring_rules;
-      }
-    }
+    // handleKeydown(event) {
+    //   if (event.key === 'P') {
+    //     this.boring_rules = !this.boring_rules;
+    //   }
+    // },
+    getCSSState() {
+      return this.$route.query.css !== 'false';
+    },
   }
 }
 </script>

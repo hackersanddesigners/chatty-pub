@@ -1,19 +1,24 @@
 <template>
   <div class="controls">
-    <label for="toggleUI">
-      <input type="checkbox" id="toggleUI" v-model="localShowUI" @change="handleToggleUI" />
-      Show/Hide UI
-    </label>
 
     <label for="toggleTopic">
       <input type="checkbox" id="toggleTopic" v-model="localOnlyCurrentTopic" @change="handleToggleTopic" />
       Display only current topic
     </label>
 
-    <label for="msg-data">
-      <input type="checkbox" id="msg-data" v-model="localShowMessageData" @change="handleToggleMessageData" />
+    <label for="msgData">
+      <input type="checkbox" id="msgData" v-model="localShowMessageData" @change="handleToggleMessageData" title="Show message sender, date time and reactions" />
       Show chat message data
     </label>
+
+    <label for="plaintext">
+      <input type="checkbox" id="plaintext" v-model="localPlainTextCSS" @change="handlePlaintextCSS" title="Enable/disable applying the CSS to the styles itself" />
+      Plaintext CSS
+    </label>
+
+    <button @click="handleToggleUI">
+      Hide UI
+    </button>
 
     <button @click="$emit('print')">Print</button>
     <p class="notice">
@@ -25,7 +30,6 @@
     <button @click="$emit('goDocs')">Docs</button>
   </div>
 </template>
-
 <script>
 export default {
   name: "UiControls",
@@ -33,12 +37,14 @@ export default {
     showUI: Boolean,
     onlyCurrentTopic: Boolean,
     showMessageData: Boolean,
+    plaintextCSS: Boolean,
   },
   data() {
     return {
       localShowUI: this.showUI,
       localOnlyCurrentTopic: this.onlyCurrentTopic,
       localShowMessageData: this.showMessageData,
+      localPlainTextCSS: this.plaintextCSS,
     };
   },
   mounted() {
@@ -49,14 +55,14 @@ export default {
       return this.$route.query[param];
     },
     initializeFromQueryParams() {
-      // const queryShowUI = this.getQueryParam('showUI') === 'true';
+      const queryShowUI = this.getQueryParam('ui') === 'true'; // Use 'ui'
       const queryOnlyCurrentTopic = this.getQueryParam('top') === 'true';
       const queryShowMessageData = this.getQueryParam('dat') === 'true';
+      const queryPlaintextCSS = this.getQueryParam('css') === 'true';
 
-      // Stel lokale state in op basis van de URL-query parameters
       if (this.getQueryParam('ui') !== undefined) {
-        // this.localShowUI = queryShowUI;
-        // this.$emit('toggleUI', this.localShowUI);
+        this.localShowUI = queryShowUI;
+        this.$emit('toggleUI', this.localShowUI);
       }
       if (this.getQueryParam('top') !== undefined) {
         this.localOnlyCurrentTopic = queryOnlyCurrentTopic;
@@ -66,22 +72,28 @@ export default {
         this.localShowMessageData = queryShowMessageData;
         this.$emit('toggleMessageData', this.localShowMessageData);
       }
+      if (this.getQueryParam('css') !== undefined) {
+        this.localPlainTextCSS = queryPlaintextCSS;
+        this.$emit('togglePlaintextCSS', this.localPlainTextCSS);
+      }
     },
     updateQueryParams() {
       const query = {
         ...this.$route.query,
-        ui: this.localShowUI,
-        top: this.localOnlyCurrentTopic,
-        dat: this.localShowMessageData,
+        ui: this.localShowUI ? 'true' : 'false',  // Make sure 'ui' is properly set
+        top: this.localOnlyCurrentTopic ? 'true' : 'false',
+        dat: this.localShowMessageData ? 'true' : 'false',
+        css: this.localPlainTextCSS ? 'true' : 'false',
       };
 
       this.$router.replace({
-        path: this.$route.path, 
+        path: this.$route.path,
         query,                  
         hash: this.$route.hash
       });
     },
     handleToggleUI() {
+      this.localShowUI = !this.localShowUI;  // Toggle UI state
       this.$emit('toggleUI', this.localShowUI);
       this.updateQueryParams();
     },
@@ -91,6 +103,10 @@ export default {
     },
     handleToggleMessageData() {
       this.$emit('toggleMessageData', this.localShowMessageData);
+      this.updateQueryParams();
+    },
+    handlePlaintextCSS() {
+      this.$emit('togglePlaintextCSS', this.localPlainTextCSS);
       this.updateQueryParams();
     }
   },
@@ -103,6 +119,9 @@ export default {
     },
     showMessageData(newVal) {
       this.localShowMessageData = newVal;
+    },
+    plaintextCSS(newVal) {
+      this.localPlainTextCSS = newVal;
     }
   }
 };
