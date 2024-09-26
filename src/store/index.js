@@ -61,8 +61,10 @@ let font = (content) => {
   let path = content;
   let filename = getFilename(path);
   let ext = filename.split(".").pop();
-  font.src =
-    "https://chatty-pub-files.hackersanddesigners.nl/files" + path;
+  // change to use path from env file
+  // font.src =
+  // "https://chatty-pub-files.hackersanddesigners.nl/files" + path;
+  font.src = process.env.VUE_APP_PATH_REPLACE_TO + path;
   font.format = getFormat(ext);
   font.family = filename.replace(".", "_");
   return font;
