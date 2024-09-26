@@ -46,7 +46,7 @@ export default {
     //   }
     // },
     getCSSState() {
-      return this.$route.query.css !== 'false';
+      return this.$route.query.css === 'true';
     },
   }
 }

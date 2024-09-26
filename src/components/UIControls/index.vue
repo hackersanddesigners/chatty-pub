@@ -46,7 +46,7 @@ export default {
       localHideUI: this.showUI,
       localOnlyCurrentTopic: this.onlyCurrentTopic,
       localShowMessageData: this.showMessageData,
-      localPlainTextCSS: this.plaintextCSS,
+      localPlainTextCSS: false,
     };
   },
   mounted() {
@@ -60,7 +60,7 @@ export default {
       const queryHideUI = this.getQueryParam('hui') === 'true'; // hide ui
       const queryOnlyCurrentTopic = this.getQueryParam('top') === 'true';
       const queryShowMessageData = this.getQueryParam('dat') === 'true';
-      const queryPlaintextCSS = this.getQueryParam('css') === 'true';
+      // const queryPlaintextCSS = this.getQueryParam('css') === 'true';
 
       if (this.getQueryParam('hui') !== undefined) {
         this.localHideUI = queryHideUI;
@@ -74,7 +74,9 @@ export default {
         this.$emit('toggleMessageData', this.localShowMessageData);
       }
       if (this.getQueryParam('css') !== undefined) {
-        this.localPlainTextCSS = queryPlaintextCSS;
+        // this.localPlainTextCSS = queryPlaintextCSS;
+      } else {
+        this.localPlainTextCSS = false;  // Default to false if no parameter is provided
       }
     },
     updateQueryParams(paramsToUpdate) {
