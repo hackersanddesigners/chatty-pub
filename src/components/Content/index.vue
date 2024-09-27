@@ -39,10 +39,15 @@ export default {
     ...mapGetters(["sortedTopics"]),
     filteredTopics() {
       const hash = this.$route.hash.substr(1);
-      if (!hash || !this.only_current_topic) return this.sortedTopics;
+      console.log("hash", hash);
+      if (!hash || !this.only_current_topic) {
+        console.log("all found topics", this.sortedTopics);
+        return this.sortedTopics;
+      }
       const found =  this.sortedTopics.find((el) => {
         return this.toValidID(el.title) === hash;
       });
+      console.log("single found topic", found);
       return [found];
     },
     foundStream() {

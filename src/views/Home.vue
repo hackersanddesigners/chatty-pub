@@ -19,6 +19,7 @@
     </splitpanes>
   </div>
 </template>
+
 <script>
 import Streams from "../components/Streams";
 import Content from "../components/Content";
@@ -95,10 +96,13 @@ export default {
     },
     updateQueryParams(showUI) {
       const query = {
-        ...this.$route.query, 
-        hui: showUI ? 'false' : 'true',  // 'false' als de UI wordt getoond, 'true' als de UI verborgen wordt
+        ...this.$route.query,
+        hui: showUI ? 'false' : 'true',  // 'false' when UI is shown, 'true' when UI is hidden
       };
-      this.$router.replace({ query }).catch(() => { });
+      this.$router.replace({
+        query,
+        hash: this.$route.hash  // Preserve the current hash
+      }).catch(() => { });
     },
     resetPanelSizes() {
       this.panel_sizes = JSON.parse(JSON.stringify(this.init_panel_sizes));
