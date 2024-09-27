@@ -9,7 +9,7 @@
     <label for="msgData">
       <input type="checkbox" id="msgData" v-model="localShowMessageData" @change="handleToggleMessageData"
         title="Show message sender, date time and reactions" />
-      Show chat message data
+      Show message data
     </label>
 
     <label for="plaintext">
@@ -19,7 +19,7 @@
     </label>
 
     <button @click="handleToggleUI">
-      Hide UI
+      {{ localHideUI ? "Show" : "Hide" }} UI
     </button>
 
     <button @click="$emit('print')">Print</button>
@@ -32,6 +32,7 @@
     <button @click="$emit('goDocs')">Docs</button>
   </div>
 </template>
+
 <script>
 export default {
   name: "UiControls",
@@ -46,7 +47,7 @@ export default {
       localHideUI: this.showUI,
       localOnlyCurrentTopic: this.onlyCurrentTopic,
       localShowMessageData: this.showMessageData,
-      localPlainTextCSS: false,
+      localPlainTextCSS: this.plaintextCSS !== undefined ? this.plaintextCSS : false,  // Default to false if not provided
     };
   },
   mounted() {
@@ -57,10 +58,10 @@ export default {
       return this.$route.query[param];
     },
     initializeFromQueryParams() {
-      const queryHideUI = this.getQueryParam('hui') === 'true'; // hide ui
+      const queryHideUI = this.getQueryParam('hui') === 'true';
       const queryOnlyCurrentTopic = this.getQueryParam('top') === 'true';
       const queryShowMessageData = this.getQueryParam('dat') === 'true';
-      // const queryPlaintextCSS = this.getQueryParam('css') === 'true';
+      const queryPlaintextCSS = this.getQueryParam('css') === 'true';
 
       if (this.getQueryParam('hui') !== undefined) {
         this.localHideUI = queryHideUI;
@@ -74,42 +75,42 @@ export default {
         this.$emit('toggleMessageData', this.localShowMessageData);
       }
       if (this.getQueryParam('css') !== undefined) {
-        // this.localPlainTextCSS = queryPlaintextCSS;
-      } else {
-        this.localPlainTextCSS = false;  // Default to false if no parameter is provided
+        this.localPlainTextCSS = queryPlaintextCSS;
+        this.$emit('togglePlaintextCSS', this.localPlainTextCSS);  // Sync the CSS state
       }
     },
     updateQueryParams(paramsToUpdate) {
       const query = {
         ...this.$route.query,
-        ...paramsToUpdate,  // Alleen de relevante parameters bijwerken
+        ...paramsToUpdate,  // Update only the relevant parameters
       };
 
       this.$router.replace({
         path: this.$route.path,
         query,
-        hash: this.$route.hash
+        hash: this.$route.hash,
       });
     },
     handleToggleUI() {
       this.localHideUI = !this.localHideUI;
       this.$emit('toggleUI', !this.localHideUI);
-      this.updateQueryParams({ hui: this.localHideUI ? 'true' : 'false' });  // Update alleen de 'ui' parameter
+      this.updateQueryParams({ hui: this.localHideUI ? 'true' : 'false' });  // Update the 'hui' parameter
     },
     handleToggleTopic() {
       this.$emit('toggleTopic', this.localOnlyCurrentTopic);
-      this.updateQueryParams({ top: this.localOnlyCurrentTopic ? 'true' : 'false' });  // Update alleen de 'top' parameter
+      this.updateQueryParams({ top: this.localOnlyCurrentTopic ? 'true' : 'false' });  // Update the 'top' parameter
     },
     handleToggleMessageData() {
       this.$emit('toggleMessageData', this.localShowMessageData);
-      this.updateQueryParams({ dat: this.localShowMessageData ? 'true' : 'false' });  // Update alleen de 'dat' parameter
+      this.updateQueryParams({ dat: this.localShowMessageData ? 'true' : 'false' });  // Update the 'dat' parameter
     },
     handlePlaintextCSS() {
       this.$emit('togglePlaintextCSS', this.localPlainTextCSS);
-      this.updateQueryParams({ css: this.localPlainTextCSS ? 'true' : 'false' });
-    }
+      this.updateQueryParams({ css: this.localPlainTextCSS ? 'true' : 'false' });  // Update the 'css' parameter
+    },
   },
   watch: {
+    // Watch for changes in props and sync local data
     showUI(newVal) {
       this.localHideUI = newVal;
     },
@@ -125,7 +126,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 .controls {
