@@ -1,5 +1,5 @@
 <template>
-  <div class="message-outer" :class="(show_message_data && message.reactions.length > 0 )?'show_message_data':''">
+  <div class="message-outer" :class="(show_message_data && message.reactions.length > 0) ? 'show_message_data' : ''">
     <div class="message-data" v-if="show_message_data">
       <div class="from">{{ message.sender_full_name }}</div>
       <div class="time">{{ time }}</div>
@@ -12,21 +12,17 @@
         <vue3-markdown-it :source="content" v-bind="$mdOpts"></vue3-markdown-it>
       </template>
       <div class="message-data-reactions" v-if="show_message_data && message.reactions.length > 0">
-        <span
-          class="reaction"
-          v-for="reaction in message.reactions"
-          :key="reaction"
-        >
+        <span class="reaction" v-for="reaction in message.reactions" :key="reaction">
           {{ String.fromCodePoint("0x" + reaction.emoji_code) }}
         </span>
       </div>
     </div>
 
     <div class="reactions ui">
-      <span v-for="reaction in reactions" :key="reaction" :title="reaction">
-        {{ shortcodeToEmoji(reaction) }}
+      <span v-for="reaction in reactions" :key="reaction" :title="reaction" v-html="shortcodeToEmoji(reaction)">
       </span>
     </div>
+
   </div>
 </template>
 
@@ -47,7 +43,7 @@ export default {
   mixins: [emoji],
   computed: {
     content() {
-      if(!this.message.content) return "";
+      if (!this.message.content) return "";
       // let c = this.message.content.replaceAll("\n", "<br/>");
       let c = this.message.content;
 
@@ -61,7 +57,7 @@ export default {
 
       const replacement_from_url = process.env.VUE_APP_PATH_REPLACE_FROM;
       const replacement_to_url = process.env.VUE_APP_PATH_REPLACE_TO;
-      
+
       c = c.replaceAll(
         replacement_from_url,
         replacement_to_url
@@ -91,7 +87,7 @@ export default {
 
       return c;
     },
-    hasRulesShortcode(){
+    hasRulesShortcode() {
       // console.log(this.content, this.content.includes("[rules]"));
       return this.content.includes('[rules]');
     },
@@ -154,13 +150,15 @@ export default {
   display: flex;
   border-bottom: 1px solid #666;
 }
-.message-data > div {
+
+.message-data>div {
   flex-grow: 1;
 }
 
 .message-data .from:after {
   content: ":";
 }
+
 .message-data .time {
   text-align: right;
 }
@@ -180,6 +178,6 @@ export default {
 /* important! hides default link & image tag auto-created by zulip for file links */
 
 .message_inline_ref {
-display: none;
+  display: none;
 }
 </style>
