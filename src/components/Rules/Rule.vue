@@ -7,7 +7,7 @@
       <pre :style="rules">
 @font-face { 
   font-family: "{{ font.family }}"; 
-  src: "{{ font.src }}" format({{ "font.format" }}); 
+  src: "{{ font.src }}" format({{ font.format }}); 
 }</pre
       >
       <div class="instructions">
