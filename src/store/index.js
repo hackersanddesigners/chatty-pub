@@ -30,7 +30,7 @@ let toCSS = (message, currentStream) => {
   results = Array.from(results);
 
   if (is_font) { // font
-    let re_path = /\/user_uploads(\/.*?\.(?:ttf|otf|woff))/gm;
+    let re_path = /\/?user_uploads(\/.*?\.(?:ttf|otf|woff))/gm;
     content = re_path.exec(message.content)[1];
     return { className: '', emoji_code: '', rules: [], parentClassName: '', id: id, content: font(content), type: type }
   } else if (is_codeblock) {
