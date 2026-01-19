@@ -32,6 +32,7 @@ let toCSS = (message, currentStream) => {
   if (is_font) { // font
     let re_path = /\/?user_uploads(\/.*?\.(?:ttf|otf|woff))/gm;
     content = re_path.exec(message.content)[1];
+    console.log("font content: ", content);
     return { className: '', emoji_code: '', rules: [], parentClassName: '', id: id, content: font(content), type: type }
   } else if (is_codeblock) {
     return { className: '', emoji_code: '', rules: [], parentClassName: '', id: id, content: cleanupCodeBlock(content), type: type }
